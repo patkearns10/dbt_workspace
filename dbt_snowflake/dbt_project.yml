@@ -47,6 +47,3 @@ snapshots:
 
     hard_deletes:
       +enabled: False
-
-
-# end again
