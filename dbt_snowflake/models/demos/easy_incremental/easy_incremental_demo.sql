@@ -1,4 +1,7 @@
-{{ config(materialized='easy_incremental', watermark='watermark') }}
+{{ config(
+  materialized='easy_incremental',
+  watermark='watermark'
+  ) }}
 
 WITH HISTORY AS (
   SELECT 

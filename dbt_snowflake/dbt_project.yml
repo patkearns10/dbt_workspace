@@ -31,6 +31,10 @@ models:
         +materialized: easy_incremental
       hard_deletes:
         +enabled: False
+  dbt_artifacts:
+    +schema: dbt_artifacts
+    staging:
+      +schema: dbt_artifacts_staging
 
 sources:
   secret:

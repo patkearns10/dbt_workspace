@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: my_first_model
+    columns:
+      - name: col
+        tests:
+          - unique
+          - not_null
