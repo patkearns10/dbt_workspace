@@ -1,6 +1,7 @@
 {{ config(
   materialized='easy_incremental',
-  watermark='watermark'
+  watermark='watermark',
+  enabled=False
   ) }}
 
 WITH HISTORY AS (

@@ -3,7 +3,8 @@
         materialized='partitioned_incremental', 
         partition_by='WAREHOUSE_NAME', 
         partitions_to_process=["'RANDY_PITCHER_WORKSPACE_PROD_WH'", "'RANDY_PITCHER_WORKSPACE_DEV_WH'"],
-        unique_key='record_id'
+        unique_key='record_id',
+        enabled=False
     ) 
 }}
 
