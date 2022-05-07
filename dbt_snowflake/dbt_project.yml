@@ -6,6 +6,7 @@ profile: default
 
 vars:
   my_cool_var: '2016-06-01'
+  disable_models: "['some_model_name']"
   snowflake_meta_src_db: 'snowflake' # override this with -> dbt run --vars "'snowflake_meta_src_db': 'my_snowflake_meta_src_db'"
 
 # on-run-start: 'CALL {{stored_proc__pi()}}();'
