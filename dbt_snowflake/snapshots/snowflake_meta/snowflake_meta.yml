@@ -1,0 +1,6 @@
+version: 2
+
+snapshots:
+  - name: snpsht__snowflake_query_history
+    description: some description for this snapshot
+    
