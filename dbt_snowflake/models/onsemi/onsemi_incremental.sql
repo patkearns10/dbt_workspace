@@ -17,7 +17,7 @@
         ,alias='BILLING_FACT'
         ,tags ='MART SALES'
         ,unique_key=v_pk_list
-        ,merge_update_columns=v_update_column_list
+        ,merge_update_columns=[ "BIW_UPD_DTTM", "BIW_BATCH_ID", "GENERIC_ID", "UNIQUE_ID", "SOMETIMES_BAD_ID", "_UPDATED_AT", "V_PK_LIST", "V_HOUSE_KEEPING_COLUMN", "V_ALL_COLUMN_LIST", "V_UPDATE_COLUMN_LIST", "BIW_MD5_KEY" ]
         )
 }}
 
