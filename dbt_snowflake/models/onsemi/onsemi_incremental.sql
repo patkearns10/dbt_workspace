@@ -16,6 +16,8 @@
         ,schema ='MART_SALES'
         ,alias='BILLING_FACT'
         ,tags ='MART SALES'
+        ,unique_key=v_pk_list
+        ,merge_update_columns=v_update_column_list
         )
 }}
 
