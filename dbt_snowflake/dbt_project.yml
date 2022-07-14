@@ -54,3 +54,9 @@ snapshots:
 
     hard_deletes:
       +enabled: False
+
+on-run-start:
+  - "{{ create_run_end_results_table() }}"
+
+on-run-end:
+  - "{{ log_run_end_results(results) }}"
