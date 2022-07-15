@@ -1,5 +1,8 @@
+-- This is an example Incremental model. This is the code that you would have within all of your incremental models
+-- so they can kick off the stored procedures to update the ETL Control table
 {{
     config(
+        materialization='incremental'
         post_hook="{{ v_sql_upd_success(v_dbt_job_name) }}"
     )
 }}
@@ -34,6 +37,14 @@ select
 
 --------
 -- ... rest of the SQL here
+
+-- from
+--   some_table
+-- where
+-- {% if is_incremental() %}
+--     -- this filter will only be applied on an incremental run
+--     where event_time > (select max(event_time) from {{ this }}) 
+-- {% endif %}
 --------
 
 -- Step 5 Success or Failure to ETL table
