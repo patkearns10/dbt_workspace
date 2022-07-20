@@ -6,6 +6,8 @@
       run_invocation_id text not null,
       model_identifier text not null,
       model_name text not null,
+      relation_name text not null,
+      materialization text not null,
       model_status text not null,
       model_message text not null,
       updated_at timestamp not null

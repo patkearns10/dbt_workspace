@@ -2,8 +2,9 @@
 -- so they can kick off the stored procedures to update the ETL Control table
 {{
     config(
-        materialization='incremental'
-        post_hook="{{ v_sql_upd_success(v_dbt_job_name) }}"
+        materialization='incremental',
+        post_hook="{{ v_sql_upd_success(v_dbt_job_name) }}",
+        enabled=false
     )
 }}
 
