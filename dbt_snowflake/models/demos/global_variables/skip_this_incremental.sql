@@ -18,6 +18,7 @@
     -- # run this model
     -- TODO: replace this with your usual incremental SQL code here
     select
+        1 as id,
         'example data' as some_col
 
 {%- endif %}
