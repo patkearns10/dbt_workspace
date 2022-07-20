@@ -4,7 +4,8 @@
     config(
         unique_key = 'query_id',
         strategy   = 'timestamp',
-        updated_at = 'end_time'
+        updated_at = 'end_time',
+        enabled=false
     )
 }}
 
