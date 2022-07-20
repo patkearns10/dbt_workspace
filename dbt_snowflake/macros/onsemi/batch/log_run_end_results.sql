@@ -14,7 +14,11 @@
               {{ log(res, info=True) }}
             */ 
             #}
-            {% set tidy_message = res.message.replace("'", '"') %}
+            {% if res.message %}
+                {% set tidy_message = res.message.replace("'", '"') %}
+            {% else %}
+                {% set tidy_message = '' %}
+            {% endif %}
             
             {% set query -%}
                 insert into {{ target.database }}.{{ target.schema }}.dbt_meta__run_end_results values (
