@@ -2,7 +2,7 @@
 
     {% if execute %}
     
-        {{ log('Recording model run results in `dbt_meta__run_end_results`.', info=True) }}
+        {% do log('Recording model run results in `dbt_meta__run_end_results`.', info=True) %}
 
         {% for res in results %}
         
@@ -11,9 +11,10 @@
               Because results messages can contain single quotes in the error message, we
               replace them with double quotes to avoid errors during the insert.
               Note: to see all results returned, test run on 1 model with:
-              {{ log(res, info=True) }}
+              log(res, info=True)
             */ 
             #}
+
             {% if res.message %}
                 {% set tidy_message = res.message.replace("'", '"') %}
             {% else %}
