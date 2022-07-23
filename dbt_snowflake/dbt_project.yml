@@ -10,6 +10,7 @@ vars:
   snowflake_meta_src_db: 'snowflake' # override this with -> dbt run --vars "'snowflake_meta_src_db': 'my_snowflake_meta_src_db'"
   dbt_artifacts:
     dbt_artifacts_database: development
+    dbt_artifacts_schema: dbt_artifacts_pkearns
 
 # on-run-start: 'CALL {{stored_proc__pi()}}();'
 # on-run-start: '{{ variable_update() }}'
@@ -37,9 +38,9 @@ models:
         +enabled: True
   
   dbt_artifacts:
-    +schema: dbt_artifacts
+    +schema: dbt_artifacts_pkearns
     staging:
-      +schema: dbt_artifacts_staging
+      +schema: dbt_artifacts_pkearns_staging
 
 sources:
   secret:
@@ -62,3 +63,4 @@ on-run-start:
 
 on-run-end:
   - "{{ log_run_end_results(results) }}"
+  - "{{ dbt_artifacts.upload_results(results) }}"
