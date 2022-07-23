@@ -34,7 +34,7 @@ models:
         +watermark:    watermark
         +materialized: easy_incremental
       hard_deletes:
-        +enabled: False
+        +enabled: True
   
   dbt_artifacts:
     +schema: dbt_artifacts
@@ -46,7 +46,7 @@ sources:
     snowflake_meta:
       +tags: ['snowflake_meta']
     hard_deletes:
-      +enabled: False
+      +enabled: True
 
 snapshots:
   secret:
@@ -55,7 +55,7 @@ snapshots:
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"
 
     hard_deletes:
-      +enabled: False
+      +enabled: True
 
 on-run-start:
   - "{{ create_run_end_results_table() }}"
