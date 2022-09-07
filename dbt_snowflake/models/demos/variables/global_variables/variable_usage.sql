@@ -29,4 +29,20 @@ select
 
 {% set disable_models="['some_other_model_name']" %}
 
-    {{ disable_models }} as disable_models_updated
+    {{ disable_models }} as disable_models_updated,
+
+    -- non existent variable (variable not defined)
+    '{{ var("non_existent_variable", "default_value") }}' as non_existent_variable,
+    -- variable defined in dbt_project.yml as '2016-01-01'
+    '{{ var("my_cool_var", "default_value") }}' as existent_variable,
+    -- define non existent variable (variable defined in sql)
+    {% set my_cool_var='2021-01-01' %} 
+    '{{ my_cool_var }}' as now_existent_variable,
+    -- global var not the same as variable defined in sql
+    '{{ var("my_cool_var") }}' as var_variable,
+    -- switch from var to set variable
+    {% set my_cool_var_mirror=var("my_cool_var") %}
+    '{{ my_cool_var_mirror }}' as mirror_variable,
+    -- now you can alter the value
+    {% set my_cool_var_mirror="2022-01-01" %}
+    '{{ my_cool_var_mirror }}' as changed_variable
