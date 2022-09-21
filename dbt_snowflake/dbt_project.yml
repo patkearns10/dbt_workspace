@@ -55,7 +55,7 @@ snapshots:
       +enabled: True
 
 on-run-start:
-  - "{{ create_run_end_results_table() }}"
+  # - "{{ create_run_end_results_table() }}"
 
 on-run-end:
   # - "{{ log_run_end_results(results) }}"  # JYeo code
