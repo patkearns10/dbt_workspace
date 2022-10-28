@@ -36,8 +36,6 @@ models:
     +schema: dbt_artifacts_kearns_added
     staging:
       +schema: dbt_artifacts_kearns_added__staging
-    sources:
-      +schema: dbt_artifacts_kearns_added__sources
 
 sources:
   secret:
