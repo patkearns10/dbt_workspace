@@ -4,7 +4,7 @@ packages:
   - package: dbt-labs/codegen
     version: 0.6.0
   - package: brooklyn-data/dbt_artifacts
-    version: 2.0.0
+    version: 2.1.1
   - git: "https://{{ env_var('DBT_ENV_SECRET_GIT_PAT') }}@github.com/dbt-labs/pro-serv-tools.git" # git URL
     revision: "main"
     subdirectory: "pro_serv_utils"
