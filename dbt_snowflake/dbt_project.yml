@@ -10,6 +10,8 @@ vars:
   snowflake_meta_src_db: 'snowflake' # override this with -> dbt run --vars "'snowflake_meta_src_db': 'my_snowflake_meta_src_db'"
   dbt_artifacts_database: development
   dbt_artifacts_schema: dbt_artifacts_kearns_added
+  source_database: 'raw'
+  target_database: 'raw'
 
 models:
   secret:
