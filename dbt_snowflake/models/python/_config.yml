@@ -1,0 +1,15 @@
+version: 2
+
+models:
+  - name: python_builtins__describe
+    # Document within the same codebase
+    description: My transformation written in Python
+    # Configure in ways that feel intuitive and familiar
+    config:
+      materialized: table
+      tags: ['python']
+
+  - name: use_variables__customers_limit_10
+    config:
+      materialized: table
+      target_name: "{{ target.name }}"
