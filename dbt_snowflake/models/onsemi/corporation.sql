@@ -6,7 +6,8 @@
 {{
     config(
         materialized='incremental',
-        unique_key="CORPORATION_KEY"
+        unique_key="CORPORATION_KEY",
+        enabled=false
         )
 }}
 
