@@ -27,7 +27,7 @@ one_time_load as (
 stg_data as (
     select * from {{ ref('seed__corporation__stg_data') }}
     {%- if is_incremental() %}
-    where snapshot_date >= (select max(snapshot_date) from {{ this }})
+    where snapshot__date >= (select max(snapshot__date) from {{ this }})
     {%- endif %}
 )
 
@@ -37,7 +37,7 @@ select
 from one_time_load
     -- after the initial load, we will not need to run this again
     {%- if is_incremental() %}
-    where snapshot_date >= (select max(snapshot_date) from {{ this }}) or snapshot_date is null
+    where snapshot__date >= (select max(snapshot__date) from {{ this }}) or snapshot_date is null
     {%- endif %}
 
 union all
