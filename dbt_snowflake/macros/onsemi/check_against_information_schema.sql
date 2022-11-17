@@ -11,7 +11,7 @@
         )
 
         {# get count of sources in target database #}
-        select count(*) from information_schema_relations   --todo remove +1
+        select count(*) from information_schema_relations
         where
         relation_name in
             (
