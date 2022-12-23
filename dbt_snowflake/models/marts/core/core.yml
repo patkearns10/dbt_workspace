@@ -27,3 +27,12 @@ models:
       #   description: This test should fail
       #   tests:
       #     - unique
+
+  - name: payments__pivoted
+    description: one record per order id with columns aggregating payments for each payment type.
+    columns:
+      - name: order_id
+        description: Primary key
+        tests:
+          - unique
+          - not_null
