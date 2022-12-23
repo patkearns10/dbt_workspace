@@ -30,9 +30,15 @@ models:
 
   - name: payments__pivoted
     description: one record per order id with columns aggregating payments for each payment type.
+    tests:
+      - dbt_expectations.expect_table_columns_to_match_set:
+          column_list: ["ORDER_ID", "CREDIT_CARD_AMOUNT", "BANK_TRANSFER_AMOUNT", "COUPON_AMOUNT", "GIFT_CARD_AMOUNT"]
     columns:
       - name: order_id
         description: Primary key
         tests:
           - unique
           - not_null
+
+
+

@@ -8,4 +8,5 @@ packages:
   - git: "https://{{ env_var('DBT_ENV_SECRET_GIT_PAT') }}@github.com/dbt-labs/pro-serv-tools.git" # git URL
     revision: "main"
     subdirectory: "pro_serv_utils"
-    
+  - package: calogica/dbt_expectations
+    version: 0.8.0
