@@ -8,10 +8,10 @@ vars:
   my_cool_var: '2016-06-01'
   disable_models: "['some_model_name']"
   snowflake_meta_src_db: 'snowflake' # override this with -> dbt run --vars "'snowflake_meta_src_db': 'my_snowflake_meta_src_db'"
-
-
-# on-run-start: 'CALL {{stored_proc__pi()}}();'
-# on-run-start: '{{ variable_update() }}'
+  dbt_artifacts_database: development
+  dbt_artifacts_schema: dbt_artifacts_kearns_added
+  source_database: 'raw'
+  target_database: 'raw'
 
 models:
   secret:
@@ -33,18 +33,19 @@ models:
         +watermark:    watermark
         +materialized: easy_incremental
       hard_deletes:
-        +enabled: False
+        +enabled: True
+  
   dbt_artifacts:
-    +schema: dbt_artifacts
+    +schema: dbt_artifacts_kearns_added
     staging:
-      +schema: dbt_artifacts_staging
+      +schema: dbt_artifacts_kearns_added__staging
 
 sources:
   secret:
     snowflake_meta:
       +tags: ['snowflake_meta']
     hard_deletes:
-      +enabled: False
+      +enabled: True
 
 snapshots:
   secret:
@@ -53,4 +54,12 @@ snapshots:
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"
 
     hard_deletes:
-      +enabled: False
+      +enabled: True
+
+on-run-start:
+  # - "{{ create_run_end_results_table() }}"
+
+on-run-end:
+  # - "{{ log_run_end_results(results) }}"  # JYeo code
+  # - "{{ dbt_artifacts.upload_results(results) }}"  # dbt_artifacts
+  # - "{{ store_test_results(results) }}" # store test failures
