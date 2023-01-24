@@ -11,6 +11,13 @@ sources:
             tests:
               - not_null
               - unique
+      - name: customers_2
+        identifier: customers
+        columns:
+          - name: id
+            tests:
+              - not_null
+              - unique
       - name: orders
         description: One record per order
         loaded_at_field: _etl_loaded_at
