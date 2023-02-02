@@ -1,0 +1,40 @@
+version: 2
+
+exposures:
+
+  - name: Total_Cloud_Spend_Analysis
+    type: dashboard
+    url: https://tableau.generalmills.com/#/views/TotalCloudSpendAnalysis_16348351446230/GMITotalCloudSpend?:iid=1
+    owner:
+      name: Claire from Data
+      email: data@jaffleshop.com
+    depends_on:
+      - ref('customers')
+  
+  - name: Azure_Cost_Explorer
+    type: dashboard
+    url: https://tableau.generalmills.com/#/views/AzureCostExplorer_16299105616250/AzureCostOverview?:iid=1
+    owner:
+      name: Claire from Data
+      email: data@jaffleshop.com
+    depends_on:
+      - ref('orders')
+
+  - name: Alicloud_Cost_Explorer
+    type: dashboard
+    url: https://tableau.generalmills.com/#/views/AlicloudCostExplorer/AliCloudCostOverview?:iid=1
+    owner:
+      name: Claire from Data
+      email: data@jaffleshop.com
+    depends_on:
+      - ref('payments__pivoted')
+
+  - name: Big_Query_Spend_Analysis
+    type: dashboard
+    url: https://tableau.generalmills.com/#/views/GCPCostExplorer_16303332095400/GCPCostOverview?:iid=1
+    owner:
+      name: Claire from Data
+      email: data@jaffleshop.com
+    depends_on:
+      - ref('stg_orders')
+      - ref('stg_customers')
