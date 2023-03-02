@@ -27,3 +27,9 @@ models:
       #   description: This test should fail
       #   tests:
       #     - unique
+  - name: payments__pivoted
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - ORDER_ID
+            - CREDIT_CARD_AMOUNT
