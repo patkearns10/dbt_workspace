@@ -12,6 +12,7 @@ vars:
   dbt_artifacts_schema: dbt_artifacts_kearns_added
   source_database: 'raw'
   target_database: 'raw'
+  schemas: {'dev': ['dev_schema', 'dev_test']}
 
 models:
   secret:
