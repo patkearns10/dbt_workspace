@@ -25,7 +25,7 @@ WITH HISTORY AS (
     }}, 
 
     END_TIME AS WATERMARK,
-    {{dbt_utils.surrogate_key(['START_TIME', 'WAREHOUSE_NAME'])}} AS record_id
+    {{dbt_utils.generate_surrogate_key(['START_TIME', 'WAREHOUSE_NAME'])}} AS record_id
 
   FROM 
     {{ source('snowflake_meta', 'warehouse_metering_history') }}
