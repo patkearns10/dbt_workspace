@@ -3,6 +3,16 @@ version: 2
 models:
   - name: customers
     description: One record per customer
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_id
+            - first_name
+            - last_name
+            - first_order_date
+            - most_recent_order_date
+            - number_of_orders
+            - lifetime_value
     columns:
       - name: customer_id
         description: Primary key
