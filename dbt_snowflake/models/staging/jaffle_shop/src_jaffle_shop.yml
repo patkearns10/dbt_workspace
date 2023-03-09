@@ -24,6 +24,7 @@ sources:
         freshness:
           warn_after: {count: 12, period: hour}
           error_after: {count: 24, period: hour}
+          filter: "_etl_loaded_at >= date_sub(current_date(), interval 1 day)"
         columns:
           - name: id
             tests:
