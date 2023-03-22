@@ -24,7 +24,7 @@
             -- "name":"warehouse_load_history",
             -- "source_name":"snowflake_meta",
             #}
-          {%- do sources.append(node.schema ~ '.' ~ node.name) -%}
+          {%- do sources.append(node.schema ~ '.' ~ node.identifier) -%}
       {%- endif -%}
     {%- endfor %}
   {% endif %}
