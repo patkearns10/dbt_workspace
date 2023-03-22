@@ -20,7 +20,7 @@
         --- {{ ns.catalog_name }}                                         # within for loop
         {%- endfor %}
     {%- else %}
-        'else'
+        -- else
     {%- endif %}
     --- {{ ns.catalog_name }} 
 
