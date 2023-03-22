@@ -4,4 +4,5 @@
     )
 }}
 
+
 select * from {{ ref('foo_table') }}
