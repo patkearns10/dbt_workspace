@@ -35,4 +35,9 @@ models:
   my_new_project:
     # Applies to all files under models/example/
     example:
-      materialized: view
+      +materialized: view
+      +on_table_exists: drop
+
+dispatch:
+  - macro_namespace: dbt_utils
+    search_order: ['trino_utils', 'dbt_utils']
