@@ -6,22 +6,23 @@
 {%- set intermediate_keywords=['int', 'staging', 'fixtures', 'flatfiles', 'dbt'] %}
 
     {%- if target.name == 'dev' %}
-        - {{ ns.catalog_name }} 
+        -- {{ ns.catalog_name }} 
         {%- for word in intermediate_keywords %}
-            # is '{{ word }}' in '{{this.schema}}'
+            --# is '{{ word }}' in '{{this.schema}}'
             {%- if word in this.schema %}
-                # yes
+                --# yes
                 {%- set ns.catalog_name = 'intermediate' %}
                 -- {{ ns.catalog_name }}                                  # within if block
                 {%- else %}
-                # no
+                --# no
                 -- {{ ns.catalog_name }}                                  # within if block
             {%- endif %}
         --- {{ ns.catalog_name }}                                         # within for loop
         {%- endfor %}
     {%- else %}
-        # else
+        -- else
     {%- endif %}
     --- {{ ns.catalog_name }} 
 
-select '{{ ns.catalog_name }}' as column                              # I would expect this to return 'intermediate'
+select '{{ ns.catalog_name }}' as example_col                              
+-- # I would expect this to return 'intermediate'
