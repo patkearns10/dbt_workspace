@@ -1,9 +1,6 @@
-
-
-
 {% set your_query %}
 -- this should return 100
-select count(customer_id) from customers where customer_id is not null
+select count(customer_id) from {{ ref('customers') }} where customer_id is not null
 {% endset %}
 
 {% set results = run_query(your_query) %}
