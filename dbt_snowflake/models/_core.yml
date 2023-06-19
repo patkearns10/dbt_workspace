@@ -7,3 +7,6 @@ models:
         tests:
           - unique
           - not_null
+  - name: bar_view
+    config:
+      meta: {from_model_yml: yerp}
