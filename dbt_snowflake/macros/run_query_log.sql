@@ -1,5 +1,5 @@
 {# overwrite run_query with one that loudly logs at you #}
-{% macro run_query_new(sql) %}
+{% macro run_query_verbose(sql) %}
     {% call statement("run_query_statement", fetch_result=true, auto_begin=false) %}
         {{ sql }}
     {% endcall %}
