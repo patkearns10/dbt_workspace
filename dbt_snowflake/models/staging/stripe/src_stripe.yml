@@ -13,7 +13,6 @@ sources:
               - unique
           - name: paymentmethod
             tests:
-              - unique
               - accepted_values:
                   values: ['credit_card', 'bank_transfer', 'gift_card', 'coupon']
           - name: status
