@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: jaffle_shop
     description: A replica of the postgres database
-    database: raw
+    database: some_database_that_doesnt_exist
     tables:
       - name: customers
         columns:
