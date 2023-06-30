@@ -1,5 +1,5 @@
 {% set payment_methods_query -%}
-    select distinct payment_method from {{ ref('stg_payments') }}
+    select status, payment_method from {{ ref('stg_payments') }}
     order by 1
 {% endset -%}
 
