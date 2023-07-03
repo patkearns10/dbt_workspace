@@ -45,4 +45,7 @@ select
     '{{ my_cool_var_mirror }}' as mirror_variable,
     -- now you can alter the value
     {% set my_cool_var_mirror="2022-01-01" %}
-    '{{ my_cool_var_mirror }}' as changed_variable
+    '{{ my_cool_var_mirror }}' as changed_variable,
+
+    -- non existent variable (variable not defined) overwritten by env_var
+    '{{ var("non_existent_variable", env_var("DBT_WAREHOUSE")) }}' as overwrite_in_command
