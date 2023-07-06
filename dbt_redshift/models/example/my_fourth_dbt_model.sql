@@ -3,5 +3,5 @@
 {{ config(materialized='table') }}
 
 select *
-from {{ ref('my_first_dbt_model') }}
+from {{ ref('my_third_dbt_model') }}
 where id = 1
