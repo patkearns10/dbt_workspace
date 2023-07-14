@@ -36,4 +36,5 @@ models:
       - name: customer_id
         description: This test should fail
         tests:
-          - is_even
+          - is_even:
+              to: ref('customers')

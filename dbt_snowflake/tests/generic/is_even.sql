@@ -1,11 +1,14 @@
-{% test is_even(model, column_name) %}
+{% test is_even(model, column_name, to) %}
 
 with validation as (
 
     select
         {{ column_name }} as even_field
 
-    from {{ model }}
+    from {{ model }} m
+    left join
+    {{ to }} c
+    on m.customer_id = c.customer_id
 
 ),
 
