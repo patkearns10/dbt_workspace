@@ -34,7 +34,7 @@ models:
           - unique
           - not_null
       - name: customer_id
-        description: This test should fail
+        description: add wait time
         tests:
-          - is_even:
-              to: ref('customers')
+          - is_not_null_custom:
+              header: "CALL SYSTEM$WAIT(60);"
