@@ -17,7 +17,7 @@ select
 union all
 
 select
-    4 as id,
-    'green' as color,
+    5 as id,
+    'red' as color,
     42 as the_answer,
     current_timestamp() as insert_time
