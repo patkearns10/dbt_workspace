@@ -1,0 +1,1 @@
+select * from {{ ref('snapshot_hard_deletes') }} order by dbt_updated_at desc
