@@ -16,6 +16,8 @@ vars:
 
 models:
   secret:
+    +pre-hook:
+      - "{{ governance_check() }}"
     +materialized: view
     +meta:
       some_key: some_value
