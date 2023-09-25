@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key='UNIQUE_ID, GENERIC_ID',
+        unique_key='UNIQUE_ID',
         on_schema_change='append_new_columns',
         merge_exclude_columns = ['version', 'other_col'],
     )
