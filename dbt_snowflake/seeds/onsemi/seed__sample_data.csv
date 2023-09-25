@@ -1,6 +1,6 @@
 ID,NAME,AGE,DELETED
-1,pat,12
-2,alex,42
-3,mike,11
-4,sara,95
-5,liz,7
+1,pat,12,false
+2,alex,42,false
+3,mike,11,false
+4,sara,95,false
+5,liz,7,false
