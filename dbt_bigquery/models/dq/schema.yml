@@ -1,0 +1,17 @@
+version: 2
+
+models:
+  - name: dq_testignore_manual
+    description: Table that gets records from csv seed with manually added records to ignore in tests
+    columns:
+      - name: record_key
+        description: id of the error that should be ignored.
+      - name:  test_name
+        description: > 
+          Name of test. For generic macro tests - name of the table for storring error results, extracted using 'this' Jinja funciton.
+          For data tests - following can also be used - model['unique_id'] or from model['alias']. Python method to remove identifier of specific run - "'.'.join(model['unique_id'].split('.')[0:3])" 
+      - name: reason
+        description: Reason why key should be ignored
+
+  - name: dq_testignore
+    description: Table for union of ignore keys from manual and automatic sources. This table should be referenced in declarations of tests. 
