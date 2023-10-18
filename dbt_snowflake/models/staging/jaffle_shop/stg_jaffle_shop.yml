@@ -14,6 +14,7 @@ models:
     description: One record per order
     columns:
       - name: order_id
+        description: Primary key
         tests:
           - unique
           - not_null
