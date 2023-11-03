@@ -96,14 +96,14 @@ snapshots:
     hard_deletes:
       +enabled: True
 
-on-run-start:
+# on-run-start:
   # - "{{ create_run_end_results_table() }}"
 
-on-run-end:
+# on-run-end:
   # - "{{ log_run_end_results(results) }}"  # JYeo code
   # - "{{ dbt_artifacts.upload_results(results) }}"  # dbt_artifacts
   # - "{{ store_test_results(results) }}" # store test failures
 
-on-run-end: 
-  - "{{ log(invocation_id, true) }}"
-  - "{{ log(modules.datetime.datetime.now(), true) }}"
+# on-run-end: 
+#   - "{{ log(invocation_id, true) }}"
+#   - "{{ log(modules.datetime.datetime.now(), true) }}"
