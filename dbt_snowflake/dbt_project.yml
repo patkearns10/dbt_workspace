@@ -3,6 +3,8 @@ version: '1.0.0'
 config-version: 2
 
 profile: default
+dbt-cloud: 
+    project-id: 89074
 
 vars:
   my_cool_var: '2016-06-01'
@@ -53,12 +55,11 @@ vars:
 
 models:
   secret:
-    +post-hook:
-      - "{{ log(invocation_id, true) }}"
-      - "{{ log(modules.datetime.datetime.now(), true) }}"
-
-    +pre-hook:
-      - "{{ governance_check() }}"
+    #+post-hook:
+    #  - "{{ log(invocation_id, true) }}"
+    #  - "{{ log(modules.datetime.datetime.now(), true) }}" 
+    #+pre-hook:
+    #  - "{{ governance_check() }}"
     +materialized: view
     +meta:
       some_key: some_value
@@ -96,14 +97,12 @@ snapshots:
     hard_deletes:
       +enabled: True
 
-on-run-start:
+# on-run-start: #
   # - "{{ create_run_end_results_table() }}"
 
-on-run-end:
+# on-run-end: #
   # - "{{ log_run_end_results(results) }}"  # JYeo code
   # - "{{ dbt_artifacts.upload_results(results) }}"  # dbt_artifacts
   # - "{{ store_test_results(results) }}" # store test failures
-
-on-run-end: 
-  - "{{ log(invocation_id, true) }}"
-  - "{{ log(modules.datetime.datetime.now(), true) }}"
+  # - "{{ log(invocation_id, true) }}"
+  # - "{{ log(modules.datetime.datetime.now(), true) }}" #}
