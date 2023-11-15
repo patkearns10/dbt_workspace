@@ -31,21 +31,6 @@ environment_id: {environment_id}
 )
 #------------------------------------------------------------------------------
 
-
-#------------------------------------------------------------------------------
-# use environment variables to set configuration
-#------------------------------------------------------------------------------
-run_status_map = { # dbt run statuses are encoded as integers. This map provides a human-readable status
-  1:  'Queued',
-  2:  'Starting',
-  3:  'Running',
-  10: 'Success',
-  20: 'Error',
-  30: 'Cancelled',
-}
-#------------------------------------------------------------------------------
-
-
 req_auth_header = {'Authorization': f'Token {api_key}','Content-Type': 'application/json', "Accept": "application/json",}
 req_job_url = f'{api_base}/api/v2/accounts/{account_id}/jobs/{job_id}/'
 data = {

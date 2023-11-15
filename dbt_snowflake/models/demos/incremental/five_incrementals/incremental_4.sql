@@ -12,7 +12,7 @@
     ------------------------
     -- {{ is_incremental() }}
     ------------------------
-        {% do log("is incremental? " ~ is_incremental(), info=True )%}
+        {% do log("is incremental? " ~ is_incremental() )%}
     ------------------------
 
 {% if is_incremental() %}
