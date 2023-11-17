@@ -1,9 +1,10 @@
 {{
     config(
-        materialized='table',
-        sql_header="CALL SYSTEM$WAIT(60);",
+        materialized='view',
+
     )
 }}
+{#  sql_header="CALL SYSTEM$WAIT(60);", #}
 
 with
 dummy_datas as (
