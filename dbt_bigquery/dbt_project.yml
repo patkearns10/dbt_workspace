@@ -24,6 +24,32 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+vars:
+  my_cool_var: '2016-06-01'
+  dbt_system_to_build: 'incremental'
+  weekday_sale_default_weekday: thursday
+  weekday_sale:
+    - weekday: monday
+      promotion_no: 18015
+      sp_sales_code: 512
+      media_mark: 18251
+    - weekday: tuesday
+      promotion_no: 18019
+      sp_sales_code: 517
+      media_mark: 18046
+    - weekday: wednesday
+      promotion_no: 18061
+      sp_sales_code: 518
+      media_mark: 17771
+    - weekday: thursday
+      promotion_no: 18064
+      sp_sales_code: 519
+      media_mark: 18474
+    - weekday: friday
+      promotion_no: 18044
+      sp_sales_code: 520
+      media_mark: 18256
+
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
