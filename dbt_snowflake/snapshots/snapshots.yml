@@ -1,0 +1,8 @@
+version: 2
+
+snapshots:
+  - name: snapshot_hard_deletes
+    description: docs docs docs
+    columns:
+      - name: id
+        description: pkey
