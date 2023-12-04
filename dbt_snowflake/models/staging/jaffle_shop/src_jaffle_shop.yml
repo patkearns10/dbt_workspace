@@ -22,8 +22,8 @@ sources:
         description: One record per order
         loaded_at_field: _etl_loaded_at
         freshness:
-          warn_after: {count: "{{ 1 if target.name == 'prod' else 200 if target.name == 'dev' else 300 }}", period: day}
-          error_after: {count: "{{ 2 if target.name == 'prod' else 400 if target.name == 'dev' else 500 }}", period: day}
+          warn_after: {count: 1, period: day}
+          error_after: {count: 2, period: day}
         columns:
           - name: id
             tests:

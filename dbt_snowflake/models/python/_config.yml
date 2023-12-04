@@ -10,6 +10,6 @@ models:
       tags: ['python']
 
   - name: use_variables__customers_limit_10
-    config:
-      materialized: table
-      target_name: "{{ target.name }}"
+    # config:
+    #   materialized: table
+    #   target_name: "{{ target.name }}"
