@@ -1,0 +1,4 @@
+sources:
+  - name: dbt_pkearns
+    tables:
+      - name: CORE_PLG_EXEC_METRICS
