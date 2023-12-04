@@ -11,3 +11,7 @@ select 3 as col
 union all
 
 select 4 as col
+
+union all
+
+select 5 as col
