@@ -2,6 +2,7 @@ version: 2
 
 models:
   - name: customers
+    access: public
     description: One record per customer
     tests:
       - dbt_utils.unique_combination_of_columns:
@@ -24,6 +25,7 @@ models:
         description: NULL when a customer has not yet placed an order.
 
   - name: orders
+    access: public
     description: Complete orders model including the amount associated with each order.
     tests:
       - dbt_utils.expression_is_true:

@@ -78,6 +78,11 @@ models:
         +materialized: easy_incremental
       hard_deletes:
         +enabled: True
+
+    marts:
+      core:
+        +tags:
+          - "marts_core_subfolder"
   
   dbt_artifacts:
     +schema: dbt_artifacts_kearns_added
