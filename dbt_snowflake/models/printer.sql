@@ -3,5 +3,5 @@
 select 1 as col
 {{ printing(this=this) }}
 union all
-{{ log(">>>>>>>>>logging: " ~ this, info=True) }}
+{{ log(">>>>>>>>>logging: " ~ thise) }}
 select 2 as col
