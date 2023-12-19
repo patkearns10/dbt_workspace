@@ -10,7 +10,7 @@
           numeric_precision,
           numeric_scale
 
-        from ci.information_schema."columns"
+        from information_schema."columns"
         where table_name = '{{ relation.identifier }}'
     ),
 
