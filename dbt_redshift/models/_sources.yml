@@ -1,0 +1,7 @@
+version: 2
+
+sources:
+  - name: dbt_pkearns
+    database: ci
+    tables:
+      - name: my_first_dbt_model
