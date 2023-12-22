@@ -91,12 +91,42 @@
 
     ),
 
+    other_databases as (
+                select
+          ordinal_position,
+          schema_name as table_schema,
+          column_name,
+          data_type,
+          null::int as character_maximum_length,
+          null::int as numeric_precision,
+          null::int as numeric_scale
+        from svv_redshift_columns
+        where table_name = '{{ relation.identifier }}'
+        and schema_name = '{{ relation.schema }}'
+    ),
+
     unioned as (
       select * from bound_views
       union all
       select * from unbound_views
       union all
       select * from external_views
+      union all
+      select * from other_databases
+    ),
+    
+    distinct_unioned as (
+      select
+        ordinal_position,
+        column_name,
+        table_schema,
+        max(data_type) as data_type,
+        max(character_maximum_length) as character_maximum_length,
+        max(numeric_precision) as numeric_precision,
+        max(numeric_scale) as numeric_scale
+      from
+         unioned
+      group by 1,2,3
     )
 
     select
@@ -106,7 +136,7 @@
       numeric_precision,
       numeric_scale
 
-    from unioned
+    from distinct_unioned
     {% if relation.schema %}
     where table_schema = '{{ relation.schema }}'
     {% endif %}
