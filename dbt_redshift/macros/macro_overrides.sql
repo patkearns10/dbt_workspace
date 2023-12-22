@@ -84,7 +84,7 @@
           else null
         end as numeric_scale
       from
-        ci.pg_catalog.svv_external_columns
+        pg_catalog.svv_external_columns
       where
         schemaname = '{{ relation.schema }}'
         and tablename = '{{ relation.identifier }}'
@@ -114,7 +114,7 @@
       union all
       select * from other_databases
     ),
-    
+
     distinct_unioned as (
       select
         ordinal_position,
