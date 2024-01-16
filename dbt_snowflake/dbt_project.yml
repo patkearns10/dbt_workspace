@@ -15,7 +15,7 @@ vars:
   source_database: 'raw'
   target_database: 'raw'
   schemas: {'dev': ['dev_schema', 'dev_test']}
-  do_something: 'no'
+  do_something: "nope nope nope"
   weekday_sale:
     - weekday: monday,
       data:
