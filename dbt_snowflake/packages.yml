@@ -8,4 +8,6 @@ packages:
   # - git: "https://{{ env_var('DBT_ENV_SECRET_GIT_PAT') }}@github.com/dbt-labs/pro-serv-tools.git" # git URL
   #   revision: "main"
   #   subdirectory: "pro_serv_utils"
-    
+
+  - package: Snowflake-Labs/dbt_constraints
+    version: 0.6.2

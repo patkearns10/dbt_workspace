@@ -21,6 +21,7 @@ models:
         tests:
           - unique
           - not_null
+          - not_null_sampling
       - name: first_order_date
         description: NULL when a customer has not yet placed an order.
 
