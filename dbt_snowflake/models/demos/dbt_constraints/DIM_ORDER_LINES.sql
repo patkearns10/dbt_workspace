@@ -26,4 +26,3 @@ select
 
 
 -- include: {{ ref('customers') }}
--- test defer to prod
