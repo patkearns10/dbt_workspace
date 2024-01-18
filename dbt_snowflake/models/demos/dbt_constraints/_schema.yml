@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: DIM_CUSTOMERS
+    columns:
+      # Single column inline constraints
+      - name: C_CUSTKEY
+        tests:
+          - dbt_constraints.primary_key
+      - name: C_CUSTKEY
+        tests:
+          - dbt_constraints.unique_key
+  - name: DIM_ORDER_LINES
+    columns:
+      # Single column inline constraints
+      - name: OL_PK
+        tests:
+          - dbt_constraints.primary_key
+      - name: OL_UK
+        tests:
+          - dbt_constraints.unique_key
+      - name: OL_CUSTKEY
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('DIM_CUSTOMERS')
+              pk_column_name: C_CUSTKEY
+    # tests:
+    #   - dbt_constraints.foreign_key:
+    #       fk_column_name: OL_CUSTKEY
+    #       pk_table_name: ref('DIM_CUSTOMERS')
+    #       pk_column_name: C_CUSTKEY
+
