@@ -24,9 +24,3 @@ models:
           - dbt_constraints.foreign_key:
               pk_table_name: ref('DIM_CUSTOMERS')
               pk_column_name: C_CUSTKEY
-    # tests:
-    #   - dbt_constraints.foreign_key:
-    #       fk_column_name: OL_CUSTKEY
-    #       pk_table_name: ref('DIM_CUSTOMERS')
-    #       pk_column_name: C_CUSTKEY
-
