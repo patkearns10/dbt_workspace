@@ -24,5 +24,5 @@ select
 40 as OL_UK,
 400 as OL_CUSTKEY
 
-
+-- 
 -- include: {{ ref('customers') }}
