@@ -34,3 +34,4 @@ select
 
 -- include: {{ ref('customers') }} 
 -- to check if defer to prod works correctly.
+-- force it
