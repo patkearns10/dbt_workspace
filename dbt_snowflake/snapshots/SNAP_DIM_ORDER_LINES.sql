@@ -2,7 +2,7 @@
     {{
         config(
             target_database='development',
-            target_schema='snapshots',
+            target_schema=generate_schema_name('snapshots'),
             unique_key='OL_PK',
             strategy='check',
             check_cols='all'
