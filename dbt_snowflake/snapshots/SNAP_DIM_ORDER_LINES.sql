@@ -10,6 +10,7 @@
     }}
 
 select * from {{ ref('DIM_ORDER_LINES') }}
+-- include: {{ ref('SNAP_DIM_CUSTOMERS') }}
 -- comment for PR
 
 {% endsnapshot %}
