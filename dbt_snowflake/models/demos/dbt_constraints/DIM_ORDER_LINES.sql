@@ -24,5 +24,6 @@ select
 40 as OL_UK,
 400 as OL_CUSTKEY
 
-
+-- more changes
 -- include: {{ ref('customers') }}
+-- NEED TO TRY WITH SNAPSHOTS
