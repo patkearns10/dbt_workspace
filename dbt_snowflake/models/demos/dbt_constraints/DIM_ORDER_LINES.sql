@@ -26,3 +26,4 @@ select
 
 -- more changes
 -- include: {{ ref('customers') }}
+-- NEED TO TRY WITH SNAPSHOTS

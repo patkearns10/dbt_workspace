@@ -1,0 +1,15 @@
+version: 2
+
+snapshots:
+  - name: SNAP_DIM_CUSTOMERS
+    columns:
+      - name: C_CUSTKEY
+        tests:
+          - dbt_constraints.primary_key
+  - name: SNAP_DIM_ORDER_LINES
+    columns:
+      - name: OL_CUSTKEY
+        tests:
+          - dbt_constraints.foreign_key:
+              pk_table_name: ref('SNAP_DIM_CUSTOMERS')
+              pk_column_name: C_CUSTKEY
