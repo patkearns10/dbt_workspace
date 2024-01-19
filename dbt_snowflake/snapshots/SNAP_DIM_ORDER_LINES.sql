@@ -10,5 +10,6 @@
     }}
 
 select * from {{ ref('DIM_ORDER_LINES') }}
+-- comment for PR
 
 {% endsnapshot %}
