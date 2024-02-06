@@ -1,3 +1,15 @@
+"""
+Export your variables:
+----------------------
+export DBT_ACCOUNT_ID=51798
+export DBT_PROJECT_ID=89074
+export DBT_API_KEY='dbtc_aaaaabbbbbbccccddddeeeeefffff'
+
+Run your script:
+----------------------
+python3 api_list_job_details_for_project.py
+"""
+
 import requests
 import base64
 import json
