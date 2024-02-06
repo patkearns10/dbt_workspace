@@ -54,7 +54,6 @@ for project_id in projects:
     pprint('    =======================')
     # pprint(payload)
 
-    environments = {}
     for item in payload:
         print(f'    environment_id: {item["id"]}')
         print(f'    environment_name: {item["name"]}')
