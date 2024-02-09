@@ -3,22 +3,18 @@ version: 2
 sources:
   - name: jaffle_shop
     description: A replica of the postgres database
-    database: raw
+    database: development
+    schema: dbt_pkearns
     tables:
       - name: customers
-        columns:
-          - name: id
-            tests:
-              - not_null
-              - unique
-      - name: customers_2
-        identifier: customers
+        identifier: jaffle_shop__customers
         columns:
           - name: id
             tests:
               - not_null
               - unique
       - name: orders
+        identifier: jaffle_shop__orders
         description: One record per order
         loaded_at_field: _etl_loaded_at
         freshness:
@@ -34,3 +30,11 @@ sources:
             tests:
               - accepted_values:
                   values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+      - name: items
+        identifier: jaffle_shop__items
+      - name: products
+        identifier: jaffle_shop__products
+      - name: stores
+        identifier: jaffle_shop__stores
+      - name: supplies 
+        identifier: jaffle_shop__supplies
