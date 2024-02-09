@@ -1,0 +1,10 @@
+packages:
+- package: dbt-labs/dbt_utils
+  version: 1.0.0
+- package: dbt-labs/codegen
+  version: 0.9.0
+- package: brooklyn-data/dbt_artifacts
+  version: 2.2.2
+- package: Snowflake-Labs/dbt_constraints
+  version: 0.6.2
+sha1_hash: cbbdb27262a4c52361b38a0cf19274a60ee4d225
