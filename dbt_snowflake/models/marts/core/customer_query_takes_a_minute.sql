@@ -1,6 +1,7 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        enabled=false
     )
 }}
 
@@ -10,69 +11,69 @@ with data as (
 ),
 
 datas as (
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 union
-select row_number() over (partition by customer_id order by first_name, first_order_date) as ro, * from data
+select row_number() over (partition by customer_id order by customer_name, first_order_date) as ro, * from data
 
 )
 
