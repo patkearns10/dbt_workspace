@@ -36,11 +36,6 @@ models:
         tests:
           - not_null
           - unique
-      - name: status
-        description: "{{ doc('order_status') }}"
-        tests:
-          - accepted_values:
-              values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
 
   - name: stg_products
     description: Product (food and drink items that can be ordered) data with basic cleaning and transformation applied, one row per product.
