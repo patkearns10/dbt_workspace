@@ -19,3 +19,9 @@ union all
 select 
 400 as C_CUSTKEY,
 'orange' as color
+
+union all
+
+select 
+500 as C_CUSTKEY,
+'orange' as color

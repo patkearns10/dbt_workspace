@@ -20,7 +20,7 @@ renamed as (
         ----------  ids
         id as order_id,
         store_id as location_id,
-        customer as customer_id,
+        customer::text as customer_id,
 
         ---------- properties
         (order_total / 100.0) as order_total,
