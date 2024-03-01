@@ -29,7 +29,7 @@ exposures:
     depends_on:
       - ref('payments__pivoted')
 
-  - name: Big_Query_Spend_Analysis
+  - name: big_query_spend_analysis
     type: dashboard
     url: https://tableau.generalmills.com/#/views/GCPCostExplorer_16303332095400/GCPCostOverview?:iid=1
     owner:
@@ -38,3 +38,4 @@ exposures:
     depends_on:
       - ref('stg_orders')
       - ref('stg_customers')
+      - source('jaffle_shop', 'orders')
