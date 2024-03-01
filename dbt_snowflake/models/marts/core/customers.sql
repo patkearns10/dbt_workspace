@@ -1,8 +1,20 @@
 {{
     config(
-        materialized='table'
+        materialized='table',
+        pre_hook="{{ delete_table_condition(this,'customer_id = -1') }}"
     )
 }}
+
+{% if flags.WHICH in ('run', 'build') %}
+-------------
+-- print True
+------------
+{% else %}
+-------------
+-- print False
+------------
+{% endif %}
+
 
 with customers as (
     select * from {{ ref('stg_customers')}}
