@@ -8,6 +8,5 @@
 }}
 
 {{ log_something() }}
--- comment
 
 select * from {{ ref('foo_view') }}
