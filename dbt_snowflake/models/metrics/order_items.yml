@@ -30,6 +30,10 @@ semantic_models:
         description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
         agg: sum
         expr: product_price
+      - name: median_revenue
+        description: The median revenue generated for each order item.
+        agg: median
+        expr: product_price
       - name: food_revenue
         description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
         agg: sum
