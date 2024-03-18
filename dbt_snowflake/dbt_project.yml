@@ -83,6 +83,8 @@ models:
       core:
         +tags:
           - "marts_core_subfolder"
+    python:
+      +enabled: false
   
   dbt_artifacts:
     +schema: dbt_artifacts_kearns_added

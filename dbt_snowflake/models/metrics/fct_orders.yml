@@ -82,6 +82,12 @@ metrics:
     label: "order_total"
     type_params:
       measure: order_total
+  - name: "order_count"
+    description: "The number of orders placed"
+    type: simple
+    label: "order_count"
+    type_params:
+      measure: order_count
   - name: "locations_with_orders"
     description: "The number of locations that have orders."
     type: simple
@@ -175,6 +181,18 @@ metrics:
           alias: cost
           filter: |
             {{Dimension('product__is_food_order')}} = True
+  - name: "order_gross_profit"
+    label: "order_gross_profit"    
+    description: "The gross profit for each order"
+    type: derived
+    type_params:
+      expr: revenue - cost
+      metrics:
+        - name: order_total
+          alias: revenue
+        - name: order_amount
+          alias: cost
+ 
  #CUMULATIVE METRICS 
   - name: "cumulative_order_amount"
     label: "cumulative_order_amount"    
