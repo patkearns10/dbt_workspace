@@ -11,7 +11,7 @@ from pprint import pprint
 #------------------------------------------------------------------------------
 # get environment variables
 #------------------------------------------------------------------------------
-api_base        = os.getenv('DBT_URL', 'https://cloud.getdbt.com') # default to multitenant url
+api_base        = os.getenv('DBT_URL', 'https://au.dbt.com') # default to multitenant url
 api_key         = os.environ['DBT_API_KEY']  # no default here, just throw an error here if key not provided
 account_id      = int(os.environ['DBT_ACCOUNT_ID']) # no default here, just throw an error here if id not provided
 
