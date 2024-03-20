@@ -4,7 +4,7 @@ config-version: 2
 
 profile: default
 dbt-cloud: 
-    project-id: 255979
+    project-id: 89074
 
 vars:
   my_cool_var: '2016-06-01'
