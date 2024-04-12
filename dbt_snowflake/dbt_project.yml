@@ -64,7 +64,7 @@ models:
     +materialized: view
     +meta:
       some_key: some_value
-    
+
     snowflake_meta:
       +tags:   snowflake_meta
       +schema: snowflake_meta
