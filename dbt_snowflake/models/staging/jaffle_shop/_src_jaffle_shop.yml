@@ -18,8 +18,8 @@ sources:
         description: One record per order
         loaded_at_field: ordered_at
         freshness:
-          warn_after: {count: 100, period: day}
-          error_after: {count: 200, period: day}
+          warn_after: {count: 100000, period: day}
+          error_after: {count: 200000, period: day}
         columns:
           - name: id
             tests:

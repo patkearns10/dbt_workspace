@@ -11,3 +11,5 @@ packages:
 
   - package: Snowflake-Labs/dbt_constraints
     version: 0.6.2
+  - package: dbt-labs/audit_helper
+    version: 0.11.0
