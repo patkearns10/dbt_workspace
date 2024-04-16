@@ -55,3 +55,8 @@ joined as (
 )
 
 select * from joined
+
+-- creating a dupe
+-- this will fail a normal unique test
+union all
+select * from joined where order_item_id = '3f8b6d6a-c77a-46eb-8eb0-48f80acb9708'

@@ -1,0 +1,4 @@
+model_name,column_name,test_name,filter_clause,description,valid_from,valid_to
+order_items,order_item_id,unique_coded_exceptions_order_items_order_item_id,order_item_id != '3f8b6d6a-c77a-46eb-8eb0-48f80acb9708',remove this id from test because dupes,'2024-04-16','2999-01-01'
+order_items,order_item_id,unique_coded_exceptions_order_items_order_item_id,order_item_id != 'test_item',test for multiple entries,'2024-04-16','2999-01-01'
+not_a_model,not_a_column,not_a_test,"1=1",test for not bringing in different model/test exceptions,'2024-04-16','2999-01-01'
