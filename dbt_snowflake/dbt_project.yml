@@ -10,8 +10,8 @@ vars:
   my_cool_var: '2016-06-01'
   disable_models: "['some_model_name']"
   snowflake_meta_src_db: 'snowflake' # override this with -> dbt run --vars "'snowflake_meta_src_db': 'my_snowflake_meta_src_db'"
-  dbt_artifacts_database: development
-  dbt_artifacts_schema: dbt_artifacts_kearns_added
+  # dbt_artifacts_database: development
+  # dbt_artifacts_schema: dbt_artifacts_kearns_added
   source_database: 'raw'
   target_database: 'raw'
   schemas: {'dev': ['dev_schema', 'dev_test']}
@@ -87,9 +87,9 @@ models:
       +enabled: false
   
   dbt_artifacts:
-    +schema: dbt_artifacts_kearns_added
+    +schema: dbt_artifact
     staging:
-      +schema: dbt_artifacts_kearns_added__staging
+      +schema: dbt_artifact
 
 sources:
   secret:
