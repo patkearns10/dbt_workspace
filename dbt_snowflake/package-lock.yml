@@ -4,9 +4,9 @@ packages:
 - package: dbt-labs/codegen
   version: 0.9.0
 - package: brooklyn-data/dbt_artifacts
-  version: 2.2.2
+  version: 2.6.2
 - package: Snowflake-Labs/dbt_constraints
   version: 0.6.2
 - package: dbt-labs/audit_helper
   version: 0.11.0
-sha1_hash: 0bfa0beedeba02c591b21d63a465f642a77d0385
+sha1_hash: 4869a7ae30b52f590ebb0dae814c46997c8aa463
