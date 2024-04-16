@@ -69,3 +69,12 @@ models:
         description: A boolean indicating if this order included any food items.
       - name: is_drink_order
         description: A boolean indicating if this order included any drink items.
+
+  - name: order_items
+    description: Order items overview data mart, offering key details for each order item inlcluding PRODUCT_ID, PRODUCT_PRICE, SUPPLY_COST. One row per order item.
+    columns:
+      - name: order_item_id
+        description: The unique key of the orders items mart.
+        tests:
+          - not_null
+          - unique_coded_exceptions
