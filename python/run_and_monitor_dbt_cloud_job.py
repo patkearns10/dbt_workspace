@@ -9,7 +9,6 @@ api_base        = os.getenv('DBT_URL', 'https://cloud.getdbt.com') # default to 
 job_cause       = os.getenv('DBT_JOB_CAUSE', 'API-triggered job') # default to generic message
 git_branch      = os.getenv('DBT_JOB_BRANCH', None) # default to None
 schema_override = os.getenv('DBT_JOB_SCHEMA_OVERRIDE', None) # default to None
-pr_id           = os.getenv('DBT_PR_ID', None) # default to None
 api_key         = os.environ['DBT_API_KEY']  # no default here, just throw an error here if key not provided
 account_id      = os.environ['DBT_ACCOUNT_ID'] # no default here, just throw an error here if id not provided
 project_id      = os.environ['DBT_PROJECT_ID'] # no default here, just throw an error here if id not provided
@@ -54,8 +53,6 @@ def run_job(url, headers, cause, branch=None, schema=None ) -> int:
     req_payload['git_branch'] = branch.replace('refs/heads/', '')
   if schema_override:
     req_payload['schema_override'] = schema_override.replace('-', '_')
-  else:
-    req_payload['schema_override'] = f'dbt_cloud_pr_{job_id}_{pr_id}'
 
   # trigger job
   print(f'Triggering job:\n\turl: {url}\n\tpayload: {req_payload}')
@@ -91,7 +88,7 @@ def main():
 
   # build status check url and run status link
   req_status_url = f'{api_base}/api/v2/accounts/{account_id}/runs/{run_id}/'
-  run_status_link = f'{api_base}/deploy/{account_id}/projects/{project_id}/runs/{run_id}/'
+  run_status_link = f'{api_base}/#/accounts/{account_id}/projects/{project_id}/runs/{run_id}/'
 
   # update user with status link
   print(f'Job running! See job status at {run_status_link}')
