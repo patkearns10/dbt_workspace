@@ -33,7 +33,7 @@ Example 3 - full clean :)
 
     {% set get_drop_commands_query %}
         SELECT
-            'DROP SCHEMA {{database}}.' || SCHEMA_NAME || 'CASCADE' || ';' AS DROP_QUERY
+            'DROP SCHEMA {{database}}.' || SCHEMA_NAME || ' CASCADE' || ';' AS DROP_QUERY
         FROM
             {{database}}.INFORMATION_SCHEMA.SCHEMATA
         WHERE
