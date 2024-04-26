@@ -2,6 +2,8 @@ version: 2
 
 models:
   - name: customers
+    config:
+      tags: 'some_tag'
     access: public
     description: One record per customer
  #   tests:
@@ -17,7 +19,7 @@ models:
     columns:
      - name: customer_id
        description: Primary key
-       tags: [run_da_tests]
+       tags: ['run_da_tests']
  #       tests:
  #         - unique
  #         - not_null

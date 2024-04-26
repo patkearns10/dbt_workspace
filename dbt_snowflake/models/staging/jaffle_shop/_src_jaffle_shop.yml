@@ -3,16 +3,20 @@ version: 2
 sources:
   - name: jaffle_shop
     description: A replica of the postgres database
+    tags: ['top_level']
     database: development
     schema: dbt_pkearns
     tables:
       - name: customers
+        tags: ['table_level']
         identifier: jaffle_shop__customers
         columns:
           - name: id
+            tags: ['column_level']
             tests:
               - not_null
-              - unique
+              - unique:
+                  tags: ['test_level']
       - name: orders
         identifier: jaffle_shop__orders
         description: One record per order
