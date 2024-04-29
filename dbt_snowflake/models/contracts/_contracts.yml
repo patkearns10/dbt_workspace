@@ -58,7 +58,7 @@ models:
           - include: all
   
   - name: fct_contracts
-    latest_version: 2
+    latest_version: 1
     columns:
       - name: job_id
         data_type: number
