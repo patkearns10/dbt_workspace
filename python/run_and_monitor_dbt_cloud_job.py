@@ -14,6 +14,8 @@ api_key         = os.environ['DBT_API_KEY']  # no default here, just throw an er
 account_id      = os.environ['DBT_ACCOUNT_ID'] # no default here, just throw an error here if id not provided
 project_id      = os.environ['DBT_PROJECT_ID'] # no default here, just throw an error here if id not provided
 job_id          = os.environ['DBT_PR_JOB_ID'] # no default here, just throw an error here if id not provided
+is_slim_ci_job = False
+
 
 print(f"""
 Configuration:
@@ -54,7 +56,7 @@ def run_job(url, headers, cause, branch=None, schema=None ) -> int:
     req_payload['git_branch'] = branch.replace('refs/heads/', '')
   if schema_override:
     req_payload['schema_override'] = schema_override.replace('-', '_')
-  else:
+  if is_slim_ci_job:
     req_payload['schema_override'] = f'dbt_cloud_pr_{job_id}_{pr_id}'
 
   # trigger job
