@@ -2,13 +2,16 @@ version: 2
 
 models:
   - name: stg_customers
+    tags: ['model_level']
     description: Customer data with basic cleaning and transformation applied, one row per customer.
     columns:
       - name: customer_id
+        tags: ['column_level']
         description: The unique key for each customer.
         tests:
           - not_null
-          - unique
+          - unique:
+              tags: ['test_level']
 
   - name: stg_locations
     description: List of open locations with basic cleaning and transformation applied, one row per location.
