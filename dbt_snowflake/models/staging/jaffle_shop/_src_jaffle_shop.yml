@@ -5,14 +5,18 @@ sources:
     description: A replica of the postgres database
     database: development
     schema: dbt_pkearns
+    tags: ['top_level']
     tables:
       - name: customers
+        tags: ['table_level']
         identifier: jaffle_shop__customers
         columns:
           - name: id
+            tags: ['column_level']
             tests:
               - not_null
-              - unique
+              - unique:
+                  tags: ['top_level']
       - name: orders
         identifier: jaffle_shop__orders
         description: One record per order
