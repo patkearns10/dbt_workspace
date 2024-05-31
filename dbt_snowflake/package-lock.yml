@@ -2,11 +2,11 @@ packages:
 - package: dbt-labs/dbt_utils
   version: 1.0.0
 - package: dbt-labs/codegen
-  version: 0.9.0
+  version: 0.12.1
 - package: brooklyn-data/dbt_artifacts
   version: 2.6.2
 - package: Snowflake-Labs/dbt_constraints
   version: 0.6.2
 - package: dbt-labs/audit_helper
   version: 0.11.0
-sha1_hash: 4869a7ae30b52f590ebb0dae814c46997c8aa463
+sha1_hash: a4d0e98cd1edff030c12a11dd97fa0cf6517d1ff
