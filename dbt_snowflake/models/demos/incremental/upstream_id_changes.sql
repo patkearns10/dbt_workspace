@@ -61,6 +61,20 @@ sample_data as (
         2 as unique_id,
         'white' as color,
         date('2024-01-09') as _date
+    
+    union all
+
+    select
+        4 as unique_id,
+        'white' as color,
+        date('2024-01-10') as _date
+
+    union all
+
+    select
+        5 as unique_id,
+        'white' as color,
+        date('2024-01-11') as _date
 )
 
 select * from sample_data
