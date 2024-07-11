@@ -101,6 +101,7 @@ sources:
 
 snapshots:
   secret:
+    +target_schema: "{{ target.schema }}"
     snowflake_meta:
       +tags: ['snowflake_meta']
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"
