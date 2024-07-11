@@ -103,7 +103,7 @@ snapshots:
   secret:
     +target_schema: "{{ target.schema }}"
     schema_change:
-        +target_schema: "{{target.schema if (env_var('DBT_ENV_CLEANSED') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') }} == 'github_pull_request') else 'CLEANSED' }}"
+        +target_schema: "{{target.schema if env_var('DBT_ENV_CLEANSED') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') == 'github_pull_request' else 'CLEANSED' }}"
     snowflake_meta:
       +tags: ['snowflake_meta']
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"

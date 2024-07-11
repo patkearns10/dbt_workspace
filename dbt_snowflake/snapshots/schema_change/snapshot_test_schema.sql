@@ -8,6 +8,7 @@
     }}
 
     select
+    
     dbt_cloud_run_reason_category as id,
     dbt_cloud_run_reason_category,
     dbt_cloud_run_reason,
