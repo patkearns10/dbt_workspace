@@ -1,4 +1,10 @@
 select
+
+{{ log('# DBT_CLOUD_INVOCATION_CONTEXT: '~env_var('DBT_CLOUD_INVOCATION_CONTEXT'), info=True) }}
+{{ log('# DBT_CLOUD_ENVIRONMENT_NAME: '~env_var('DBT_CLOUD_ENVIRONMENT_NAME'), info=True) }}
+{{ log('# DBT_CLOUD_ENVIRONMENT_TYPE: '~env_var('DBT_CLOUD_ENVIRONMENT_TYPE'), info=True) }}
+
+
 -- ex: dev, staging, ci, or prod
 '{{env_var('DBT_CLOUD_INVOCATION_CONTEXT', "default")}}' as DBT_CLOUD_INVOCATION_CONTEXT,
 -- ex: "Development"
