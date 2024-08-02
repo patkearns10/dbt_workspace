@@ -125,7 +125,7 @@ metrics:
     label: "food_order_amount"
     type: simple
     type_params:
-      measure: food_orders
+      measure: food_order_total
   - name: met_max_order_amount
     label: "max_order_amount"    
     description: "The highest order value for a given period"
