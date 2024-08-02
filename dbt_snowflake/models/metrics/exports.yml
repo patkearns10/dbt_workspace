@@ -1,0 +1,72 @@
+saved_queries:
+
+  - name: sl_order_item_daily
+    description: Combination of order and item info at daily level
+    label: Order Item daily
+    query_params:
+        metrics:
+          - met_order_total
+          - met_food_order_total
+          - met_order_count
+          - customers_with_orders
+          - met_order_value_p99
+          - met_max_order_amount
+          - met_min_order_amount
+          - met_order_gross_profit
+        group_by:
+          - "Dimension('orders__ordered_at__day')"
+          - "Dimension('orders__location')"
+          - "Dimension('order_item__product')"
+    exports:
+        - name: order_item_daily_exp
+          config:
+            export_as: table
+            schema: dbt_pkearns
+
+
+  - name: sl_order_item_month
+    description: Combination of order and item info at daily level
+    label: Order Item monthly
+    query_params:
+        metrics:
+          - met_order_total
+          - met_food_order_total
+          - met_order_count
+          - customers_with_orders
+          - met_order_value_p99
+          - met_max_order_amount
+          - met_min_order_amount
+          - met_order_gross_profit
+        group_by:
+          - "Dimension('orders__ordered_at__month')"
+          - "Dimension('orders__location')"
+          - "Dimension('order_item__product')"
+    exports:
+        - name: order_item_monthly_exp
+          config:
+            export_as: table
+            schema: dbt_pkearns
+
+  - name: sl_customers
+    description: Orders by Customer
+    label: Customer Orders
+    query_params:
+        metrics:
+          - met_order_total
+          - met_food_order_total
+          - met_order_count
+          - met_order_value_p99
+          - met_max_order_amount
+          - met_min_order_amount
+          - met_food_order_pct
+          - met_order_gross_profit
+
+        group_by:
+          - "Dimension('customers__customer_name')"
+          - "Dimension('customers__customer_type')"
+          - "Dimension('customers__first_ordered_at')"
+    exports:
+        - name: order_item_monthly_exp
+          config:
+            export_as: table
+            schema: dbt_pkearns
