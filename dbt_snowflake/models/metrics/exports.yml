@@ -14,7 +14,7 @@ saved_queries:
           - met_order_gross_profit
         group_by:
           - "TimeDimension('metric_time', 'day')"
-          - "Dimension('orders__location')"
+          - "Entity('orders__location')"
           - "Dimension('order_item__product')"
     exports:
         - name: order_item_daily_exp
@@ -37,7 +37,7 @@ saved_queries:
           - met_order_gross_profit
         group_by:
           - "TimeDimension('metric_time', 'day')"
-          - "Dimension('orders__location')"
+          - "Entity('orders__location')"
           - "Dimension('order_item__product')"
     exports:
         - name: order_item_monthly_exp
