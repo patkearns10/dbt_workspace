@@ -1,7 +1,7 @@
 saved_queries:
 
   - name: sl_order_item_daily
-    description: Combination of order and item info at daily level
+    description: order info at daily level
     label: Order Item daily
     query_params:
         metrics:
@@ -15,7 +15,6 @@ saved_queries:
         group_by:
           - "TimeDimension('metric_time', 'day')"
           - "Entity('orders__location')"
-          - "Dimension('order_item__product')"
     exports:
         - name: order_item_daily_exp
           config:
@@ -24,7 +23,7 @@ saved_queries:
 
 
   - name: sl_order_item_month
-    description: Combination of order and item info at daily level
+    description: order info at monthly level
     label: Order Item monthly
     query_params:
         metrics:
@@ -38,7 +37,6 @@ saved_queries:
         group_by:
           - "TimeDimension('metric_time', 'day')"
           - "Entity('orders__location')"
-          - "Dimension('order_item__product')"
     exports:
         - name: order_item_monthly_exp
           config:
