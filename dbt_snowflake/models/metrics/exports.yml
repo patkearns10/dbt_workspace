@@ -8,13 +8,12 @@ saved_queries:
           - met_order_total
           - met_food_order_total
           - met_order_count
-          - customers_with_orders
           - met_order_value_p99
           - met_max_order_amount
           - met_min_order_amount
           - met_order_gross_profit
         group_by:
-          - "Dimension('orders__ordered_at__day')"
+          - "TimeDimension('metric_time', 'day')"
           - "Dimension('orders__location')"
           - "Dimension('order_item__product')"
     exports:
@@ -32,13 +31,12 @@ saved_queries:
           - met_order_total
           - met_food_order_total
           - met_order_count
-          - customers_with_orders
           - met_order_value_p99
           - met_max_order_amount
           - met_min_order_amount
           - met_order_gross_profit
         group_by:
-          - "Dimension('orders__ordered_at__month')"
+          - "TimeDimension('metric_time', 'day')"
           - "Dimension('orders__location')"
           - "Dimension('order_item__product')"
     exports:
