@@ -35,7 +35,7 @@ saved_queries:
           - met_min_order_amount
           - met_order_gross_profit
         group_by:
-          - "TimeDimension('metric_time', 'day')"
+          - "TimeDimension('metric_time', 'month')"
           - "Entity('orders__location')"
     exports:
         - name: order_item_monthly_exp
@@ -58,9 +58,9 @@ saved_queries:
           - met_order_gross_profit
 
         group_by:
-          - "Dimension('customers__customer_name')"
-          - "Dimension('customers__customer_type')"
-          - "Dimension('customers__first_ordered_at')"
+          - "Dimension('customer__customer_name')"
+          - "Dimension('customer__customer_type')"
+          - "Dimension('customer__first_ordered_at')"
     exports:
         - name: order_item_monthly_exp
           config:
