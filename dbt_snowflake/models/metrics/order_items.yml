@@ -40,4 +40,3 @@ semantic_models:
         description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
         agg: sum
         expr: case when is_drink_item = 1 then product_price else 0 end
-
