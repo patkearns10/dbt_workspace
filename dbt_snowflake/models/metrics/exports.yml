@@ -1,6 +1,6 @@
 saved_queries:
 
-  - name: sl_order_item_daily
+  - name: sl_order_daily
     description: order info at daily level
     label: Order Item daily
     query_params:
@@ -22,7 +22,7 @@ saved_queries:
             schema: dbt_pkearns
 
 
-  - name: sl_order_item_month
+  - name: sl_order_monthly
     description: order info at monthly level
     label: Order Item monthly
     query_params:
