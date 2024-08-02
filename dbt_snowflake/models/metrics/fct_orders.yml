@@ -63,7 +63,7 @@ semantic_models:
           percentile: 0.99
           use_discrete_percentile: true
           use_approximate_percentile: false
-      - name: food_orders
+      - name: food_order_total
         expr: case when is_food_order then order_total else 0 end
         agg: sum
       - name: max_order_value
@@ -82,6 +82,12 @@ metrics:
     label: "order_total"
     type_params:
       measure: order_total
+  - name: met_food_order_total
+    description: "Sum of orders value if food order"
+    type: simple
+    label: food_order_total
+    type_params:
+      measure: food_order_total
   - name: met_order_count
     description: "The number of orders placed"
     type: simple
@@ -172,16 +178,12 @@ metrics:
     description: "The gross profit for each food order"
     type: derived
     type_params:
-      expr: revenue - cost
+      expr: food_revenue - food_cost
       metrics:
-        - name: met_order_total
-          alias: revenue
-          filter: |
-            {{Dimension('orders__is_food_order')}} = True
-        - name: met_order_amount
-          alias: cost
-          filter: |
-            {{Dimension('orders__is_food_order')}} = True
+        - name: met_food_order_total
+          alias: food_revenue
+        - name: met_food_order_amount
+          alias: food_cost
   - name: met_order_gross_profit
     label: "order_gross_profit"    
     description: "The gross profit for each order"
