@@ -16,7 +16,7 @@ saved_queries:
           - "TimeDimension('metric_time', 'day')"
           - "Entity('orders__location')"
     exports:
-        - name: order_item_daily_exp
+        - name: order_daily_exp
           config:
             export_as: table
             schema: dbt_pkearns
@@ -38,7 +38,7 @@ saved_queries:
           - "TimeDimension('metric_time', 'month')"
           - "Entity('orders__location')"
     exports:
-        - name: order_item_monthly_exp
+        - name: order_monthly_exp
           config:
             export_as: table
             schema: dbt_pkearns
@@ -62,7 +62,7 @@ saved_queries:
           - "Dimension('customer__customer_type')"
           - "Dimension('customer__first_ordered_at')"
     exports:
-        - name: order_item_monthly_exp
+        - name: customers_exp
           config:
             export_as: table
             schema: dbt_pkearns
