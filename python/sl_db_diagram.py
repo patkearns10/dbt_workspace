@@ -1,27 +1,28 @@
 import csv
+from datetime import datetime
 import json
 import os
 import sys
-import time
 
 if len(sys.argv) == 2:
     metric_name = sys.argv[1]
 else:
     metric_name = 'met_trade_footfall_daily_conversions'
 
-# extract the current filepath
-DIR_PATH = os.path.dirname(os.path.abspath(__file__))
-
 """
 Add 'semantic_manifest.json' file to your current directory.
 """
 
+# extract the current filepath
+DIR_PATH = os.path.dirname(os.path.abspath(__file__))
+now = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+
+
 def export_metric_dbdiagram_file():
     """create new file to import into dbdiagram.io, pulling data from semantic_layer.json"""
 
-    ts = time.time()
     # Opening new file and JSON file
-    with open(os.path.join(DIR_PATH, f'dbdiagram_metric_{ts}.txt'), 'w') as dbdiagram_metric_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
+    with open(os.path.join(DIR_PATH, f'dbdiagram_metric_{now}.txt'), 'w') as dbdiagram_metric_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
 
         # returns JSON object as a dictionary
         manifest = json.load(semantic_manifest_file)
@@ -156,9 +157,8 @@ def export_metric_dbdiagram_file():
 def export_dbdiagram_file():
     """create new file to import into dbdiagram.io, pulling data from semantic_layer.json"""
 
-    ts = time.time()
     # Opening new file and JSON file
-    with open(os.path.join(DIR_PATH, f'dbdiagram_all_{ts}.txt'), 'w') as dbdiagram_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
+    with open(os.path.join(DIR_PATH, f'dbdiagram_all_{now}.txt'), 'w') as dbdiagram_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
 
         # returns JSON object as a dictionary
         manifest = json.load(semantic_manifest_file)
@@ -194,9 +194,10 @@ def export_dbdiagram_file():
             dbdiagram_file.write(f'Table {metric["name"]}'+'\n')
             dbdiagram_file.write('{')
             dbdiagram_file.write(f'Note: "{metric["description"]}"'+'\n')
-            if metric["type"] == 'simple':
-                metrics.append(f'{metric["name"]}.{metric["type_params"]["measure"]["name"]}')
-                dbdiagram_file.write(f'{metric["type_params"]["measure"]["name"]} measure'+'\n')
+            if metric["type"] in ('simple', 'cumulative', 'conversion'):
+                for m in metric["type_params"]["input_measures"]:
+                    metrics.append(f'{metric["name"]}.{m["name"]}')
+                    dbdiagram_file.write(f'{m["name"]} measure'+'\n')
             elif metric["type"] == 'ratio':
                 # numerator
                 metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
@@ -204,6 +205,10 @@ def export_dbdiagram_file():
                 # denominator
                 metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
                 dbdiagram_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+            elif metric["type"] == 'derived':
+                for met in metric["type_params"]["metrics"]:
+                    metrics.append(f'{metric["name"]}.{met["name"]}')
+                    dbdiagram_file.write(f'{met["name"]} metric'+'\n')
             else:
                 print('todo: other types of metrics (cumulative, conversion, derived')
             dbdiagram_file.write('}')
@@ -228,9 +233,8 @@ def export_dbdiagram_file():
 def list_fields_and_metrics():
     """create two csv files: semantic model fields & metrics."""
 
-    ts = time.time()
     # Opening new file and JSON file
-    with open(os.path.join(DIR_PATH, f'semantic_models_{ts}.csv'), 'w') as semantic_models_file, open(os.path.join(DIR_PATH, f'semantic_metrics_{ts}.csv'), 'w') as semantic_metrics_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
+    with open(os.path.join(DIR_PATH, f'semantic_models_{now}.csv'), 'w') as semantic_models_file, open(os.path.join(DIR_PATH, f'semantic_metrics_{now}.csv'), 'w') as semantic_metrics_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
 
         # returns JSON object as a dictionary
         manifest = json.load(semantic_manifest_file)
@@ -285,11 +289,12 @@ def list_fields_and_metrics():
         print('Succesfully created semantic models file!')
 
         # metrics csv
-        metric_fields = ['metric_name', 'label', 'measures', 'type', 'description', 'filter']
-        def create_csv_dict(metric_name, label, measures, type, description, filter):
+        metric_fields = ['metric_name', 'label', 'metrics', 'measures', 'type', 'description', 'filter']
+        def create_csv_dict(metric_name, label, metrics, measures, type, description, filter):
             return {
             "metric_name": f"{metric_name}",
             "label": f"{label}",
+            "metrics": f"{metrics}",
             "measures": f"{measures}",
             "type": f"{type}",
             "description": f"{description}",
@@ -302,36 +307,50 @@ def list_fields_and_metrics():
 
 
         for metric in manifest['metrics']:
-            if metric["type"] == 'simple':
+
+            if metric["type"] in ('simple', 'cumulative', 'conversion'):
                 metric_writer.writerow(
                     create_csv_dict(
                         metric["name"],
                         metric["label"],
-                        [metric["type_params"]["measure"]["name"]],
+                        None,
+                        [measures["name"] for measures in metric["type_params"]["input_measures"] ],
                         metric["type"],
                         metric["description"],
                         metric["filter"]
                         )
                     )
-
             elif metric["type"] == 'ratio':
                 metric_writer.writerow(
                     create_csv_dict(
                         metric["name"],
                         metric["label"],
                         [metric["type_params"]["numerator"]["name"], metric["type_params"]["denominator"]["name"]],
+                        [measures["name"] for measures in metric["type_params"]["input_measures"] ],
+                        metric["type"],
+                        metric["description"],
+                        metric["filter"]
+                        )
+                    )
+            elif metric["type"] == 'derived':
+                metric_writer.writerow(
+                    create_csv_dict(
+                        metric["name"],
+                        metric["label"],
+                        [metrics["name"] for metrics in metric["type_params"]["metrics"] ],
+                        [measures["name"] for measures in metric["type_params"]["input_measures"] ],
                         metric["type"],
                         metric["description"],
                         metric["filter"]
                         )
                     )
             else:
-                print('todo: other types of metrics (cumulative, conversion, derived')
+                print('Found something unexpected (type not in simple, ratio, derived, conversion)')
 
     print('Succesfully created metrics file!')
 
 
 if __name__ == '__main__':
     # export_metric_dbdiagram_file()
-    list_fields_and_metrics()
-    # export_dbdiagram_file()
+    # list_fields_and_metrics()
+    export_dbdiagram_file()
