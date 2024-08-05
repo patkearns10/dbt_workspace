@@ -123,10 +123,125 @@
                 }
             ],
             "label": null,
-            "metadata": null,
-            "config": {
-                "meta": {}
-            }
+            "metadata": null
+        },
+        {
+            "name": "order_item",
+            "defaults": {
+                "agg_time_dimension": "ordered_at"
+            },
+            "description": "Items contatined in each order. The grain of the table is one row per order item.\n",
+            "node_relation": {
+                "alias": "order_items",
+                "schema_name": "dbt_pkearns",
+                "database": "DEVELOPMENT",
+                "relation_name": "DEVELOPMENT.dbt_pkearns.order_items"
+            },
+            "primary_entity": null,
+            "entities": [
+                {
+                    "name": "order_item",
+                    "description": null,
+                    "type": "primary",
+                    "role": null,
+                    "expr": "order_item_id",
+                    "metadata": null,
+                    "label": null
+                },
+                {
+                    "name": "order_id",
+                    "description": null,
+                    "type": "foreign",
+                    "role": null,
+                    "expr": "order_id",
+                    "metadata": null,
+                    "label": null
+                },
+                {
+                    "name": "product",
+                    "description": null,
+                    "type": "foreign",
+                    "role": null,
+                    "expr": "product_id",
+                    "metadata": null,
+                    "label": null
+                }
+            ],
+            "measures": [
+                {
+                    "name": "revenue",
+                    "agg": "sum",
+                    "description": "The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.",
+                    "create_metric": false,
+                    "expr": "product_price",
+                    "agg_params": null,
+                    "metadata": null,
+                    "non_additive_dimension": null,
+                    "agg_time_dimension": null,
+                    "label": null
+                },
+                {
+                    "name": "food_revenue",
+                    "agg": "sum",
+                    "description": "The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.",
+                    "create_metric": false,
+                    "expr": "case when is_food_item = 1 then product_price else 0 end",
+                    "agg_params": null,
+                    "metadata": null,
+                    "non_additive_dimension": null,
+                    "agg_time_dimension": null,
+                    "label": null
+                },
+                {
+                    "name": "drink_revenue",
+                    "agg": "sum",
+                    "description": "The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.",
+                    "create_metric": false,
+                    "expr": "case when is_drink_item = 1 then product_price else 0 end",
+                    "agg_params": null,
+                    "metadata": null,
+                    "non_additive_dimension": null,
+                    "agg_time_dimension": null,
+                    "label": null
+                }
+            ],
+            "dimensions": [
+                {
+                    "name": "ordered_at",
+                    "description": null,
+                    "type": "time",
+                    "is_partition": false,
+                    "type_params": {
+                        "time_granularity": "day",
+                        "validity_params": null
+                    },
+                    "expr": "date_trunc('day', ordered_at)",
+                    "metadata": null,
+                    "label": null
+                },
+                {
+                    "name": "is_food_item",
+                    "description": null,
+                    "type": "categorical",
+                    "is_partition": false,
+                    "type_params": null,
+                    "expr": null,
+                    "metadata": null,
+                    "label": null
+                },
+                {
+                    "name": "is_drink_item",
+                    "description": null,
+                    "type": "categorical",
+                    "is_partition": false,
+                    "type_params": null,
+                    "expr": null,
+                    "metadata": null,
+                    "label": null
+                }
+            ],
+            "label": null,
+            "metadata": null
         },
         {
             "name": "orders",
@@ -348,131 +463,7 @@
                 }
             ],
             "label": null,
-            "metadata": null,
-            "config": {
-                "meta": {}
-            }
-        },
-        {
-            "name": "order_item",
-            "defaults": {
-                "agg_time_dimension": "ordered_at"
-            },
-            "description": "Items contatined in each order. The grain of the table is one row per order item.\n",
-            "node_relation": {
-                "alias": "order_items",
-                "schema_name": "dbt_pkearns",
-                "database": "DEVELOPMENT",
-                "relation_name": "DEVELOPMENT.dbt_pkearns.order_items"
-            },
-            "primary_entity": null,
-            "entities": [
-                {
-                    "name": "order_item",
-                    "description": null,
-                    "type": "primary",
-                    "role": null,
-                    "expr": "order_item_id",
-                    "metadata": null,
-                    "label": null
-                },
-                {
-                    "name": "order_id",
-                    "description": null,
-                    "type": "foreign",
-                    "role": null,
-                    "expr": "order_id",
-                    "metadata": null,
-                    "label": null
-                },
-                {
-                    "name": "product",
-                    "description": null,
-                    "type": "foreign",
-                    "role": null,
-                    "expr": "product_id",
-                    "metadata": null,
-                    "label": null
-                }
-            ],
-            "measures": [
-                {
-                    "name": "revenue",
-                    "agg": "sum",
-                    "description": "The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.",
-                    "create_metric": false,
-                    "expr": "product_price",
-                    "agg_params": null,
-                    "metadata": null,
-                    "non_additive_dimension": null,
-                    "agg_time_dimension": null,
-                    "label": null
-                },
-                {
-                    "name": "food_revenue",
-                    "agg": "sum",
-                    "description": "The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.",
-                    "create_metric": false,
-                    "expr": "case when is_food_item = 1 then product_price else 0 end",
-                    "agg_params": null,
-                    "metadata": null,
-                    "non_additive_dimension": null,
-                    "agg_time_dimension": null,
-                    "label": null
-                },
-                {
-                    "name": "drink_revenue",
-                    "agg": "sum",
-                    "description": "The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.",
-                    "create_metric": false,
-                    "expr": "case when is_drink_item = 1 then product_price else 0 end",
-                    "agg_params": null,
-                    "metadata": null,
-                    "non_additive_dimension": null,
-                    "agg_time_dimension": null,
-                    "label": null
-                }
-            ],
-            "dimensions": [
-                {
-                    "name": "ordered_at",
-                    "description": null,
-                    "type": "time",
-                    "is_partition": false,
-                    "type_params": {
-                        "time_granularity": "day",
-                        "validity_params": null
-                    },
-                    "expr": "date_trunc('day', ordered_at)",
-                    "metadata": null,
-                    "label": null
-                },
-                {
-                    "name": "is_food_item",
-                    "description": null,
-                    "type": "categorical",
-                    "is_partition": false,
-                    "type_params": null,
-                    "expr": null,
-                    "metadata": null,
-                    "label": null
-                },
-                {
-                    "name": "is_drink_item",
-                    "description": null,
-                    "type": "categorical",
-                    "is_partition": false,
-                    "type_params": null,
-                    "expr": null,
-                    "metadata": null,
-                    "label": null
-                }
-            ],
-            "label": null,
-            "metadata": null,
-            "config": {
-                "meta": {}
-            }
+            "metadata": null
         }
     ],
     "metrics": [
@@ -495,7 +486,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "count_distinct_customers",
@@ -508,11 +498,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "customers",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "customers"
         },
         {
             "name": "met_customers_with_orders",
@@ -533,7 +519,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "count_distinct_customers",
@@ -546,11 +531,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "customers_with_orders",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "customers_with_orders"
         },
         {
             "name": "met_order_total",
@@ -571,7 +552,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_total",
@@ -584,11 +564,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "order_total",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "order_total"
         },
         {
             "name": "met_food_order_total",
@@ -609,7 +585,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "food_order_total",
@@ -622,11 +597,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "food_order_total",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "food_order_total"
         },
         {
             "name": "met_order_count",
@@ -647,7 +618,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_count",
@@ -660,11 +630,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "order_count",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "order_count"
         },
         {
             "name": "met_locations_with_orders",
@@ -685,7 +651,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "locations_with_orders",
@@ -698,11 +663,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "locations_with_orders",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "locations_with_orders"
         },
         {
             "name": "met_order_value_p99",
@@ -723,7 +684,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_value_p99",
@@ -736,11 +696,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "order_value_p99",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "order_value_p99"
         },
         {
             "name": "met_discrete_order_value_p99",
@@ -761,7 +717,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_value_p99",
@@ -774,11 +729,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "discrete_order_value_p99",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "discrete_order_value_p99"
         },
         {
             "name": "met_large_order",
@@ -799,7 +750,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_count",
@@ -818,11 +768,7 @@
                 ]
             },
             "metadata": null,
-            "label": "Large Orders",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "Large Orders"
         },
         {
             "name": "met_food_order_amount",
@@ -843,7 +789,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "food_order_total",
@@ -856,11 +801,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "food_order_amount",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "food_order_amount"
         },
         {
             "name": "met_max_order_amount",
@@ -881,7 +822,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "max_order_value",
@@ -894,11 +834,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "max_order_amount",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "max_order_amount"
         },
         {
             "name": "met_min_order_amount",
@@ -919,7 +855,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "min_order_value",
@@ -932,11 +867,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "min_order_amount",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "min_order_amount"
         },
         {
             "name": "met_new_customers",
@@ -957,7 +888,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "customers_with_orders",
@@ -976,11 +906,7 @@
                 ]
             },
             "metadata": null,
-            "label": "New Customers",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "New Customers"
         },
         {
             "name": "met_order_amount",
@@ -1001,7 +927,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_cost",
@@ -1014,11 +939,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "order_amount",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "order_amount"
         },
         {
             "name": "met_food_order_pct",
@@ -1045,7 +966,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "food_order_total",
@@ -1065,11 +985,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "food_order_pct",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "food_order_pct"
         },
         {
             "name": "met_food_order_pct_cumulative",
@@ -1092,7 +1008,6 @@
                     }
                 ],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "food_order_total",
@@ -1112,11 +1027,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "food_order_as_percent_of_total_order_amount",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "food_order_as_percent_of_total_order_amount"
         },
         {
             "name": "met_food_order_gross_profit",
@@ -1146,7 +1057,6 @@
                     }
                 ],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "food_order_total",
@@ -1159,11 +1069,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "food_order_gross_profit",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "food_order_gross_profit"
         },
         {
             "name": "met_order_gross_profit",
@@ -1193,7 +1099,6 @@
                     }
                 ],
                 "conversion_type_params": null,
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_total",
@@ -1213,11 +1118,186 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "order_gross_profit",
-            "config": {
-                "meta": {}
+            "label": "order_gross_profit"
+        },
+        {
+            "name": "met_food_order_total_x10",
+            "description": "10",
+            "type": "derived",
+            "type_params": {
+                "measure": null,
+                "numerator": null,
+                "denominator": null,
+                "expr": "met_food_order_total * 10",
+                "window": null,
+                "grain_to_date": null,
+                "metrics": [
+                    {
+                        "name": "met_food_order_total",
+                        "filter": null,
+                        "alias": null,
+                        "offset_window": null,
+                        "offset_to_grain": null
+                    }
+                ],
+                "conversion_type_params": null,
+                "input_measures": [
+                    {
+                        "name": "food_order_total",
+                        "filter": null,
+                        "alias": null,
+                        "join_to_timespine": false,
+                        "fill_nulls_with": null
+                    }
+                ]
             },
-            "time_granularity": null
+            "filter": null,
+            "metadata": null,
+            "label": "food_x10"
+        },
+        {
+            "name": "met_food_order_total_x100",
+            "description": "100",
+            "type": "derived",
+            "type_params": {
+                "measure": null,
+                "numerator": null,
+                "denominator": null,
+                "expr": "met_food_order_total_x10 * 10",
+                "window": null,
+                "grain_to_date": null,
+                "metrics": [
+                    {
+                        "name": "met_food_order_total_x10",
+                        "filter": null,
+                        "alias": null,
+                        "offset_window": null,
+                        "offset_to_grain": null
+                    }
+                ],
+                "conversion_type_params": null,
+                "input_measures": [
+                    {
+                        "name": "food_order_total",
+                        "filter": null,
+                        "alias": null,
+                        "join_to_timespine": false,
+                        "fill_nulls_with": null
+                    }
+                ]
+            },
+            "filter": null,
+            "metadata": null,
+            "label": "food_x100"
+        },
+        {
+            "name": "met_food_order_total_x1000",
+            "description": "1000",
+            "type": "derived",
+            "type_params": {
+                "measure": null,
+                "numerator": null,
+                "denominator": null,
+                "expr": "met_food_order_total_x100 * 10",
+                "window": null,
+                "grain_to_date": null,
+                "metrics": [
+                    {
+                        "name": "met_food_order_total_x100",
+                        "filter": null,
+                        "alias": null,
+                        "offset_window": null,
+                        "offset_to_grain": null
+                    }
+                ],
+                "conversion_type_params": null,
+                "input_measures": [
+                    {
+                        "name": "food_order_total",
+                        "filter": null,
+                        "alias": null,
+                        "join_to_timespine": false,
+                        "fill_nulls_with": null
+                    }
+                ]
+            },
+            "filter": null,
+            "metadata": null,
+            "label": "food_x1000"
+        },
+        {
+            "name": "met_food_order_total_x10000",
+            "description": "10000",
+            "type": "derived",
+            "type_params": {
+                "measure": null,
+                "numerator": null,
+                "denominator": null,
+                "expr": "met_food_order_total_x1000 * 10",
+                "window": null,
+                "grain_to_date": null,
+                "metrics": [
+                    {
+                        "name": "met_food_order_total_x1000",
+                        "filter": null,
+                        "alias": null,
+                        "offset_window": null,
+                        "offset_to_grain": null
+                    }
+                ],
+                "conversion_type_params": null,
+                "input_measures": [
+                    {
+                        "name": "food_order_total",
+                        "filter": null,
+                        "alias": null,
+                        "join_to_timespine": false,
+                        "fill_nulls_with": null
+                    }
+                ]
+            },
+            "filter": null,
+            "metadata": null,
+            "label": "food_x10000"
+        },
+        {
+            "name": "met_food_order_total_ratio",
+            "description": "test for many metrics deep",
+            "type": "ratio",
+            "type_params": {
+                "measure": null,
+                "numerator": {
+                    "name": "met_food_order_total_x10000",
+                    "filter": null,
+                    "alias": null,
+                    "offset_window": null,
+                    "offset_to_grain": null
+                },
+                "denominator": {
+                    "name": "met_food_order_total_x10",
+                    "filter": null,
+                    "alias": null,
+                    "offset_window": null,
+                    "offset_to_grain": null
+                },
+                "expr": null,
+                "window": null,
+                "grain_to_date": null,
+                "metrics": [],
+                "conversion_type_params": null,
+                "input_measures": [
+                    {
+                        "name": "food_order_total",
+                        "filter": null,
+                        "alias": null,
+                        "join_to_timespine": false,
+                        "fill_nulls_with": null
+                    }
+                ]
+            },
+            "filter": null,
+            "metadata": null,
+            "label": "met_food_order_total_ratio"
         },
         {
             "name": "met_cumulative_order_amount",
@@ -1238,11 +1318,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": {
-                    "window": null,
-                    "grain_to_date": null,
-                    "period_agg": "first"
-                },
                 "input_measures": [
                     {
                         "name": "order_total",
@@ -1255,11 +1330,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "cumulative_order_amount",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "cumulative_order_amount"
         },
         {
             "name": "met_cumulative_order_ammount_l1m",
@@ -1283,14 +1354,6 @@
                 "grain_to_date": null,
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": {
-                    "window": {
-                        "count": 1,
-                        "granularity": "month"
-                    },
-                    "grain_to_date": null,
-                    "period_agg": "first"
-                },
                 "input_measures": [
                     {
                         "name": "order_total",
@@ -1303,11 +1366,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "cumulative_order_ammount_l1m",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "cumulative_order_ammount_l1m"
         },
         {
             "name": "met_cumulative_order_amount_mtd",
@@ -1328,11 +1387,6 @@
                 "grain_to_date": "month",
                 "metrics": [],
                 "conversion_type_params": null,
-                "cumulative_type_params": {
-                    "window": null,
-                    "grain_to_date": "month",
-                    "period_agg": "first"
-                },
                 "input_measures": [
                     {
                         "name": "order_total",
@@ -1345,11 +1399,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "cumulative_order_amount_mtd",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "cumulative_order_amount_mtd"
         },
         {
             "name": "visit_to_buy_conversion",
@@ -1386,7 +1436,6 @@
                     },
                     "constant_properties": null
                 },
-                "cumulative_type_params": null,
                 "input_measures": [
                     {
                         "name": "order_count",
@@ -1399,11 +1448,7 @@
             },
             "filter": null,
             "metadata": null,
-            "label": "Visit to Buy Conversion Rate (7-day window)",
-            "config": {
-                "meta": {}
-            },
-            "time_granularity": null
+            "label": "Visit to Buy Conversion Rate (7-day window)"
         }
     ],
     "project_configuration": {
@@ -1417,10 +1462,9 @@
         "metadata": null,
         "dsi_package_version": {
             "major_version": "0",
-            "minor_version": "6",
-            "patch_version": "11"
-        },
-        "time_spines": []
+            "minor_version": "4",
+            "patch_version": "4"
+        }
     },
     "saved_queries": [
         {
@@ -1450,7 +1494,7 @@
                     "config": {
                         "export_as": "table",
                         "schema_name": "dbt_pkearns",
-                        "alias": "order_daily_exp"
+                        "alias": null
                     }
                 }
             ]
@@ -1482,7 +1526,7 @@
                     "config": {
                         "export_as": "table",
                         "schema_name": "dbt_pkearns",
-                        "alias": "order_monthly_exp"
+                        "alias": null
                     }
                 }
             ]
@@ -1516,7 +1560,7 @@
                     "config": {
                         "export_as": "table",
                         "schema_name": "dbt_pkearns",
-                        "alias": "customers_exp"
+                        "alias": null
                     }
                 }
             ]

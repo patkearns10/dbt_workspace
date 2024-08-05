@@ -4,17 +4,16 @@ import json
 import os
 import sys
 
+sys.setrecursionlimit(1500)
+
 if len(sys.argv) == 2:
     metric_name = sys.argv[1]
 else:
-    metric_name = 'met_food_order_pct'
+    metric_name = 'met_food_order_total_ratio'
 
 """
 Add 'semantic_manifest.json' file to your current directory.
 """
-
-### TODO: test by adding long lineage of metrics 
-
 
 # extract the current filepath
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -41,28 +40,32 @@ def write_relationships(file_name, primary_keys, foreign_keys, metrics, measures
             if metric.split('.')[1] == measure.split('.')[1]:
                 file_name.write(f'Ref: {metric} - {measure}'+'\n')
 
-def recursive_metric_finder(manifest, metrics, file_name):
+metrics_consumed = []
+
+def recursive_metric_finder(manifest, metrics, file_name, metrics_consumed):
     # metrics can reference other metrics, so for those types, recursively find the metrics
     for r_metric in metrics:
         for manifest_metric in manifest['metrics']:
-            if manifest_metric["name"] == r_metric.split('.')[1]:
+            if manifest_metric["name"] == r_metric.split('.')[1] and manifest_metric["name"] not in metrics_consumed:
                 file_name.write(f'Table {manifest_metric["name"]}'+'\n')
                 file_name.write('{'+'\n')
                 file_name.write(f'Note: {multiline_comment}{manifest_metric["description"]} -- type: {manifest_metric["type"]}{multiline_comment}'+'\n')
-                if manifest_metric["type"] in ('simple', 'cumulative', 'conversion'):
+                if manifest_metric["type"] in ('simple', 'cumulative', 'conversion') and manifest_metric["name"] not in metrics_consumed:
                     # these metrics only depend on measures
                     for mm in manifest_metric["type_params"]["input_measures"]:
                         metrics.append(f'{manifest_metric["name"]}.{mm["name"]}')
                         file_name.write(f'{mm["name"]} measure'+'\n')
                     file_name.write('}'+'\n')
-                elif manifest_metric["type"] == 'derived':
+                    metrics_consumed.append(manifest_metric["name"])
+                    break
+                elif manifest_metric["type"] == 'derived' and manifest_metric["name"] not in metrics_consumed:
                     # depends on one or many metrics
                     for mmet in manifest_metric["type_params"]["metrics"]:
                         metrics.append(f'{manifest_metric["name"]}.{mmet["name"]}')
                         file_name.write(f'{mmet["name"]} metric'+'\n')
+                        metrics_consumed.append(manifest_metric["name"])
                     file_name.write('}'+'\n')
-                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
-                elif manifest_metric["type"] == 'ratio':
+                elif manifest_metric["type"] == 'ratio' and manifest_metric["name"] not in metrics_consumed:
                     # numerator metric
                     metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["numerator"]["name"]}')
                     file_name.write(f'{manifest_metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
@@ -70,7 +73,8 @@ def recursive_metric_finder(manifest, metrics, file_name):
                     metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["denominator"]["name"]}')
                     file_name.write(f'{manifest_metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
                     file_name.write('}'+'\n')
-                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
+                    metrics_consumed.append(manifest_metric["type_params"]["numerator"]["name"])
+                    metrics_consumed.append(manifest_metric["type_params"]["denominator"]["name"])
                 else:
                     print('Found something unexpected (type not in simple, ratio, derived, conversion)')
 
@@ -106,7 +110,7 @@ def export_metric_dbdiagram_file():
                         metrics.append(f'{metric["name"]}.{met["name"]}')
                         dbdiagram_metric_file.write(f'{met["name"]} metric'+'\n')
                     dbdiagram_metric_file.write('}'+'\n')
-                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
+                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
 
                 elif metric["type"] == 'ratio':
                     # numerator
@@ -116,7 +120,7 @@ def export_metric_dbdiagram_file():
                     metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
                     dbdiagram_metric_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
                     dbdiagram_metric_file.write('}'+'\n')
-                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
+                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
 
         # get measures to semantic model matches
         tables_built = []
@@ -357,6 +361,6 @@ def list_fields_and_metrics():
 
 
 if __name__ == '__main__':
-    # export_metric_dbdiagram_file()
+    export_metric_dbdiagram_file()
     # list_fields_and_metrics()
-    export_dbdiagram_file()
+    # export_dbdiagram_file()
