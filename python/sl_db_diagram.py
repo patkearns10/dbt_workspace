@@ -7,16 +7,72 @@ import sys
 if len(sys.argv) == 2:
     metric_name = sys.argv[1]
 else:
-    metric_name = 'met_trade_footfall_daily_conversions'
+    metric_name = 'met_food_order_pct'
 
 """
 Add 'semantic_manifest.json' file to your current directory.
 """
 
+### TODO: test by adding long lineage of metrics 
+
+
 # extract the current filepath
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 now = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
+multiline_comment = "'''"
 
+def write_relationships(file_name, primary_keys, foreign_keys, metrics, measures):
+    # create pk --> fk relationships
+    file_name.write('\n')
+    for primary_key in list(set(primary_keys)):
+        for foreign_key in list(set(foreign_keys)):
+            # Ref: sem_date.date_key - sem_sale_item.date_key
+            if primary_key.split('.')[1] == foreign_key.split('.')[1]:
+                if primary_key.split('.')[1] == 'date_key':
+                    file_name.write(f'Ref: {primary_key} - {foreign_key}'+'\n')
+                else:
+                    file_name.write(f'Ref: {primary_key} < {foreign_key}'+'\n')
+    for metric in list(set(metrics)):
+        for m in list(set(metrics)):
+            if metric.split('.')[1] == m.split('.')[0]:
+                file_name.write(f'Ref: {metric} - {m}'+'\n')
+    for metric in list(set(metrics)):
+        for measure in list(set(measures)):
+            if metric.split('.')[1] == measure.split('.')[1]:
+                file_name.write(f'Ref: {metric} - {measure}'+'\n')
+
+def recursive_metric_finder(manifest, metrics, file_name):
+    # metrics can reference other metrics, so for those types, recursively find the metrics
+    for r_metric in metrics:
+        for manifest_metric in manifest['metrics']:
+            if manifest_metric["name"] == r_metric.split('.')[1]:
+                file_name.write(f'Table {manifest_metric["name"]}'+'\n')
+                file_name.write('{'+'\n')
+                file_name.write(f'Note: {multiline_comment}{manifest_metric["description"]} -- type: {manifest_metric["type"]}{multiline_comment}'+'\n')
+                if manifest_metric["type"] in ('simple', 'cumulative', 'conversion'):
+                    # these metrics only depend on measures
+                    for mm in manifest_metric["type_params"]["input_measures"]:
+                        metrics.append(f'{manifest_metric["name"]}.{mm["name"]}')
+                        file_name.write(f'{mm["name"]} measure'+'\n')
+                    file_name.write('}'+'\n')
+                elif manifest_metric["type"] == 'derived':
+                    # depends on one or many metrics
+                    for mmet in manifest_metric["type_params"]["metrics"]:
+                        metrics.append(f'{manifest_metric["name"]}.{mmet["name"]}')
+                        file_name.write(f'{mmet["name"]} metric'+'\n')
+                    file_name.write('}'+'\n')
+                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
+                elif manifest_metric["type"] == 'ratio':
+                    # numerator metric
+                    metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["numerator"]["name"]}')
+                    file_name.write(f'{manifest_metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+                    # denominator metric
+                    metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["denominator"]["name"]}')
+                    file_name.write(f'{manifest_metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+                    file_name.write('}'+'\n')
+                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
+                else:
+                    print('Found something unexpected (type not in simple, ratio, derived, conversion)')
 
 def export_metric_dbdiagram_file():
     """create new file to import into dbdiagram.io, pulling data from semantic_layer.json"""
@@ -36,14 +92,22 @@ def export_metric_dbdiagram_file():
         for metric in manifest['metrics']:
             if metric["name"] == metric_name:        
                 dbdiagram_metric_file.write(f'Table {metric["name"]}'+'\n')
-                dbdiagram_metric_file.write('{')
-                dbdiagram_metric_file.write('\n')
-                dbdiagram_metric_file.write(f'Note: "{metric["description"]}"'+'\n')
-                if metric["type"] == 'simple':
-                    metrics.append(f'{metric["name"]}.{metric["type_params"]["measure"]["name"]}')
-                    dbdiagram_metric_file.write(f'{metric["type_params"]["measure"]["name"]} measure'+'\n')
-                    dbdiagram_metric_file.write('}')
-                    dbdiagram_metric_file.write('\n')
+                dbdiagram_metric_file.write('{'+'\n')
+                dbdiagram_metric_file.write(f'Note: {multiline_comment}{metric["description"]} -- type: {metric["type"]}{multiline_comment}'+'\n')
+                
+                if metric["type"] in ('simple', 'cumulative', 'conversion'):
+                    for m in metric["type_params"]["input_measures"]:
+                        metrics.append(f'{metric["name"]}.{m["name"]}')
+                        dbdiagram_metric_file.write(f'{m["name"]} measure'+'\n')
+                    dbdiagram_metric_file.write('}'+'\n')
+
+                elif metric["type"] == 'derived':
+                    for met in metric["type_params"]["metrics"]:
+                        metrics.append(f'{metric["name"]}.{met["name"]}')
+                        dbdiagram_metric_file.write(f'{met["name"]} metric'+'\n')
+                    dbdiagram_metric_file.write('}'+'\n')
+                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
+
                 elif metric["type"] == 'ratio':
                     # numerator
                     metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
@@ -51,31 +115,8 @@ def export_metric_dbdiagram_file():
                     # denominator
                     metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
                     dbdiagram_metric_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
-                    dbdiagram_metric_file.write('}')
-                    dbdiagram_metric_file.write('\n')
-                    for m in metrics:
-                        for metric in manifest['metrics']:
-                            if m.split('.')[1] == metric["name"]:
-                                dbdiagram_metric_file.write(f'Table {metric["name"]}'+'\n')
-                                dbdiagram_metric_file.write('{')
-                                dbdiagram_metric_file.write('\n')
-                                dbdiagram_metric_file.write(f'Note: "{metric["description"]}"'+'\n')
-                                if metric["type"] == 'simple':
-                                    metrics.append(f'{metric["name"]}.{metric["type_params"]["measure"]["name"]}')
-                                    dbdiagram_metric_file.write(f'{metric["type_params"]["measure"]["name"]} measure'+'\n')
-                                    dbdiagram_metric_file.write('}')
-                                    dbdiagram_metric_file.write('\n')
-                                elif metric["type"] == 'ratio':
-                                    # numerator
-                                    metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
-                                    dbdiagram_metric_file.write(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
-                                    # denominator
-                                    metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
-                                    dbdiagram_metric_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
-                                    dbdiagram_metric_file.write('}')
-                                    dbdiagram_metric_file.write('\n')
-                                else:
-                                    print('todo: other types of metrics (cumulative, conversion, derived')
+                    dbdiagram_metric_file.write('}'+'\n')
+                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file)
 
         # get measures to semantic model matches
         tables_built = []
@@ -84,9 +125,8 @@ def export_metric_dbdiagram_file():
                 for metric in metrics:
                     if metric.split('.')[1] == measure["name"] and semantic_model["name"] not in tables_built:
                         dbdiagram_metric_file.write(f'Table {semantic_model["name"]}'+'\n')
-                        dbdiagram_metric_file.write('{')
-                        dbdiagram_metric_file.write('\n')
-                        dbdiagram_metric_file.write(f'Note: "{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}"'+'\n')
+                        dbdiagram_metric_file.write('{'+'\n')
+                        dbdiagram_metric_file.write(f'Note: {multiline_comment}{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}{multiline_comment}'+'\n')
                         for entity in semantic_model["entities"]:
                             if entity["type"] == 'primary':
                                 primary_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
@@ -99,8 +139,7 @@ def export_metric_dbdiagram_file():
                         for measure in semantic_model["measures"]:
                             measures.append(f'{semantic_model["name"]}.{measure["name"]}')
                             dbdiagram_metric_file.write(f'{measure["name"]} measure'+'\n')
-                        dbdiagram_metric_file.write('}')
-                        dbdiagram_metric_file.write('\n')
+                        dbdiagram_metric_file.write('}'+'\n')
                         tables_built.append(semantic_model["name"])
                         
         # get semantic model foreign key matches 
@@ -114,9 +153,8 @@ def export_metric_dbdiagram_file():
         for semantic_model in manifest['semantic_models']:
             if semantic_model["name"] in semantic_models_include and semantic_model["name"] not in tables_built:
                 dbdiagram_metric_file.write(f'Table {semantic_model["name"]}'+'\n')
-                dbdiagram_metric_file.write('{')
-                dbdiagram_metric_file.write('\n')
-                dbdiagram_metric_file.write(f'Note: "{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}"'+'\n')
+                dbdiagram_metric_file.write('{'+'\n')
+                dbdiagram_metric_file.write(f'Note: {multiline_comment}{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}{multiline_comment}'+'\n')
                 for entity in semantic_model["entities"]:
                     if entity["type"] == 'primary':
                         primary_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
@@ -129,28 +167,11 @@ def export_metric_dbdiagram_file():
                 for measure in semantic_model["measures"]:
                     measures.append(f'{semantic_model["name"]}.{measure["name"]}')
                     dbdiagram_metric_file.write(f'{measure["name"]} measure'+'\n')
-                dbdiagram_metric_file.write('}')
-                dbdiagram_metric_file.write('\n')
+                dbdiagram_metric_file.write('}'+'\n')
                 tables_built.append(semantic_model["name"])
 
         # create pk --> fk relationships
-        dbdiagram_metric_file.write('\n')
-        for primary_key in list(set(primary_keys)):
-            for foreign_key in list(set(foreign_keys)):
-                # Ref: sem_date.date_key - sem_sale_item.date_key
-                if primary_key.split('.')[1] == foreign_key.split('.')[1]:
-                    if primary_key.split('.')[1] == 'date_key':
-                        dbdiagram_metric_file.write(f'Ref: {primary_key} - {foreign_key}'+'\n')
-                    else:
-                        dbdiagram_metric_file.write(f'Ref: {primary_key} < {foreign_key}'+'\n')
-        for metric in list(set(metrics)):
-            for measure in list(set(measures)):
-                if metric.split('.')[1] == measure.split('.')[1]:
-                    dbdiagram_metric_file.write(f'Ref: {metric} - {measure}'+'\n')
-        for metric in list(set(metrics)):
-            for m in list(set(metrics)):
-                if metric.split('.')[1] == m.split('.')[0]:
-                    dbdiagram_metric_file.write(f'Ref: {metric} - {m}'+'\n')
+        write_relationships(dbdiagram_metric_file, primary_keys, foreign_keys, metrics, measures)
 
     print('Succesfully created metric dbdiagram.io file!')
 
@@ -167,12 +188,11 @@ def export_dbdiagram_file():
         foreign_keys = []
         metrics = []
         measures = []
-        # print table format for dbdiagram.io
+        # output table format for dbdiagram.io
         for semantic_model in manifest['semantic_models']:
             dbdiagram_file.write(f'Table {semantic_model["name"]}'+'\n')
-            dbdiagram_file.write('{')
-            dbdiagram_file.write('\n')
-            dbdiagram_file.write(f'Note: "{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}"'+'\n')
+            dbdiagram_file.write('{'+'\n')
+            dbdiagram_file.write(f'Note: {multiline_comment}{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}{multiline_comment}'+'\n')
             for entity in semantic_model["entities"]:
                 if entity["type"] == 'primary':
                     primary_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
@@ -185,15 +205,14 @@ def export_dbdiagram_file():
             for measure in semantic_model["measures"]:
                 measures.append(f'{semantic_model["name"]}.{measure["name"]}')
                 dbdiagram_file.write(f'{measure["name"]} measure'+'\n')
-            dbdiagram_file.write('}')
-            dbdiagram_file.write('\n')
+            dbdiagram_file.write('}'+'\n')
 
         # create metrics tables
         dbdiagram_file.write('\n')
         for metric in manifest['metrics']:
             dbdiagram_file.write(f'Table {metric["name"]}'+'\n')
-            dbdiagram_file.write('{')
-            dbdiagram_file.write(f'Note: "{metric["description"]}"'+'\n')
+            dbdiagram_file.write('{'+'\n')
+            dbdiagram_file.write(f'Note: {multiline_comment}{metric["description"]} -- type: {metric["type"]}{multiline_comment}'+'\n')
             if metric["type"] in ('simple', 'cumulative', 'conversion'):
                 for m in metric["type_params"]["input_measures"]:
                     metrics.append(f'{metric["name"]}.{m["name"]}')
@@ -210,23 +229,11 @@ def export_dbdiagram_file():
                     metrics.append(f'{metric["name"]}.{met["name"]}')
                     dbdiagram_file.write(f'{met["name"]} metric'+'\n')
             else:
-                print('todo: other types of metrics (cumulative, conversion, derived')
-            dbdiagram_file.write('}')
+                print('Found something unexpected (type not in simple, ratio, derived, conversion)')
+            dbdiagram_file.write('}'+'\n')
 
         # create pk --> fk relationships
-        dbdiagram_file.write('\n')
-        for primary_key in primary_keys:
-            for foreign_key in foreign_keys:
-                # Ref: sem_date.date_key - sem_sale_item.date_key
-                if primary_key.split('.')[1] == foreign_key.split('.')[1]:
-                    if primary_key.split('.')[1] == 'date_key':
-                        dbdiagram_file.write(f'Ref: {primary_key} - {foreign_key}'+'\n')
-                    else:
-                        dbdiagram_file.write(f'Ref: {primary_key} < {foreign_key}'+'\n')
-        for metric in metrics:
-            for measure in measures:
-                if metric.split('.')[1] == measure.split('.')[1]:
-                    dbdiagram_file.write(f'Ref: {metric} - {measure}'+'\n')
+        write_relationships(dbdiagram_file, primary_keys, foreign_keys, metrics, measures)
 
     print('Succesfully created dbdiagram.io file!')
     
@@ -254,7 +261,7 @@ def list_fields_and_metrics():
         writer = csv.DictWriter(semantic_models_file, fieldnames=fields)
         writer.writeheader()
 
-        # print table format for dbdiagram.io
+        # output table format for dbdiagram.io for semantic models
         for semantic_model in manifest['semantic_models']:
             for entity in semantic_model["entities"]:
                 writer.writerow(
@@ -305,9 +312,8 @@ def list_fields_and_metrics():
         metric_writer = csv.DictWriter(semantic_metrics_file, fieldnames=metric_fields)
         metric_writer.writeheader()
 
-
+        # output table format for dbdiagram.io for metrics
         for metric in manifest['metrics']:
-
             if metric["type"] in ('simple', 'cumulative', 'conversion'):
                 metric_writer.writerow(
                     create_csv_dict(
