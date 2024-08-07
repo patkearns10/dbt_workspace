@@ -7,9 +7,10 @@ import sys
 sys.setrecursionlimit(1500)
 
 if len(sys.argv) == 2:
-    metric_name = sys.argv[1]
+    arg_metric_name = sys.argv[1]
 else:
-    metric_name = 'met_food_order_total_ratio'
+    arg_metric_name = 'met_trade_agg_average_transaction_value'
+arg_metric_list = arg_metric_name.split(",")
 
 """
 Add 'semantic_manifest.json' file to your current directory.
@@ -19,6 +20,7 @@ Add 'semantic_manifest.json' file to your current directory.
 DIR_PATH = os.path.dirname(os.path.abspath(__file__))
 now = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
 multiline_comment = "'''"
+# my_list = my_string.split(",")
 
 def write_relationships(file_name, primary_keys, foreign_keys, metrics, measures):
     # create pk --> fk relationships
@@ -33,14 +35,12 @@ def write_relationships(file_name, primary_keys, foreign_keys, metrics, measures
                     file_name.write(f'Ref: {primary_key} < {foreign_key}'+'\n')
     for metric in list(set(metrics)):
         for m in list(set(metrics)):
-            if metric.split('.')[1] == m.split('.')[0]:
+            if metric.split('.')[1] == m.split('.')[0] and metric != m:
                 file_name.write(f'Ref: {metric} - {m}'+'\n')
     for metric in list(set(metrics)):
         for measure in list(set(measures)):
-            if metric.split('.')[1] == measure.split('.')[1]:
+            if metric.split('.')[1] == measure.split('.')[1] and metric != measure:
                 file_name.write(f'Ref: {metric} - {measure}'+'\n')
-
-metrics_consumed = []
 
 def recursive_metric_finder(manifest, metrics, file_name, metrics_consumed):
     # metrics can reference other metrics, so for those types, recursively find the metrics
@@ -91,36 +91,39 @@ def export_metric_dbdiagram_file():
         foreign_keys = []
         metrics = []
         measures = []
-
+        metrics_consumed = []
         # get metric - measure matches
-        for metric in manifest['metrics']:
-            if metric["name"] == metric_name:        
-                dbdiagram_metric_file.write(f'Table {metric["name"]}'+'\n')
-                dbdiagram_metric_file.write('{'+'\n')
-                dbdiagram_metric_file.write(f'Note: {multiline_comment}{metric["description"]} -- type: {metric["type"]}{multiline_comment}'+'\n')
-                
-                if metric["type"] in ('simple', 'cumulative', 'conversion'):
-                    for m in metric["type_params"]["input_measures"]:
-                        metrics.append(f'{metric["name"]}.{m["name"]}')
-                        dbdiagram_metric_file.write(f'{m["name"]} measure'+'\n')
-                    dbdiagram_metric_file.write('}'+'\n')
+        for arg_metric in arg_metric_list:
+            for metric in manifest['metrics']:
+                if metric["name"] == arg_metric and metric["name"] not in metrics_consumed:       
+                    dbdiagram_metric_file.write(f'Table {metric["name"]}'+'\n')
+                    dbdiagram_metric_file.write('{'+'\n')
+                    dbdiagram_metric_file.write(f'Note: {multiline_comment}{metric["description"]} -- type: {metric["type"]}{multiline_comment}'+'\n')
+                    if metric["type"] in ('simple', 'cumulative', 'conversion') and metric["name"] not in metrics_consumed:
+                        for m in metric["type_params"]["input_measures"]:
+                            metrics.append(f'{metric["name"]}.{m["name"]}')
+                            dbdiagram_metric_file.write(f'{m["name"]} measure'+'\n')
+                        dbdiagram_metric_file.write('}'+'\n')
+                        metrics_consumed.append(metric["name"])
 
-                elif metric["type"] == 'derived':
-                    for met in metric["type_params"]["metrics"]:
-                        metrics.append(f'{metric["name"]}.{met["name"]}')
-                        dbdiagram_metric_file.write(f'{met["name"]} metric'+'\n')
-                    dbdiagram_metric_file.write('}'+'\n')
-                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
+                    elif metric["type"] == 'derived' and metric["name"] not in metrics_consumed:
+                        for met in metric["type_params"]["metrics"]:
+                            metrics.append(f'{metric["name"]}.{met["name"]}')
+                            dbdiagram_metric_file.write(f'{met["name"]} metric'+'\n')
+                        dbdiagram_metric_file.write('}'+'\n')
+                        recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
 
-                elif metric["type"] == 'ratio':
-                    # numerator
-                    metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
-                    dbdiagram_metric_file.write(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
-                    # denominator
-                    metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
-                    dbdiagram_metric_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
-                    dbdiagram_metric_file.write('}'+'\n')
-                    recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
+                    elif metric["type"] == 'ratio' and metric["name"] not in metrics_consumed:
+                        # numerator
+                        metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
+                        dbdiagram_metric_file.write(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+                        # denominator
+                        metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
+                        dbdiagram_metric_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+                        dbdiagram_metric_file.write('}'+'\n')
+                        recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
+                    else:
+                        print('Metrics traversed)')
 
         # get measures to semantic model matches
         tables_built = []
@@ -362,5 +365,5 @@ def list_fields_and_metrics():
 
 if __name__ == '__main__':
     export_metric_dbdiagram_file()
-    # list_fields_and_metrics()
-    # export_dbdiagram_file()
+    list_fields_and_metrics()
+    export_dbdiagram_file()
