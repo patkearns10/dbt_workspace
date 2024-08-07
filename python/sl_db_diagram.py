@@ -4,7 +4,6 @@ import json
 import os
 import sys
 
-sys.setrecursionlimit(1500)
 
 if len(sys.argv) == 2:
     arg_metric_name = sys.argv[1]
@@ -82,7 +81,7 @@ def recursive_metric_finder(manifest, metrics, file_name, metrics_consumed):
 def export_metric_dbdiagram_file():
     """
     Summary:
-        Input one or metrics and return a dbdiagram file. https://dbdiagram.io/home
+        Input one or more metrics and return a dbdiagram file. https://dbdiagram.io/home
     Steps in function:
         Import semantic_manifest.json from local directory.
         Starting with a provided metric (input directly on line 12 or as a comma separated string with no spaces),
@@ -294,7 +293,7 @@ def list_fields_and_metrics():
                 writer.writerow(
                         create_csv_dict(
                             semantic_model["name"],
-                            semantic_model["node_relation"]["relation_name"],
+                            semantic_model["node_relation"]["alias"],
                             entity["name"],
                             entity["type"],
                             entity["description"],
@@ -304,7 +303,7 @@ def list_fields_and_metrics():
                 writer.writerow(
                     create_csv_dict(
                         semantic_model["name"],
-                        semantic_model["node_relation"]["relation_name"],
+                        semantic_model["node_relation"]["alias"],
                         dimension["name"],
                         f'dimension: {dimension["type"]}',
                         dimension["description"],
@@ -314,7 +313,7 @@ def list_fields_and_metrics():
                 writer.writerow(
                     create_csv_dict(
                         semantic_model["name"],
-                        semantic_model["node_relation"]["relation_name"],
+                        semantic_model["node_relation"]["alias"],
                         measure["name"],
                         f'measure: {measure["agg"]} - {measure["expr"]}',
                         measure["description"],
