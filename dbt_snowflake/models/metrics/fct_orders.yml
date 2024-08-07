@@ -217,18 +217,3 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
-
-  - name: visit_to_buy_conversion
-    description: "Conversion rate from visiting to transaction in 7 days"
-    type: conversion
-    label: Visit to Buy Conversion Rate (7-day window)
-    type_params:
-      conversion_type_params:
-        base_measure:
-          name: order_count
-          fill_nulls_with: 0
-        conversion_measure:
-          name: order_count
-          fill_nulls_with: 0
-        entity: orders
-        window: 7 days
