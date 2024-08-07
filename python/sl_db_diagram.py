@@ -22,6 +22,7 @@ now = datetime.now().strftime('%Y.%m.%d.%H.%M.%S')
 multiline_comment = "'''"
 # my_list = my_string.split(",")
 
+# some helper macros
 def write_relationships(file_name, primary_keys, foreign_keys, metrics, measures):
     # create pk --> fk relationships
     file_name.write('\n')
@@ -79,10 +80,20 @@ def recursive_metric_finder(manifest, metrics, file_name, metrics_consumed):
                     print('Found something unexpected (type not in simple, ratio, derived, conversion)')
 
 def export_metric_dbdiagram_file():
-    """create new file to import into dbdiagram.io, pulling data from semantic_layer.json"""
+    """
+    Summary:
+        Input one or metrics and return a dbdiagram file. https://dbdiagram.io/home
+    Steps in function:
+        Import semantic_manifest.json from local directory.
+        Starting with a provided metric (input directly on line 12 or as a comma separated string with no spaces),
+        traverse the semantic json and bring in all metrics / measures / semantic models upstream from it.
+        create tables in dbml syntax
+        create references in dbml syntax
+        export dbml file
+    """
 
     # Opening new file and JSON file
-    with open(os.path.join(DIR_PATH, f'dbdiagram_metric_{now}.txt'), 'w') as dbdiagram_metric_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
+    with open(os.path.join(DIR_PATH, f'dbdiagram_metric_{now}.dbml'), 'w') as dbdiagram_metric_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
 
         # returns JSON object as a dictionary
         manifest = json.load(semantic_manifest_file)
@@ -183,10 +194,19 @@ def export_metric_dbdiagram_file():
     print('Succesfully created metric dbdiagram.io file!')
 
 def export_dbdiagram_file():
-    """create new file to import into dbdiagram.io, pulling data from semantic_layer.json"""
+    """
+    Summary:
+        Read from entire semantic_manifest.json and return a dbdiagram file of all connections. https://dbdiagram.io/home
+    Steps in function:
+        Import semantic_manifest.json from local directory.
+        Traverse the semantic json and bring in all metrics / measures / semantic models.
+        create tables in dbml syntax
+        create references in dbml syntax
+        export dbml file
+    """
 
     # Opening new file and JSON file
-    with open(os.path.join(DIR_PATH, f'dbdiagram_all_{now}.txt'), 'w') as dbdiagram_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
+    with open(os.path.join(DIR_PATH, f'dbdiagram_all_{now}.dbml'), 'w') as dbdiagram_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
 
         # returns JSON object as a dictionary
         manifest = json.load(semantic_manifest_file)
