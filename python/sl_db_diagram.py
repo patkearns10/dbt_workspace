@@ -8,7 +8,7 @@ import sys
 if len(sys.argv) == 2:
     arg_metric_name = sys.argv[1]
 else:
-    arg_metric_name = 'met_trade_agg_average_transaction_value'
+    arg_metric_name = 'met_trade_agg_units_per_transaction_yoy'
 arg_metric_list = arg_metric_name.split(",")
 
 """
@@ -68,10 +68,10 @@ def recursive_metric_finder(manifest, metrics, file_name, metrics_consumed):
                 elif manifest_metric["type"] == 'ratio' and manifest_metric["name"] not in metrics_consumed:
                     # numerator metric
                     metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["numerator"]["name"]}')
-                    file_name.write(f'{manifest_metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+                    file_name.write(f'{manifest_metric["type_params"]["numerator"]["name"]} metric_numerator'+'\n')
                     # denominator metric
                     metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["denominator"]["name"]}')
-                    file_name.write(f'{manifest_metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+                    file_name.write(f'{manifest_metric["type_params"]["denominator"]["name"]} metric_denominator'+'\n')
                     file_name.write('}'+'\n')
                     metrics_consumed.append(manifest_metric["type_params"]["numerator"]["name"])
                     metrics_consumed.append(manifest_metric["type_params"]["denominator"]["name"])
@@ -121,6 +121,7 @@ def export_metric_dbdiagram_file():
                             metrics.append(f'{metric["name"]}.{met["name"]}')
                             dbdiagram_metric_file.write(f'{met["name"]} metric'+'\n')
                         dbdiagram_metric_file.write('}'+'\n')
+                        metrics_consumed.append(metric["name"])
                         recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
 
                     elif metric["type"] == 'ratio' and metric["name"] not in metrics_consumed:
@@ -131,6 +132,7 @@ def export_metric_dbdiagram_file():
                         metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
                         dbdiagram_metric_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
                         dbdiagram_metric_file.write('}'+'\n')
+                        metrics_consumed.append(metric["name"])
                         recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
                     else:
                         print('Metrics traversed)')

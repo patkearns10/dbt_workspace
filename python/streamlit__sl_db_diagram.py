@@ -92,6 +92,7 @@ def export_metric_dbdiagram_file(manifest, choose_metrics):
                         metrics.append(f'{metric["name"]}.{met["name"]}')
                         dbdiagram_metric_file.append(f'{met["name"]} metric'+'\n')
                     dbdiagram_metric_file.append('}'+'\n')
+                    metrics_consumed.append(metric["name"])
                     recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
 
                 elif metric["type"] == 'ratio' and metric["name"] not in metrics_consumed:
@@ -102,6 +103,7 @@ def export_metric_dbdiagram_file(manifest, choose_metrics):
                     metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
                     dbdiagram_metric_file.append(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
                     dbdiagram_metric_file.append('}'+'\n')
+                    metrics_consumed.append(metric["name"])
                     recursive_metric_finder(manifest, metrics, dbdiagram_metric_file, metrics_consumed)
                 else:
                     print('Metrics traversed)')
@@ -204,10 +206,10 @@ def export_dbdiagram_file(manifest):
         elif metric["type"] == 'ratio':
             # numerator
             metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
-            dbdiagram_file.append(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+            dbdiagram_file.append(f'{metric["type_params"]["numerator"]["name"]} metric_numerator'+'\n')
             # denominator
             metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
-            dbdiagram_file.append(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+            dbdiagram_file.append(f'{metric["type_params"]["denominator"]["name"]} metric_denominator'+'\n')
         elif metric["type"] == 'derived':
             for met in metric["type_params"]["metrics"]:
                 metrics.append(f'{metric["name"]}.{met["name"]}')
