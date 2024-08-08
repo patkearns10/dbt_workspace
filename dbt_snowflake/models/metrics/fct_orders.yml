@@ -195,6 +195,50 @@ metrics:
           alias: revenue
         - name: met_order_amount
           alias: cost
+
+# test for many metrics deep
+  - name: met_food_order_total_x10
+    description: "10"
+    label: food_x10
+    type: derived
+    type_params:
+      expr: met_food_order_total * 10
+      metrics:
+        - name: met_food_order_total
+  - name: met_food_order_total_x100
+    description: "100"
+    label: food_x100
+    type: derived
+    type_params:
+      expr: met_food_order_total_x10 * 10
+      metrics:
+        - name: met_food_order_total_x10
+  - name: met_food_order_total_x1000
+    description: "1000"
+    label: food_x1000
+    type: derived
+    type_params:
+      expr: met_food_order_total_x100 * 10
+      metrics:
+        - name: met_food_order_total_x100
+  - name: met_food_order_total_x10000
+    description: "10000"
+    label: food_x10000
+    type: derived
+    type_params:
+      expr: met_food_order_total_x1000 * 10
+      metrics:
+        - name: met_food_order_total_x1000
+  - name: met_food_order_total_ratio
+    description: "test for many metrics deep"
+    label: met_food_order_total_ratio
+    type: ratio
+    type_params: 
+      numerator: met_food_order_total_x10000
+      denominator: met_food_order_total_x10
+
+
+
  
  #CUMULATIVE METRICS 
   - name: met_cumulative_order_amount
@@ -217,3 +261,18 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
+
+  - name: met_visit_to_buy_conversion
+    description: "Conversion rate from visiting to transaction in 7 days"
+    type: conversion
+    label: Visit to Buy Conversion Rate (7-day window)
+    type_params:
+      conversion_type_params:
+        base_measure:
+          name: order_count
+          fill_nulls_with: 0
+        conversion_measure:
+          name: order_count
+          fill_nulls_with: 0
+        entity: orders
+        window: 7 days
