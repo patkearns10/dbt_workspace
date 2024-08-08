@@ -206,10 +206,10 @@ def export_dbdiagram_file(manifest):
         elif metric["type"] == 'ratio':
             # numerator
             metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
-            dbdiagram_file.append(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+            dbdiagram_file.append(f'{metric["type_params"]["numerator"]["name"]} metric_numerator'+'\n')
             # denominator
             metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
-            dbdiagram_file.append(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+            dbdiagram_file.append(f'{metric["type_params"]["denominator"]["name"]} metric_denominator'+'\n')
         elif metric["type"] == 'derived':
             for met in metric["type_params"]["metrics"]:
                 metrics.append(f'{metric["name"]}.{met["name"]}')

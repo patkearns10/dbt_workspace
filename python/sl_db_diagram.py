@@ -68,10 +68,10 @@ def recursive_metric_finder(manifest, metrics, file_name, metrics_consumed):
                 elif manifest_metric["type"] == 'ratio' and manifest_metric["name"] not in metrics_consumed:
                     # numerator metric
                     metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["numerator"]["name"]}')
-                    file_name.write(f'{manifest_metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+                    file_name.write(f'{manifest_metric["type_params"]["numerator"]["name"]} metric_numerator'+'\n')
                     # denominator metric
                     metrics.append(f'{manifest_metric["name"]}.{manifest_metric["type_params"]["denominator"]["name"]}')
-                    file_name.write(f'{manifest_metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+                    file_name.write(f'{manifest_metric["type_params"]["denominator"]["name"]} metric_denominator'+'\n')
                     file_name.write('}'+'\n')
                     metrics_consumed.append(manifest_metric["type_params"]["numerator"]["name"])
                     metrics_consumed.append(manifest_metric["type_params"]["denominator"]["name"])
