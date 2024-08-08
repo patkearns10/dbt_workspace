@@ -9,6 +9,7 @@ models:
         tests:
           - not_null
           - unique
+
       - name: customer_name
         description: Customers' full name.
       - name: count_lifetime_orders

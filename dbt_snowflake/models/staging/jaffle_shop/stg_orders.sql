@@ -16,7 +16,7 @@ source as (
 renamed as (
 
     select
-
+        {{ dbt_utils.generate_surrogate_key(['id','customer'])}} as _pk,
         ----------  ids
         id as order_id,
         store_id as location_id,
