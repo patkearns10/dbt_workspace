@@ -317,8 +317,8 @@ def list_fields_and_metrics():
                         semantic_model["name"],
                         semantic_model["node_relation"]["alias"],
                         measure["name"],
-                        f'measure: {measure["agg"]} - {measure["expr"]}',
-                        measure["description"],
+                        f'measure: {measure["agg"]}',
+                        f'{measure["description"]} | expr: {measure["expr"]}',
                         )
                     )
         print('Succesfully created semantic models file!')
