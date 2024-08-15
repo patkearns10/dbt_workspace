@@ -84,3 +84,22 @@ models:
         tests:
           - not_null
           - unique_coded_exceptions
+
+  - name: customers
+    access: public
+    description: One record per customer
+    columns:
+     - name: customer_id
+       description: Primary key
+       tags: [run_da_tests]
+     - name: first_order_date
+       description: NULL when a customer has not yet placed an order.
+
+  - name: orders
+    access: public
+    description: Complete orders model including the amount associated with each order.
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "amount >= 0"
+
+

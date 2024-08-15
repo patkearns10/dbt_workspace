@@ -111,6 +111,11 @@ snapshots:
     hard_deletes:
       +enabled: True
 
+
+# tests:
+#   secret:
+#     +enabled: "{{ True if 'prod' in target.name.lower() else False }}"
+
 # on-run-start:
   # - "{{ create_run_end_results_table() }}"
 

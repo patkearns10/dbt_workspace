@@ -29,7 +29,11 @@ models:
         description: The unique key for each order item.
         tests:
           - not_null
-          - unique
+          - unique:
+              name: the_best_test
+              config:
+                tags: ['do_not_run_in_prod']
+
 
   - name: stg_orders
     description: Order data with basic cleaning and transformation applied, one row per order.
