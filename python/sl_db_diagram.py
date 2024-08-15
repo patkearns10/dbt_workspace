@@ -22,6 +22,52 @@ multiline_comment = "'''"
 # my_list = my_string.split(",")
 
 # some helper macros
+def tables_for_models(manifest, dbdiagram_file, primary_keys, foreign_keys, measures):
+    # semantic model: output table format for dbdiagram.io
+    for semantic_model in manifest['semantic_models']:
+        dbdiagram_file.write(f'Table {semantic_model["name"]}'+'\n')
+        dbdiagram_file.write('{'+'\n')
+        dbdiagram_file.write(f'Note: {multiline_comment}{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}{multiline_comment}'+'\n')
+        for entity in semantic_model["entities"]:
+            if entity["type"] == 'primary':
+                primary_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
+                dbdiagram_file.write(f'{entity["name"]} primary [primary key]'+'\n')
+            else:
+                foreign_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
+                dbdiagram_file.write(f'{entity["name"]} {entity["type"]}'+'\n')
+        for dimension in semantic_model["dimensions"]:
+            dbdiagram_file.write(f'{dimension["name"]} dimension'+'\n')
+        for measure in semantic_model["measures"]:
+            measures.append(f'{semantic_model["name"]}.{measure["name"]}')
+            dbdiagram_file.write(f'{measure["name"]} measure'+'\n')
+        dbdiagram_file.write('}'+'\n')
+
+def tables_for_metrics(manifest, dbdiagram_file, metrics):
+    # metrics: output table format for dbdiagram.io
+    dbdiagram_file.write('\n')
+    for metric in manifest['metrics']:
+        dbdiagram_file.write(f'Table {metric["name"]}'+'\n')
+        dbdiagram_file.write('{'+'\n')
+        dbdiagram_file.write(f'Note: {multiline_comment}{metric["description"]} -- type: {metric["type"]}{multiline_comment}'+'\n')
+        if metric["type"] in ('simple', 'cumulative', 'conversion'):
+            for m in metric["type_params"]["input_measures"]:
+                metrics.append(f'{metric["name"]}.{m["name"]}')
+                dbdiagram_file.write(f'{m["name"]} measure'+'\n')
+        elif metric["type"] == 'ratio':
+            # numerator
+            metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
+            dbdiagram_file.write(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
+            # denominator
+            metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
+            dbdiagram_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
+        elif metric["type"] == 'derived':
+            for met in metric["type_params"]["metrics"]:
+                metrics.append(f'{metric["name"]}.{met["name"]}')
+                dbdiagram_file.write(f'{met["name"]} metric'+'\n')
+        else:
+            print('Found something unexpected (type not in simple, ratio, derived, conversion)')
+        dbdiagram_file.write('}'+'\n')
+
 def write_relationships(file_name, primary_keys, foreign_keys, metrics, measures):
     # create pk --> fk relationships
     file_name.write('\n')
@@ -216,55 +262,49 @@ def export_dbdiagram_file():
         foreign_keys = []
         metrics = []
         measures = []
-        # output table format for dbdiagram.io
-        for semantic_model in manifest['semantic_models']:
-            dbdiagram_file.write(f'Table {semantic_model["name"]}'+'\n')
-            dbdiagram_file.write('{'+'\n')
-            dbdiagram_file.write(f'Note: {multiline_comment}{semantic_model["node_relation"]["alias"]} -- {semantic_model["description"]}{multiline_comment}'+'\n')
-            for entity in semantic_model["entities"]:
-                if entity["type"] == 'primary':
-                    primary_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
-                    dbdiagram_file.write(f'{entity["name"]} primary [primary key]'+'\n')
-                else:
-                    foreign_keys.append(f'{semantic_model["name"]}.{entity["name"]}')
-                    dbdiagram_file.write(f'{entity["name"]} {entity["type"]}'+'\n')
-            for dimension in semantic_model["dimensions"]:
-                dbdiagram_file.write(f'{dimension["name"]} dimension'+'\n')
-            for measure in semantic_model["measures"]:
-                measures.append(f'{semantic_model["name"]}.{measure["name"]}')
-                dbdiagram_file.write(f'{measure["name"]} measure'+'\n')
-            dbdiagram_file.write('}'+'\n')
+
+        # semantic model: output table format for dbdiagram.io
+        tables_for_models(manifest, dbdiagram_file, primary_keys, foreign_keys, measures)
 
         # create metrics tables
-        dbdiagram_file.write('\n')
-        for metric in manifest['metrics']:
-            dbdiagram_file.write(f'Table {metric["name"]}'+'\n')
-            dbdiagram_file.write('{'+'\n')
-            dbdiagram_file.write(f'Note: {multiline_comment}{metric["description"]} -- type: {metric["type"]}{multiline_comment}'+'\n')
-            if metric["type"] in ('simple', 'cumulative', 'conversion'):
-                for m in metric["type_params"]["input_measures"]:
-                    metrics.append(f'{metric["name"]}.{m["name"]}')
-                    dbdiagram_file.write(f'{m["name"]} measure'+'\n')
-            elif metric["type"] == 'ratio':
-                # numerator
-                metrics.append(f'{metric["name"]}.{metric["type_params"]["numerator"]["name"]}')
-                dbdiagram_file.write(f'{metric["type_params"]["numerator"]["name"]} measure_numerator'+'\n')
-                # denominator
-                metrics.append(f'{metric["name"]}.{metric["type_params"]["denominator"]["name"]}')
-                dbdiagram_file.write(f'{metric["type_params"]["denominator"]["name"]} measure_denominator'+'\n')
-            elif metric["type"] == 'derived':
-                for met in metric["type_params"]["metrics"]:
-                    metrics.append(f'{metric["name"]}.{met["name"]}')
-                    dbdiagram_file.write(f'{met["name"]} metric'+'\n')
-            else:
-                print('Found something unexpected (type not in simple, ratio, derived, conversion)')
-            dbdiagram_file.write('}'+'\n')
+        tables_for_metrics(manifest, dbdiagram_file, metrics)
 
         # create pk --> fk relationships
         write_relationships(dbdiagram_file, primary_keys, foreign_keys, metrics, measures)
 
     print('Succesfully created dbdiagram.io file!')
     
+
+def export_semantic_model_dbdiagram_file():
+    """
+    Summary:
+        Read from entire semantic_manifest.json and return a dbdiagram file of semantic model connections. https://dbdiagram.io/home
+    Steps in function:
+        Import semantic_manifest.json from local directory.
+        Traverse the semantic json and bring in all semantic models.
+        create tables in dbml syntax
+        create references in dbml syntax
+        export dbml file
+    """
+
+    # Opening new file and JSON file
+    with open(os.path.join(DIR_PATH, f'dbdiagram_semantic_models_{now}.dbml'), 'w') as dbdiagram_file, open(os.path.join(DIR_PATH, 'semantic_manifest.json')) as semantic_manifest_file:
+
+        # returns JSON object as a dictionary
+        manifest = json.load(semantic_manifest_file)
+        
+        primary_keys = []
+        foreign_keys = []
+        metrics = []
+        measures = []
+
+        # semantic model: output table format for dbdiagram.io
+        tables_for_models(manifest, dbdiagram_file, primary_keys, foreign_keys, measures)
+
+        # create pk --> fk relationships
+        write_relationships(dbdiagram_file, primary_keys, foreign_keys, metrics=[], measures=[])
+
+    print('Succesfully created dbdiagram.io file!')    
 def list_fields_and_metrics():
     """create two csv files: semantic model fields & metrics."""
 
@@ -317,8 +357,8 @@ def list_fields_and_metrics():
                         semantic_model["name"],
                         semantic_model["node_relation"]["alias"],
                         measure["name"],
-                        f'measure: {measure["agg"]} - {measure["expr"]}',
-                        measure["description"],
+                        f'measure: {measure["agg"]}',
+                        f'{measure["description"]} | expr: {measure["expr"]}',
                         )
                     )
         print('Succesfully created semantic models file!')
@@ -385,6 +425,7 @@ def list_fields_and_metrics():
 
 
 if __name__ == '__main__':
+    export_semantic_model_dbdiagram_file()
     export_metric_dbdiagram_file()
-    list_fields_and_metrics()
     export_dbdiagram_file()
+    list_fields_and_metrics()
