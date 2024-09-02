@@ -42,13 +42,17 @@ for OFFSET in OFFSETS:
             payload = r.json()["data"]
             print(payload)
 
+            #=== THIS IS THE UPDATE SECTION, CUSTOMIZE TO YOUR LIKING ===#
+            # Example using the target name field
+            
             # Get job target_name.
             target_name = payload["settings"]["target_name"]
 
             # If job's target_name is unset (None or empty string "").
             if target_name is None or len(target_name) < 1:
                 payload["settings"]["target_name"] = "default"
-
+            #=== THIS IS THE END OF THE UPDATE SECTION ===#
+            
             r = requests.post(
                 url=f"https://cloud.getdbt.com/api/v2/accounts/{ACCOUNT_ID}/jobs/{job}/",
                 headers=headers,

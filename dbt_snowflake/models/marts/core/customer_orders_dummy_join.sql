@@ -1,9 +1,10 @@
 {{
     config(
-        materialized='table',
-        sql_header="CALL SYSTEM$WAIT(60);",
+        materialized='view',
+
     )
 }}
+{#  sql_header="CALL SYSTEM$WAIT(60);", #}
 
 with
 dummy_datas as (
@@ -15,7 +16,7 @@ dummy_datas as (
 
 select
     row_number() over (
-        partition by first_name
+        partition by customer_name
         order by first_order_date asc
     ) as _order,
     *

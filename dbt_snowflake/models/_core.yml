@@ -2,8 +2,16 @@ version: 2
 
 models:
   - name: my_first_model
+    description: |
+      this
+      is a multi line
+      comment
     columns:
       - name: col
+        description: >
+          this is a multi
+          line
+          comment
         tests:
           - unique
           - not_null

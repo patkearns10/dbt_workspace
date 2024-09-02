@@ -2,8 +2,8 @@
 
 {{
     config(
-      target_database=target.database,
-      target_schema=target.schema,
+      target_database='development',
+      target_schema='snapshots',
       unique_key='id',
       check_cols=['color'],
       strategy='check',

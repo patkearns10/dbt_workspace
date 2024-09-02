@@ -4,7 +4,7 @@
 {% endset -%}
 
 {% set customers_query -%}
-    select distinct first_name from {{ ref('stg_customers') }}
+    select distinct customer_name from {{ ref('stg_customers') }}
     order by 1
 {% endset -%}
 
