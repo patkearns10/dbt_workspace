@@ -65,3 +65,8 @@ models:
       invocation_id: "{{ invocation_id }}"
     example:
       materialized: view
+
+on-run-end: 
+  - "{{ store_test_results(results) }}"
+  - "{{ centralize_test_failures(results) }}"
+  - "{{ store_test_audit_logs(results) }}"

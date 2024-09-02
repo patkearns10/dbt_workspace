@@ -19,3 +19,9 @@ models:
             tests:
                 - unique
                 - not_null
+
+    - name: sample_data
+      columns:
+          - name: generic_id
+            tests:
+                - is_unique_custom
