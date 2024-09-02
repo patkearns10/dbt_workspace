@@ -5,6 +5,13 @@
     )
 }}
 
+-- is_incremental(): {{ is_incremental() }}
+-- model.config.full_refresh: {{ model.config.full_refresh }}
+-- flags.FULL_REFRESH: {{ flags.FULL_REFRESH }}
+-- flags.WHICH: {{ flags.WHICH }}
+-- check_model_full_refresh(): {{ check_model_full_refresh() }}
+
+
 with
 
 sample_data as (
