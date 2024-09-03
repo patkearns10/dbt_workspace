@@ -32,6 +32,8 @@ job_id: {job_id}
 
 req_auth_header = {'Authorization': f'Token {api_key}','Content-Type': 'application/json'}
 querystring = {"account_id":f'{account_id}',"created_at__range":"['2023-11-21 20:01','2023-11-28 20:01']"}
+# or get latest run
+# querystring = {"account_id":f'{account_id}',"order_by":"-id","limit":"1"}
 url = f'{api_base}/api/v2/accounts/{account_id}/runs/'
 
 response = requests.get(url, headers=req_auth_header, params=querystring)
@@ -40,6 +42,7 @@ print(response.json())
 print('=============================')
 pprint(json.loads(response.content))
 print('=============================')
+pprint(json.loads(response.content)['data'][0]['id'])
 
 try:
     print(response.raise_for_status())
