@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: my_incremental_model
+    columns:
+      - name: unique_id
+        tests:
+          - is_unique__incremental:
+              condition: "unique_id = 1"
