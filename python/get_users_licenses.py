@@ -73,7 +73,7 @@ def get_licenses(req_auth_header=req_auth_header, api_key=api_key, account_id=ac
                         value['over_limit'],
                         )
                     )
-            print('Succesfully created licenses models file!')
+            print('Succesfully exported licenses file!')
     except Exception as e:
         print(e)
 
@@ -116,7 +116,7 @@ def get_users(req_auth_header=req_auth_header, api_key=api_key, account_id=accou
                         user['permissions'][0]['license_type'],
                         )
                     )
-            print('Succesfully created users models file!')
+            print('Succesfully exported users file!')
     except Exception as e:
         print(e)
 
