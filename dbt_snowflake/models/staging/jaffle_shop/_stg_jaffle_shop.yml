@@ -48,6 +48,9 @@ models:
               condition: "ordered_at <= '2024-09-07' and ordered_at >= '2024-09-01'"
           - dbt_expectations.expect_column_values_to_be_unique:
               row_condition: "customer_id is not null"
+      - name: ordered_at
+        description: used to find updated date
+        tags: ['updated_at']
       - name: _pk
         description: The unique key - using surrogate key
         tests:
