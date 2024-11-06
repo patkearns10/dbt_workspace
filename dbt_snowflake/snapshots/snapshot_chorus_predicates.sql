@@ -2,6 +2,7 @@
 
 {% set some_target_relation = api.Relation.create(database=database, schema=schema, identifier='upstream_example') -%}
 
+
     {{
         config(
             unique_key="unique_id",

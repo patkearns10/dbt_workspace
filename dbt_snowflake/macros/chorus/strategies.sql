@@ -62,22 +62,6 @@
     {{ log("Logging raw_target_predicates: \n" ~  raw_target_predicates  ) }} 
 
 
-    
-    {%- set target_predicates = [] %}
-    {%- for predicate in raw_target_predicates %}
-        {%- if 'cust_ref' in predicate %}
-            {%-set resolved_predicate = resolve_str_with_cust_ref(predicate) %} 
-            {{ log("Logging resolved_predicate: " ~  resolved_predicate  ) }}  
-            {%- do target_predicates.append(resolved_predicate) %}
-        {%- else %}
-            {%- do target_predicates.append(predicate) %}
-        {%- endif %}
-    {%- endfor %}
-
-    
-    {{ log("target_predicates: " ~  target_predicates ) }} 
-
-
     {% if overwrite_cols_cols_config|length == 0  %}
         {{ log("overwrite_cols_cols_config (overwrite on change): not configured") }}
     {% else %}        
