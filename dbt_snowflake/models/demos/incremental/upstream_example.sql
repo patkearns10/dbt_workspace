@@ -38,15 +38,16 @@ sample_data as (
 
     select
         6 as unique_id,
-        'indigo' as color,
+        'dark-blue' as color,
         date('2024-01-06') as _date
     
     union all
 
     select
         7 as unique_id,
-        'violet' as color,
+        'newblue' as color,
         date('2024-01-07') as _date
+    
 )
 
 select * from sample_data
