@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key=['generic_id', 'unique_id', 'sometimes_bad_id']
+        unique_key=['generic_id', 'unique_id', 'sometimes_bad_id'],
     )
 }}
 

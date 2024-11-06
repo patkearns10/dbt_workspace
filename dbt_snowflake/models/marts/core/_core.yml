@@ -31,7 +31,13 @@ models:
     tests:
       - dbt_utils.expression_is_true:
           expression: "amount >= 0"
-#    columns:
+    columns:
+      - name: customer_id
+        tests:
+          - unique:
+              config:
+                limit:
+                  2
 #      - name: order_id
 #        tags: [run_da_tests]
 #        description: Primary key for orders

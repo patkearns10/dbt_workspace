@@ -13,21 +13,21 @@
 -- sample data
 select
  1 as id,
- '2023-01-02' as updated_at,
- 'x' as new_col
+ '2023-01-04' as updated_at,
+ 'y' as new_col
 
  union all
  
  select
  2 as id,
- '2023-01-03' as updated_at,
- 'x' as new_col
+ '2023-01-04' as updated_at,
+ 'y' as new_col
 
  union all
  
  select
  3 as id,
- '2023-01-03' as updated_at,
- 'x' as new_col
+ '2023-01-04' as updated_at,
+ 'y' as new_col
 
 {% endsnapshot %}
