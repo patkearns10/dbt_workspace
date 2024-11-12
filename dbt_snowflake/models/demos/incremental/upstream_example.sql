@@ -23,13 +23,6 @@ sample_data as (
     union all
 
     select
-        4 as unique_id,
-        'green' as color,
-        date('2024-01-04') as _date
-    
-    union all
-
-    select
         5 as unique_id,
         'blue' as color,
         date('2024-01-05') as _date
@@ -38,15 +31,23 @@ sample_data as (
 
     select
         6 as unique_id,
-        'indigo' as color,
+        'dark-blue' as color,
         date('2024-01-06') as _date
     
     union all
 
     select
         7 as unique_id,
-        'violet' as color,
+        'newblue' as color,
         date('2024-01-07') as _date
+
+    union all
+
+    select
+        8 as unique_id,
+        'unknown' as color,
+        date('2024-01-07') as _date
+    
 )
 
 select * from sample_data
