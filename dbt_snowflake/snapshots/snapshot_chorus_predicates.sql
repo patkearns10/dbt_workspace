@@ -1,8 +1,5 @@
 {% snapshot snapshot_chorus_predicates %}
 
-{% set some_target_relation = api.Relation.create(database=database, schema=schema, identifier='upstream_example') -%}
-
-
     {{
         config(
             unique_key="unique_id",
@@ -10,7 +7,7 @@
             check_cols=['COLOR','_DATE'],
             custom_create_record_on_delete=true,
             custom_etl_at_ts = get_etl_at_timestamp(),
-            target_predicates= ["exists (select 1 from " ~ some_target_relation ~ " s where DBT_INTERNAL_DEST.unique_id = s.unique_id)", "select 1 as col"],
+            target_predicates=predicate_writer(),
         )
     }}
 
