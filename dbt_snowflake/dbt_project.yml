@@ -7,6 +7,7 @@ dbt-cloud:
     project-id: 89074
 
 vars:
+  # dbt_artifacts_exclude_all_results: true
   is_backfill: false
   refresh_start_date: '1970-01-01'
   refresh_end_date: '2999-01-01'
@@ -90,9 +91,7 @@ models:
       +enabled: false
   
   dbt_artifacts:
-    +schema: dbt_artifact
-    staging:
-      +schema: dbt_artifact
+    +schema: less_dbt_artifact
 
 sources:
   secret:
@@ -116,7 +115,7 @@ snapshots:
 
 on-run-end:
   - "{{ dbt_artifacts.upload_results(results) }}"  # dbt_artifacts
-  - "{{ get_updated_at(graph, target) }}"
+  # - "{{ get_updated_at(graph, target) }}"
   # - "{{ log_run_end_results(results) }}"  # JYeo code
   # - "{{ store_test_results(results) }}" # store test failures
   # - "{{ log(invocation_id, true) }}"
