@@ -12,7 +12,7 @@ packages:
   - package: dbt-labs/dbt_project_evaluator
     version: 0.13.1
   - git: https://github.com/patkearns10/dbt_artifacts.git
-    revision: fa4b1fb91d537d481acd8b967102f894a8cbe239
+    revision: f24c21ba3325ad2649e225eeff76f9344b5bd3c3
   - package: calogica/dbt_date
     version: 0.10.1
 sha1_hash: 7db9e439c8e7650dc6f01f838b4a1b1f14e9f002
