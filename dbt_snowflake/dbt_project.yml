@@ -7,7 +7,6 @@ dbt-cloud:
     project-id: 89074
 
 vars:
-  # dbt_artifacts_exclude_all_results: true
   is_backfill: false
   refresh_start_date: '1970-01-01'
   refresh_end_date: '2999-01-01'
