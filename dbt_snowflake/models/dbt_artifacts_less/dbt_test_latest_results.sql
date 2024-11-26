@@ -29,8 +29,15 @@ source_models as (
 source_tests as (
     select
         node_id,
-        name as test_name,
-        test_path
+        name as test_long_name,
+        test_name as test_short_name,
+        test_severity_config,
+        column_names as test_depends_on_columns,
+        test_type,
+        depends_on_nodes,
+        package_name,
+        test_path,
+        tags
     from {{ ref('dbt_artifacts_tests') }}
     where dbt_valid_to is null
 ),
@@ -46,7 +53,7 @@ test_executions as (
     qualify row_number() over (partition by node_id order by run_started_at desc) = 1
 ),
 
-first_failed_at as (
+failed as (
     select distinct
         command_invocation_id,
         node_id,
@@ -55,60 +62,56 @@ first_failed_at as (
         failures
     from test_executions
     where status in ('error','warn')
+),
 
+model_test as (
+    select 
+        source_models.model_name,
+        source_models.node_id,
+        source_models.database,
+        source_models.schema,
+        source_tests.test_long_name,
+        source_tests.test_short_name,
+        source_tests.test_severity_config,
+        source_tests.test_depends_on_columns,
+        source_tests.test_type,
+        source_tests.depends_on_nodes,
+        source_tests.package_name,
+        source_tests.test_path,
+        source_tests.tags,
+        test_executions.node_id as test_node_id,
+        test_executions.status,
+        test_executions.failures,
+        test_executions.run_started_at,
+        failed.first_failed_at
+    from source_models
+    inner join source_tests
+        on source_models.node_id = source_tests.depends_on_nodes[0]
+    left join test_executions
+        on source_tests.node_id = test_executions.node_id
+    left join failed
+        on test_executions.command_invocation_id = failed.command_invocation_id
+        and test_executions.node_id = failed.node_id
 )
 
-select * from first_failed_at
-
-
--- TODO:
--- Need to add more logic to tests to capture 
-
--- test_severity_config,
--- model_refs,
--- source_refs,
--- column_names,
--- test_type,
-
-
-
--- model_test as (
-
---     select 
---         source_models.model_name,
---         source_models.node_id,
---         source_models.database,
---         source_models.schema,
---         source_tests.test_name,
---         exec.node_id as execution_node_id,
---         tests.test_node_id as test_node_id,
---         exec.status as status,
---         exec.failures as failures,
---         exec.latest_run as latest_run,
---         failed.first_failed_at as first_failed
---     from source_models
---     left join source_tests
---         on source_models.node_id = source_tests.model_node
---     left join test_executions as exec
---     on tests.test_node_id = exec.execution_node_id
---     left join first_failed_at as failed
---     on exec.command_invocation_id = failed.command_invocation_id
---     and exec.execution_node_id = failed.node_id
--- )
-
--- select 
---     model_name,
---     model_node_id,
---     database,
---     schema,
---     category,
---     priority,
---     test_name,
---     execution_node_id,
---     test_node_id,
---     status,
---     failures,
---     latest_run,
---     first_failed
--- from 
---     model_test
+select
+    model_name,
+    node_id,
+    database,
+    schema,
+    test_long_name,
+    test_short_name,
+    test_severity_config,
+    test_depends_on_columns,
+    test_type,
+    depends_on_nodes,
+    package_name,
+    test_path,
+    tags,
+    node_id as test_node_id,
+    status,
+    failures,
+    run_started_at,
+    first_failed_at
+from 
+    model_test
