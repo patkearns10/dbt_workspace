@@ -10,7 +10,9 @@ models as (
         node_id,
         name as model_name,
         database, 
-        schema
+        schema,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type,
     from {{ ref('dbt_artifacts_models') }}
     where dbt_valid_to is null
 ),
@@ -22,9 +24,12 @@ model_executions as (
         total_node_runtime,
         status,
         materialization,
-        rows_affected
+        rows_affected,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type
     from {{ ref('model_executions') }}
-    qualify row_number() over (partition by node_id order by run_started_at desc) = 1
+    left join {{ ref('invocations') }} using (command_invocation_id)
+    qualify row_number() over (partition by node_id, dbt_cloud_environment_name, dbt_cloud_environment_type order by run_started_at desc) = 1
 ),
 
 executions as (
@@ -41,6 +46,8 @@ executions as (
     from models
     left join model_executions
         on models.node_id = model_executions.node_id
+        and models.dbt_cloud_environment_name = model_executions.dbt_cloud_environment_name
+        and models.dbt_cloud_environment_type = model_executions.dbt_cloud_environment_type
 )
     
 select * from executions

@@ -25,6 +25,8 @@ model_raw as (
         materialization,
         tags,
         meta,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type,
         dbt_updated_at,
         dbt_valid_from,
         dbt_valid_to
@@ -51,6 +53,8 @@ test_raw as (
         concat('test ', test_type) as materialization,
         tags,
         null as meta,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type,
         dbt_updated_at,
         dbt_valid_from,
         dbt_valid_to
@@ -77,6 +81,8 @@ snapshot_raw as (
         concat('snapshot ', strategy) as materialization,
         null as tags,
         meta,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type,
         dbt_updated_at,
         dbt_valid_from,
         dbt_valid_to
@@ -103,6 +109,8 @@ seed_raw as (
         'seed' as materialization,
         null as tags,
         meta,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type,
         dbt_updated_at,
         dbt_valid_from,
         dbt_valid_to
@@ -129,6 +137,8 @@ source_raw as (
         'source' as materialization,
         null as tags,
         null as meta,
+        dbt_cloud_environment_name,
+        dbt_cloud_environment_type,
         dbt_updated_at,
         dbt_valid_from,
         dbt_valid_to
@@ -155,6 +165,8 @@ exposure_raw as (
         'exposure' as materialization,
         tags,
         null as meta,
+        null as dbt_cloud_environment_name,
+        null as dbt_cloud_environment_type,
         dbt_updated_at,
         dbt_valid_from,
         dbt_valid_to

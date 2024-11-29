@@ -238,6 +238,8 @@ final as (
         invocation_raw.dbt_cloud_run_id,
         invocation_raw.dbt_cloud_run_reason_category,
         invocation_raw.dbt_cloud_run_reason,
+        invocation_raw.dbt_cloud_environment_name,
+        invocation_raw.dbt_cloud_environment_type,
         invocation_raw.env_vars,
         invocation_raw.dbt_vars,
         invocation_raw.invocation_args,

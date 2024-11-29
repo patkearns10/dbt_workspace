@@ -46,6 +46,8 @@ final as (
         invocations.dbt_vars,
         invocations.invocation_args,
         invocations.dbt_custom_envs,
+        invocations.dbt_cloud_environment_name,
+        invocations.dbt_cloud_environment_type,
         objects.dbt_scd_id,
         objects.database as object_database,
         objects.schema as object_schema,
@@ -68,6 +70,8 @@ final as (
     left join objects
         on invocations.node_id = objects.node_id
         and invocations.execution_type = objects.execution_type
+        and invocations.dbt_cloud_environment_name = objects.dbt_cloud_environment_name
+        and invocations.dbt_cloud_environment_type = objects.dbt_cloud_environment_type
         and invocations.run_started_at >= objects.dbt_valid_from
         and (invocations.run_started_at < objects.dbt_valid_to or objects.dbt_valid_to is null)
 )
