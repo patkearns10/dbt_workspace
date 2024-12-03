@@ -20,19 +20,6 @@
   {{ log("Centralizing " ~ test_results|length ~ " test results in " + central_tbl, info = true) if execute }}
 
   create or replace table {{ central_tbl }} as (
-    
-    
-  {%- for result in test_results %}
-
-  {{ log('-----------------------') }}
-  {{ log(result.node.test_metadata.name) }}
-  {{ log('-----------------------') }}
-
-
--- test_name
--- test_severity_config
--- column_names
--- test_type
 
     {%- set test_name = '' -%}
     {%- set test_type = '' -%}
