@@ -20,6 +20,8 @@
   {{ log("Centralizing " ~ test_results|length ~ " test results in " + central_tbl, info = true) if execute }}
 
   create or replace table {{ central_tbl }} as (
+    
+  {%- for result in test_results %}
 
     {%- set test_name = '' -%}
     {%- set test_type = '' -%}
