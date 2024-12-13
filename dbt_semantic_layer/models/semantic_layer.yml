@@ -1,0 +1,77 @@
+models:
+  - name: metricflow_time_spine
+    time_spine:
+      standard_granularity_column: date_day
+    columns:
+      - name: date_day
+        granularity: day
+
+semantic_models:
+
+# --- semantic model ---
+  - name: sem_date
+    model: ref('dim_date')
+    description: MECCA`s retail/gregorian calendar
+    defaults:
+      agg_time_dimension: date
+# --- entities ---
+    entities:
+      # exception to the `_key` rule because date is a dimensional column name as well.
+      - name: date_key 
+        type: primary
+      # finance semantic model foreign entity relation
+# --- dimensions ---
+    dimensions: # dimensions are qualitative values such as names, dates, or geographical data. They provide context to metrics and allow "metric by group" data slicing.
+      - name: date
+        type: time
+        type_params:
+          time_granularity: day
+
+# ----------------------------------------
+# --- FACT_EMPLOYEE_LEARNING_ENROLMENT ---
+# ----------------------------------------
+
+  - name: sem_learning_content
+    model: ref('learning_content')
+    description: Contains records of learning enrolments for each learning course per employee from Retail and Distribution Centre only. An employee can enrol in the same learning course multiple times.
+    defaults:
+      agg_time_dimension: date
+
+  # --- entities ---
+    entities:
+      - name: learning_content
+        expr: learning_content_key
+        type: primary
+      - name: date_key
+        type: foreign
+
+
+  # --- dimensions ---
+    dimensions:
+      - name: date
+        expr: date(date_key, 'YYYYMMDD')
+        type: time
+        type_params:
+          time_granularity: day
+  # --- measures ---
+    measures:
+      - name: employee_learning_enrolment_learning_content_numbers
+        description: Distinct count of learning_content_key
+        agg: count_distinct
+        expr: learning_content_key
+
+metrics:
+
+# ---------------------------------------
+# --- sem_employee_learning_enrolment ---
+# ---------------------------------------
+
+  - name: met_employee_learning_enrolment_learning_content_numbers
+    description: Number of unique enrolments
+    label: Learning Content Counts (Fact Employee Learning Enrolment)
+    type: simple
+    type_params:
+      measure: 
+        name: employee_learning_enrolment_learning_content_numbers
+    filter: |
+      {{Entity('date_key')}} <> '-1'
