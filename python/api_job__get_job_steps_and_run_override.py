@@ -34,26 +34,27 @@ req_auth_header = {'Authorization': f'Token {api_key}','Content-Type': 'applicat
 req_job_url = f'{api_base}/api/v2/accounts/{account_id}/jobs/{job_id}/'
 #------------------------------------------------------------------------------
 
-# GET JOB COMMAND FROM WHATEVER IS WITHIN DBT JOB COMMANDS
+# get job commands current configuration from dbt cloud job
 def get_job_command_steps(url, headers):
     r = requests.get(
         url=req_job_url,
         headers=req_auth_header,
     )
-
-    # Get job current configuration.
     execute_steps_commands = r.json()["data"]['execute_steps']
     return execute_steps_commands
 
 
-def run_job(url, headers, cause, audit_date, execute_steps_commands) -> int:
+# add --vars logic to the commands
+def modify_command_steps(commands, audit_date):
+    steps_override  = f" --vars '{{\"audit_date\": \"{audit_date}\"}}'"
+    execute_steps = [step + steps_override for step in commands]
+    return execute_steps
+
+# use new commands to kick off job using steps_override
+def run_job(url, headers, cause, execute_steps) -> int:
     """
     Runs a dbt job using settings from dbt, with steps override
     """
-
-    # TAKE THE COMMANDS FROM WITHIN DBT AND ADD THE DATE VARIABLE TO THE COMMAND
-    steps_override  = f" --vars '{{\"audit_date\": \"{audit_date}\"}}'"
-    execute_steps = [step + steps_override for step in execute_steps_commands]
 
     # build payload
     req_payload = {
@@ -68,6 +69,7 @@ def run_job(url, headers, cause, audit_date, execute_steps_commands) -> int:
 
 
 if __name__ == "__main__":
-    execute_steps_commands = get_job_command_steps(req_auth_header, req_job_url)
-    run_job(req_job_url, req_auth_header, job_cause, audit_date, execute_steps_commands)
-
+    current_job_commands = get_job_command_steps(req_auth_header, req_job_url)
+    execute_steps = modify_command_steps(current_job_commands, audit_date)
+    run_job(req_job_url, req_auth_header, job_cause, execute_steps)
+    
