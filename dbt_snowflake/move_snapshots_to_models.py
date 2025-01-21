@@ -27,13 +27,14 @@ def move_snapshots_and_create_yml():
                 snapshot_config = extract_snapshot_config(snapshot_content)
 
                 # Generate new model content
+                new_model_name = f"eph_{snapshot_name}"
                 new_model_content = convert_to_ephemeral_model(snapshot_content)
 
                 # Determine new file path in models folder
                 relative_path = os.path.relpath(root, snapshots_folder)
                 new_folder = os.path.join(models_folder, relative_path)
                 os.makedirs(new_folder, exist_ok=True)
-                new_model_path = os.path.join(new_folder, file)
+                new_model_path = os.path.join(new_folder, f"{new_model_name}.sql")
 
                 # Write the new model file
                 with open(new_model_path, "w") as f:
@@ -42,6 +43,7 @@ def move_snapshots_and_create_yml():
                 # Add snapshot metadata to config
                 snapshots_config.append({
                     "name": snapshot_name,
+                    "relation": f"ref('{new_model_name}')",
                     "config": snapshot_config
                 })
 
@@ -83,6 +85,7 @@ def format_snapshots_config(snapshots_config):
     formatted = "snapshots:\n"
     for snapshot in snapshots_config:
         formatted += f"  - name: {snapshot['name']}\n"
+        formatted += f"    relation: {snapshot['relation']}\n"
         formatted += "    config:\n"
         for key, value in snapshot['config'].items():
             formatted += f"      {key}: {value}\n"
@@ -97,8 +100,13 @@ def convert_to_ephemeral_model(content):
     for line in lines:
         stripped_line = line.strip()
 
-        if stripped_line.startswith("{% snapshot") or stripped_line.startswith("{% endsnapshot %}") or stripped_line.startswith("{{"):
-            continue  # Skip the first and last Jinja control blocks and jinja config entry.
+        if stripped_line.startswith("{% snapshot") or stripped_line.startswith("{% endsnapshot %}"):
+            continue  # Skip the first and last Jinja control blocks
+
+        if stripped_line.startswith("{{") and "config(" not in stripped_line:
+            if "}}" in stripped_line:
+                new_lines.append(line)  # Retain valid macros/functions
+            continue
 
         if "config(" in stripped_line:
             inside_config_block = True
