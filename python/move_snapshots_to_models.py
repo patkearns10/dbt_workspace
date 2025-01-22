@@ -26,6 +26,12 @@ def move_snapshots_and_create_yml():
                 snapshot_name = extract_snapshot_name(snapshot_content)
                 snapshot_config = extract_snapshot_config(snapshot_content)
 
+                # Adjust keys for database and schema
+                if "target_database" in snapshot_config:
+                    snapshot_config["database"] = snapshot_config.pop("target_database")
+                if "target_schema" in snapshot_config:
+                    snapshot_config["schema"] = snapshot_config.pop("target_schema")
+
                 # Generate new model content
                 new_model_name = f"eph_{snapshot_name}"
                 new_model_content = convert_to_ephemeral_model(snapshot_content)
