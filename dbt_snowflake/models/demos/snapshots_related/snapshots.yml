@@ -1,0 +1,30 @@
+snapshots:
+ - name: yml_snapshot_example
+   relation: ref('upstream_example')
+   config:
+     unique_key: unique_id
+     strategy: timestamp
+     updated_at: _date
+ - name: yml_snapshot_example_overrides
+   relation: ref('upstream_example')
+   config:
+     unique_key: unique_id
+     strategy: timestamp
+     updated_at: _date
+     dbt_valid_to_current: to_date('9999-12-31')
+     snapshot_meta_column_names:
+        {dbt_valid_from: start_date, dbt_valid_to: end_date}
+ - name: yml_snapshot_example_ephemeral
+   relation: ref('snapshot_ephemeral')
+   config:
+     database: development
+     schema: dbt_pkearns_snapshot_yml
+     unique_key: node_id
+     strategy: timestamp
+     updated_at: run_started_at
+   columns:
+      - name: node_id
+        description: The unique key.
+        tests:
+          - not_null
+          - unique
