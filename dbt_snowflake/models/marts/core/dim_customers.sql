@@ -60,3 +60,4 @@ joined as (
 )
 
 select * from joined
+where customer_name != 'Edward Ortiz'
