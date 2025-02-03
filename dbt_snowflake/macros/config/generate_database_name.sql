@@ -7,6 +7,6 @@
     {%- if custom_database_name is none -%}
         {{ default_database }} 
     {%- else -%}
-        {{ custom_database_name }}_{{ target.name | trim }}
+        {{ custom_database_name }}
     {%- endif -%}
 {%- endmacro %}
