@@ -12,6 +12,8 @@ renamed as (
 
         ----------  ids
         sku as product_id,
+        split_part(sku,'-',1) as product_category,
+        cast(split_part(sku,'-',2) as varchar) as part_id,
 
         ---------- properties
         name as product_name,
