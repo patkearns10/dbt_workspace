@@ -1,0 +1,4 @@
+order_id,order_total,tax_paid
+1,10.0,1.0
+2,7.5,0.70
+3,2.0,1.0
