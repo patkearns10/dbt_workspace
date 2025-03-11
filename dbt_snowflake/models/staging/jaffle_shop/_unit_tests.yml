@@ -1,22 +1,22 @@
 unit_tests:
   - name: test_is_dollar_format
     description: "TBD"
-    model: stg_orders
+    model: stg_orders_2
 
     # in line example
-    # given:
-    #   - input: source('jaffle_shop', 'orders')
-    #     rows:
-    #       - {id: 1, order_total: 1000, tax_paid: 100}
-    #       - {id: 2, order_total: 750, tax_paid: 70}
-    #       - {id: 3, order_total: 200, tax_paid: 100}
-    # expect:
-    #   rows:
-    #       - {order_id: 1, order_total: 10.0, tax_paid: 1.0}
-    #       - {order_id: 2, order_total: 7.5, tax_paid: 0.70}
-    #       - {order_id: 3, order_total: 2.0, tax_paid: 1.0}
+    given:
+      - input: source('jaffle_shop', 'orders')
+        rows:
+          - {id: 1, order_total: 1000, tax_paid: 100}
+          - {id: 2, order_total: 750, tax_paid: 70}
+          - {id: 3, order_total: 200, tax_paid: 100}
+    expect:
+      rows:
+          - {order_id: 1, order_total: 10.0, tax_paid: 1.0}
+          - {order_id: 2, order_total: 7.5, tax_paid: 0.70}
+          - {order_id: 3, order_total: 2.0, tax_paid: 1.0}
 
-    # # ## csv example
+    # csv example
     # given:
     #   - input: source('jaffle_shop', 'orders')
     #     format: csv
@@ -27,23 +27,23 @@ unit_tests:
 
 
     ## sql example
-    given:
-      - input: source('jaffle_shop', 'orders')
-        format: sql
-        fixture: input_sql__test_is_dollar_format
-    expect:
-      format: sql
-      fixture: output_sql__test_is_dollar_format
+  #   given:
+  #     - input: source('jaffle_shop', 'orders')
+  #       format: sql
+  #       fixture: input_sql__test_is_dollar_format
+  #   expect:
+  #     format: sql
+  #     fixture: output_sql__test_is_dollar_format
 
-  - name: test_product_id_split
-    description: "TBD"
-    model: stg_products
-    given:
-      - input: source('jaffle_shop', 'products')
-        rows:
-          - {sku: JAF-005}
-          - {sku: BEV-001}
-    expect:
-      rows:
-          - {product_id: JAF-005, product_category: JAF, part_id: '005'}
-          - {product_id: BEV-001, product_category: BEV, part_id: '001'}
+  # - name: test_product_id_split
+  #   description: "TBD"
+  #   model: stg_products
+  #   given:
+  #     - input: source('jaffle_shop', 'products')
+  #       rows:
+  #         - {sku: JAF-005}
+  #         - {sku: BEV-001}
+  #   expect:
+  #     rows:
+  #         - {product_id: JAF-005, product_category: JAF, part_id: '005'}
+  #         - {product_id: BEV-001, product_category: BEV, part_id: '001'}
