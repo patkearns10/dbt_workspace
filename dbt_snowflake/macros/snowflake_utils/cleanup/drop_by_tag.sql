@@ -12,7 +12,7 @@ Example 1 - dry run of current database
     dbt run-operation drop_by_tag    
     
 Example 2 - dry run of drop any nodes in default database with any schema that match a given tag
-    dbt run-operation drop_by_tag --args '{"tag": "updated_at"'
+    dbt run-operation drop_by_tag --args '{"tag": "updated_at"}'
 
 Example 3 - dry run of drop any nodes in default database that match a given schema and tag
     dbt run-operation drop_by_tag --args '{"tag": "updated_at", "schema": "dbt_pkearns"}'
