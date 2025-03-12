@@ -78,6 +78,7 @@ models:
     config:
       meta:
         model_has_hard_coded_exceptions: "yes it does"
+      tags: ['updated_at']
     columns:
       - name: order_item_id
         description: The unique key of the orders items mart.
