@@ -2,7 +2,7 @@
 {# filter by directory or prefix arguments, if provided #}
 {% macro get_models(directory=None, prefix=None) %}
     {% set model_names=[] %}
-    {% set models = graph.nodes.values() | selectattr('resource_type', "equalto", 'model') %}
+    {% set models = graph.nodes.values() | selectattr('resource_type', 'in', ['model', 'snapshot']) %}
     {% if directory and prefix %}
         {% for model in models %}
             {% set model_path = "/".join(model.path.split("/")[:-1]) %}
