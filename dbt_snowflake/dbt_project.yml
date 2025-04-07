@@ -113,10 +113,11 @@ snapshots:
 # on-run-start:
   # - "{{ create_run_end_results_table() }}"
 
-on-run-end:
-  - "{% if target.name != 'ci' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}" # dont dbt_artifacts run in ci
+# on-run-end:
+  # - "{% if target.name != 'ci' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}" # dont dbt_artifacts run in ci
   # - "{{ get_updated_at(graph, target) }}"
   # - "{{ log_run_end_results(results) }}"  # JYeo code
   # - "{{ store_test_results(results) }}" # store test failures
   # - "{{ log(invocation_id, true) }}"
   # - "{{ log(modules.datetime.datetime.now(), true) }}"
+  # - "{{ test_results(results) }}"
