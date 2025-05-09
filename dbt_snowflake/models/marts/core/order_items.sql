@@ -38,7 +38,7 @@ order_supplies_summary as (
 joined as (
     select
         order_items.*,
-        products.product_price,
+        products.product_price * 2,
         order_supplies_summary.supply_cost,
         products.is_food_item,
         products.is_drink_item,
