@@ -6,7 +6,7 @@
     {%- set parsed_results = [] %}
     {%- set max_failed_rows = 50 %}
     
-    {% set generated_uuid_batch_run_id = generate_uuid() %}
+    {# {% set generated_uuid_batch_run_id = generate_uuid() %} #}
 
     -- Every test shall product a RunResult object, loop through all results and extract relevent data
     {%- do print("results complete is: " ~ results) %}
@@ -41,7 +41,7 @@
                 {%- endif -%}
             {%- endif -%}
  
-            {% set generated_uuid_rule_sum_id = generate_uuid() %}
+            {# {% set generated_uuid_rule_sum_id = generate_uuid() %} #}
  
             -- Extract test column name
             {% set column_name = node.get('column_name') %}
@@ -59,8 +59,8 @@
                     'execution_duration': run_result_dict.get('execution_time'),
                     'query': compiled_sql,
                     'failed_rows': failed_rows,
-                    'rule_sum_id': generated_uuid_rule_sum_id,
-                    'batch_run_id': generated_uuid_batch_run_id,
+                    'rule_sum_id': 123,
+                    'batch_run_id': 456,
                     'num_rows_failed': failed_array_length,
                     'description': node.get('meta').get('description'),
                     'dq_dimension': node.get('meta').get('dq_dimension'),

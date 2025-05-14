@@ -25,3 +25,18 @@ models:
           - name: generic_id
             tests:
                 - is_unique_custom
+
+
+
+exposures:
+  - name: core
+    type: application
+    depends_on:
+      - ref('some_new_model_19')
+    owner:
+      name: "Scott Florence"
+      email: scott.florence@macquarie.com
+    meta:
+      workload_access:
+        aws:
+          - "arn:aws:ec2:ap-southeast-2:269421376940:instance/i-0f10a3c364f2be6df"
