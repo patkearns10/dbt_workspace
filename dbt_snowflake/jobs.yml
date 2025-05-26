@@ -1,0 +1,377 @@
+jobs:
+  import_1:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: Nightly Build
+    settings:
+      threads: 16
+      target_name: prod
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: true
+    execute_steps:
+      - dbt ls
+      - dbt build
+    generate_docs: true
+    schedule:
+      cron: '* * * * *'
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_2:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: dbt_artifacts
+    settings:
+      threads: 8
+      target_name: dbt_artifacts
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt build --exclude dbt_artifacts
+      - dbt run-operation upload_dbt_artifacts_v2
+      - dbt build -s dbt_artifacts
+    generate_docs: false
+    schedule:
+      cron: 0 * * * *
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_3:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: adhoc query
+    settings:
+      threads: 8
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt run -s stg_orders
+      - dbt run -s dim_customers
+    generate_docs: false
+    schedule:
+      cron: 0 * * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_4:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: Full Refresh
+    settings:
+      threads: 16
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt build --full-refresh
+    generate_docs: false
+    schedule:
+      cron: 0 * * * *
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_5:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: dbt_artifacts setup
+    settings:
+      threads: 16
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt run-operation create_dbt_artifacts_tables
+    generate_docs: false
+    schedule:
+      cron: 0 * * * *
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_6:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: dbt run
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt run -s +customers
+    generate_docs: true
+    schedule:
+      cron: 0 * * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_7:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version: 1.4.0-latest
+    name: run 1.4
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt run
+    generate_docs: false
+    schedule:
+      cron: 0 * * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_8:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: Slim CI test prod
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id: 367800
+    run_generate_sources: false
+    execute_steps:
+      - dbt build --select state:modified+
+    generate_docs: false
+    schedule:
+      cron: 0 */12 * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: ci
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_9:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: steps override example
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt run -s +incremental_steps_override
+    generate_docs: false
+    schedule:
+      cron: 9 */12 * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: "dbt run -s incremental_steps_override --vars '{is_backfill: true, refresh_start_date: '2024-01-01', refresh_end_date: '2024-01-03'}'"
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_10:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: Run on Merge
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id: 367800
+    run_generate_sources: false
+    execute_steps:
+      - dbt build --select state:modified+
+    generate_docs: false
+    schedule:
+      cron: 9 */12 * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: true
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: merge
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_11:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: SL Exports
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - 'dbt build --resource-type saved_query '
+    generate_docs: false
+    schedule:
+      cron: 9 */12 * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
+  import_12:
+    account_id: 51798
+    project_id: 323716
+    environment_id: 367800
+    dbt_version:
+    name: job that fails
+    settings:
+      threads: 4
+      target_name: default
+    execution:
+      timeout_seconds: 0
+    deferring_job_definition_id:
+    deferring_environment_id:
+    run_generate_sources: false
+    execute_steps:
+      - dbt build -s dbt_variables
+    generate_docs: false
+    schedule:
+      cron: 9 */12 * * 0,1,2,3,4,5,6
+    triggers:
+      github_webhook: false
+      git_provider_webhook: false
+      schedule: false
+      on_merge: false
+    description: ''
+    run_compare_changes: false
+    compare_changes_flags: --select state:modified
+    job_type: other
+    triggers_on_draft_pr: false
+    job_completion_trigger_condition:
+    custom_environment_variables: []
