@@ -9,7 +9,9 @@ export DBT_API_KEY=your_token_here
 export ACCOUNT_ID=12345
 export ENVIRONMENT_ID_ORIGINAL=111
 export ENVIRONMENT_ID_NEW=222
-python compare_jobs.py
+
+Run:
+python api_get_job_intersection.py
 """
 
 import requests
