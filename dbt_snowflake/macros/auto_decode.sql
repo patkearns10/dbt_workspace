@@ -5,7 +5,7 @@
 
     decodes as (
         select *
-        from {{ ref('fct_orders') }}
+        from {{ ref('int_decodes_security') }}
     ),
     
     {{ decode_ref_alias }}_automatically_decoded as (
