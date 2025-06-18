@@ -24,3 +24,12 @@ models:
   - name: bar_view
     config:
       meta: {from_model_yml: yerp}
+  - name: bar_table
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('foo_table')
+  - name: baz_table
+    tests:
+      - a_plus_b_equals_c:
+          model_a: ref('foo_table')
+          model_b: ref('bar_table')

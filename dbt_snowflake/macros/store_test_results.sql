@@ -21,7 +21,6 @@
 
   create or replace table {{ central_tbl }} as (
     
-    
   {%- for result in test_results %}
 
     {%- set test_name = '' -%}
@@ -71,7 +70,7 @@
     {{ log("Centralizing " ~ test_results|length ~ " test results in " + history_tbl, info = true) if execute }}
       create table if not exists {{ history_tbl }} as (
         select 
-          {{ dbt_utils.surrogate_key(["test_name", "test_result", "_timestamp"]) }} as sk_id, 
+          {{ dbt_utils.generate_surrogate_key(["test_name", "test_result", "_timestamp"]) }} as sk_id, 
           * 
         from {{ central_tbl }}
         where false
@@ -79,7 +78,7 @@
 
     insert into {{ history_tbl }} 
       select 
-       {{ dbt_utils.surrogate_key(["test_name", "test_result", "_timestamp"]) }} as sk_id, 
+       {{ dbt_utils.generate_surrogate_key(["test_name", "test_result", "_timestamp"]) }} as sk_id, 
        * 
       from {{ central_tbl }}
     ;
@@ -104,7 +103,7 @@
         {% if is_src %}
           {{ refs.append(ref|join('.')) }}
         {% else %}
-          {{ refs.append(ref[0]) }}
+          {{ refs.append(ref["name"]) }}
         {% endif %} 
       {% endfor %}
 

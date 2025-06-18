@@ -1,0 +1,19 @@
+unit_tests:
+  - name: test_include_exclude
+    description: "TBD"
+    model: unit_test_model
+
+    # in line example
+    given:
+      - input: ref('unit_test_sample_data')
+        rows:
+          - {id: 1, order_type: L, limit_value: 10}
+          - {id: 2, order_type: L, limit_value: null}
+          - {id: 3, order_type: M, limit_value: null}
+          - {id: 4, order_type: M, limit_value: 20}
+    expect:
+      rows:
+          - {id: 1, include_exclude: 1}
+          - {id: 2, include_exclude: 1}
+          - {id: 3, include_exclude: 1}
+          - {id: 4, include_exclude: null}

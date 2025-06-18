@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: some_dates
+    tests:
+      - dbt_utils.expression_is_true:
+          expression: "start_date < end_date"
+      - dbt_expectations.expect_column_pair_values_A_to_be_greater_than_B:
+          column_A: end_date
+          column_B: start_date
+          or_equal: True

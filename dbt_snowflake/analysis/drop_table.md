@@ -1,0 +1,1 @@
+dbt run-operation run_query --args '{"sql": "drop table development.snapshots.snapshot_batch_file"}'

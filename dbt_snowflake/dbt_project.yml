@@ -7,15 +7,19 @@ dbt-cloud:
     project-id: 89074
 
 vars:
+  dbt_artifacts_environment_aware: true
+  is_backfill: false
+  refresh_start_date: '1970-01-01'
+  refresh_end_date: '2999-01-01'
   my_cool_var: '2016-06-01'
   disable_models: "['some_model_name']"
   snowflake_meta_src_db: 'snowflake' # override this with -> dbt run --vars "'snowflake_meta_src_db': 'my_snowflake_meta_src_db'"
-  dbt_artifacts_database: development
-  dbt_artifacts_schema: dbt_artifacts_kearns_added
+  # dbt_artifacts_database: development
+  # dbt_artifacts_schema: dbt_artifacts_kearns_added
   source_database: 'raw'
   target_database: 'raw'
   schemas: {'dev': ['dev_schema', 'dev_test']}
-  do_something: false
+  do_something: "nope nope nope"
   weekday_sale:
     - weekday: monday,
       data:
@@ -64,7 +68,7 @@ models:
     +materialized: view
     +meta:
       some_key: some_value
-    
+
     snowflake_meta:
       +tags:   snowflake_meta
       +schema: snowflake_meta
@@ -83,11 +87,11 @@ models:
       core:
         +tags:
           - "marts_core_subfolder"
+    python:
+      +enabled: false
   
   dbt_artifacts:
-    +schema: dbt_artifacts_kearns_added
-    staging:
-      +schema: dbt_artifacts_kearns_added__staging
+    +schema: less_dbt_artifact
 
 sources:
   secret:
@@ -96,6 +100,9 @@ sources:
 
 snapshots:
   secret:
+    +target_schema: "{{ target.schema }}"
+    schema_change:
+        +target_schema: "{{target.schema if env_var('DBT_ENV_CLEANSED') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') == 'github_pull_request' else 'CLEANSED' }}"
     snowflake_meta:
       +tags: ['snowflake_meta']
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"
@@ -107,8 +114,10 @@ snapshots:
   # - "{{ create_run_end_results_table() }}"
 
 # on-run-end:
+  # - "{% if target.name != 'ci' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}" # dont dbt_artifacts run in ci
+  # - "{{ get_updated_at(graph, target) }}"
   # - "{{ log_run_end_results(results) }}"  # JYeo code
-  # - "{{ dbt_artifacts.upload_results(results) }}"  # dbt_artifacts
   # - "{{ store_test_results(results) }}" # store test failures
   # - "{{ log(invocation_id, true) }}"
   # - "{{ log(modules.datetime.datetime.now(), true) }}"
+  # - "{{ test_results(results) }}"

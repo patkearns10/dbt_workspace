@@ -29,6 +29,14 @@ with raw_data as (
         TIMEADD(minute, -8000, current_timestamp) as created_date,
         TIMEADD(minute, -67, current_timestamp) as completed_date
 
+    union all
+    select
+        4 as job_id,
+        'def' as job_type,
+        True as is_job_active,
+        TIMEADD(minute, -8000, current_timestamp) as created_date,
+        TIMEADD(minute, -67, current_timestamp) as completed_date
+
 )
 
 select

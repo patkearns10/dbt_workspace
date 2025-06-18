@@ -16,7 +16,7 @@ dummy_datas as (
 
 select
     row_number() over (
-        partition by first_name
+        partition by customer_name
         order by first_order_date asc
     ) as _order,
     *

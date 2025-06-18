@@ -1,0 +1,18 @@
+packages:
+  - package: dbt-labs/dbt_utils
+    version: 1.0.0
+  - package: dbt-labs/codegen
+    version: 0.12.1
+  - package: Snowflake-Labs/dbt_constraints
+    version: 0.6.2
+  - package: dbt-labs/audit_helper
+    version: 0.11.0
+  - package: calogica/dbt_expectations
+    version: 0.10.3
+  - package: dbt-labs/dbt_project_evaluator
+    version: 0.13.1
+  - git: https://github.com/patkearns10/dbt_artifacts.git
+    revision: fba807c24b68f53c7bd719ebc3c250e311609a10
+  - package: calogica/dbt_date
+    version: 0.10.1
+sha1_hash: 7db9e439c8e7650dc6f01f838b4a1b1f14e9f002

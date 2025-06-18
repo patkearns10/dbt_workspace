@@ -1,0 +1,9 @@
+id,status,file_date
+1,created,2025-01-01
+2,created,2025-01-01
+2,picked,2025-01-02
+3,created,2025-01-02
+1,picked,2025-01-03
+4,created,2025-01-03
+1,packed,2025-01-04
+5,created,2025-01-04
