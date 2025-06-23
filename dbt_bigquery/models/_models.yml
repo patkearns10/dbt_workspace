@@ -1,0 +1,9 @@
+version: 2
+
+models:
+  - name: decoded_csvs
+    columns:
+      - name: failed_decodes_nonderived  
+        tests:
+          - has_failed_decodes:
+              condition: "date >= current_date - 1"
