@@ -1,0 +1,471 @@
+{
+
+  "status": {
+
+    "code": 200,
+
+    "is_success": true,
+
+    "user_message": "Success!",
+
+    "developer_message": ""
+
+  },
+
+  "data": [
+
+    {
+
+      "id": 211,
+
+      "account_id": 1,
+
+      "project_id": 11,
+
+      "environment_id": 30,
+
+      "name": "RELEASE CI JOB",
+
+      "dbt_version": null,
+
+      "deactivated": false,
+
+      "deferring_environment_id": 31,
+
+      "deferring_job_definition_id": null,
+
+      "description": "",
+
+      "execute_steps": [
+
+        "dbt ls -s state:modified",
+
+        "dbt build --select state:modified+"
+
+      ],
+
+      "execution": {
+
+        "timeout_seconds": 0
+
+      },
+
+      "generate_docs": false,
+
+      "is_system": false,
+
+      "is_deferrable": false,
+
+      "job_type": "ci",
+
+      "lifecycle_webhooks_url": null,
+
+      "lifecycle_webhooks": false,
+
+      "raw_dbt_version": null,
+
+      "run_compare_changes": false,
+
+      "compare_changes_flags": "--select state:modified",
+
+      "run_failure_count": 0,
+
+      "run_generate_sources": false,
+
+      "run_lint": false,
+
+      "errors_on_lint_failure": true,
+
+      "force_node_selection": true,
+
+      "settings": {
+
+        "threads": 4,
+
+        "target_name": "default"
+
+      },
+
+      "state": 1,
+
+      "triggers_on_draft_pr": false,
+
+      "triggers": {
+
+        "github_webhook": false,
+
+        "schedule": false,
+
+        "git_provider_webhook": true,
+
+        "on_merge": false
+
+      },
+
+      "job_completion_trigger_condition": null,
+
+      "created_at": "2025-07-07 00:52:35.334819+00:00",
+
+      "updated_at": "2025-07-07 00:52:35.334835+00:00",
+
+      "account": null,
+
+      "project": null,
+
+      "environment": null,
+
+      "most_recent_run": null,
+
+      "most_recent_completed_run": null,
+
+      "schedule": {
+
+        "date": {
+
+          "type": "interval_cron",
+
+          "days": [0, 1, 2, 3, 4, 5, 6],
+
+          "cron": "2 */12 * * 0,1,2,3,4,5,6"
+
+        },
+
+        "time": {
+
+          "type": "every_hour",
+
+          "interval": 12
+
+        },
+
+        "cron": "2 */12 * * 0,1,2,3,4,5,6"
+
+      },
+
+      "generate_sources": false,
+
+      "cron_humanized": "At 2 minutes past the hour, every 12 hours, only on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday",
+
+      "next_run_humanized": null,
+
+      "next_run": null
+
+    },
+
+    {
+
+      "id": 212,
+
+      "account_id": 1,
+
+      "project_id": 11,
+
+      "environment_id": 31,
+
+      "name": "PROD - MERGE JOB - PARSE",
+
+      "dbt_version": null,
+
+      "deactivated": false,
+
+      "deferring_environment_id": 31,
+
+      "deferring_job_definition_id": null,
+
+      "description": "",
+
+      "execute_steps": [
+
+        "dbt parse"
+
+      ],
+
+      "execution": {
+
+        "timeout_seconds": 0
+
+      },
+
+      "generate_docs": false,
+
+      "is_system": false,
+
+      "is_deferrable": false,
+
+      "job_type": "merge",
+
+      "lifecycle_webhooks_url": null,
+
+      "lifecycle_webhooks": false,
+
+      "raw_dbt_version": null,
+
+      "run_compare_changes": false,
+
+      "compare_changes_flags": "--select state:modified",
+
+      "run_failure_count": 0,
+
+      "run_generate_sources": false,
+
+      "run_lint": false,
+
+      "errors_on_lint_failure": true,
+
+      "force_node_selection": true,
+
+      "settings": {
+
+        "threads": 4,
+
+        "target_name": "default"
+
+      },
+
+      "state": 1,
+
+      "triggers_on_draft_pr": false,
+
+      "triggers": {
+
+        "github_webhook": false,
+
+        "schedule": false,
+
+        "git_provider_webhook": false,
+
+        "on_merge": true
+
+      },
+
+      "job_completion_trigger_condition": null,
+
+      "created_at": "2025-07-07 00:54:55.220811+00:00",
+
+      "updated_at": "2025-07-07 00:56:15.759843+00:00",
+
+      "account": null,
+
+      "project": null,
+
+      "environment": null,
+
+      "most_recent_run": null,
+
+      "most_recent_completed_run": null,
+
+      "schedule": {
+
+        "date": {
+
+          "type": "interval_cron",
+
+          "days": [0, 1, 2, 3, 4, 5, 6],
+
+          "cron": "2 */12 * * 0,1,2,3,4,5,6"
+
+        },
+
+        "time": {
+
+          "type": "every_hour",
+
+          "interval": 12
+
+        },
+
+        "cron": "2 */12 * * 0,1,2,3,4,5,6"
+
+      },
+
+      "generate_sources": false,
+
+      "cron_humanized": "At 2 minutes past the hour, every 12 hours, only on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday",
+
+      "next_run_humanized": null,
+
+      "next_run": null
+
+    },
+
+    {
+
+      "id": 213,
+
+      "account_id": 1,
+
+      "project_id": 11,
+
+      "environment_id": 31,
+
+      "name": "PROD- MERGE JOB - BUILD MODIFIED",
+
+      "dbt_version": null,
+
+      "deactivated": false,
+
+      "deferring_environment_id": null,
+
+      "deferring_job_definition_id": null,
+
+      "description": "",
+
+      "execute_steps": [
+
+        "dbt build -s state:modified+"
+
+      ],
+
+      "execution": {
+
+        "timeout_seconds": 0
+
+      },
+
+      "generate_docs": false,
+
+      "is_system": false,
+
+      "is_deferrable": false,
+
+      "job_type": "other",
+
+      "lifecycle_webhooks_url": null,
+
+      "lifecycle_webhooks": false,
+
+      "raw_dbt_version": null,
+
+      "run_compare_changes": false,
+
+      "compare_changes_flags": "--select state:modified",
+
+      "run_failure_count": 0,
+
+      "run_generate_sources": false,
+
+      "run_lint": false,
+
+      "errors_on_lint_failure": true,
+
+      "force_node_selection": true,
+
+      "settings": {
+
+        "threads": 4,
+
+        "target_name": "default"
+
+      },
+
+      "state": 1,
+
+      "triggers_on_draft_pr": false,
+
+      "triggers": {
+
+        "github_webhook": false,
+
+        "schedule": false,
+
+        "git_provider_webhook": false,
+
+        "on_merge": false
+
+      },
+
+      "job_completion_trigger_condition": {
+
+        "condition": {
+
+          "job_id": 212,
+
+          "statuses": [10, 20, 30],
+
+          "project_id": 11
+
+        }
+
+      },
+
+      "created_at": "2025-07-07 00:56:03.155298+00:00",
+
+      "updated_at": "2025-07-07 00:56:03.155316+00:00",
+
+      "account": null,
+
+      "project": null,
+
+      "environment": null,
+
+      "most_recent_run": null,
+
+      "most_recent_completed_run": null,
+
+      "schedule": {
+
+        "date": {
+
+          "type": "interval_cron",
+
+          "days": [0, 1, 2, 3, 4, 5, 6],
+
+          "cron": "2 */12 * * 0,1,2,3,4,5,6"
+
+        },
+
+        "time": {
+
+          "type": "every_hour",
+
+          "interval": 12
+
+        },
+
+        "cron": "2 */12 * * 0,1,2,3,4,5,6"
+
+      },
+
+      "generate_sources": false,
+
+      "cron_humanized": "At 2 minutes past the hour, every 12 hours, only on Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday",
+
+      "next_run_humanized": null,
+
+      "next_run": null
+
+    }
+
+  ],
+
+  "extra": {
+
+    "filters": {
+
+      "limit": 100,
+
+      "offset": 200,
+
+      "state": "active",
+
+      "account_id": 1,
+
+      "is_system": false
+
+    },
+
+    "order_by": "id",
+
+    "pagination": {
+
+      "count": 3,
+
+      "total_count": 203
+
+    }
+
+  },
+
+  "error_code": null
+
+}
