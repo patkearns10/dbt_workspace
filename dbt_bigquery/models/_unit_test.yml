@@ -1,24 +1,24 @@
 unit_tests:
-  # - name: test_index2
-  #   description: This test checks coupon_type.
-  #   model: index2
-  #   given:
-  #     - input: ref('int_security_decoded')
-  #       rows:
-  #         - {bcusip: 'ABC', change_date: '2021-08-13', floater_set: ['struct(struct("2021-08-01" as START_DT, "2021-08-10" as END_DT, 1.81 as INDX2) as FLOATER_record)','struct(struct("2021-08-12" as START_DT, "2023-08-14" as END_DT, 2.32 as INDX2) as FLOATER_RECORD)']}
-  #         - {bcusip: 'DEF', change_date: '2022-09-16', floater_set: ['struct(struct("2020-01-01" as START_DT, "2020-02-01" as END_DT, 5.32 as INDX2) as FLOATER_record)','struct(struct("2020-02-02" as START_DT, "2022-09-16" as END_DT, 4.44 as INDX2) as FLOATER_RECORD)']}
-  #   expect:
-  #     rows:
-  #       - {bcusip: 'ABC', index2: 2.32}
-  #       - {bcusip: 'DEF', index2: 4.44}
   - name: test_index2
     description: This test checks coupon_type.
     model: index2
     given:
       - input: ref('int_security_decoded')
-        format: csv
-        fixture: fixture_security_decoded
+        rows:
+          - {bcusip: 'ABC', change_date: '2021-08-13', floater_set: ['struct(struct("2021-08-01" as START_DT, "2021-08-10" as END_DT, 1.81 as INDX2) as FLOATER_record)','struct(struct("2021-08-12" as START_DT, "2023-08-14" as END_DT, 2.32 as INDX2) as FLOATER_RECORD)']}
+          - {bcusip: 'DEF', change_date: '2022-09-16', floater_set: ['struct(struct("2020-01-01" as START_DT, "2020-02-01" as END_DT, 5.32 as INDX2) as FLOATER_record)','struct(struct("2020-02-02" as START_DT, "2022-09-16" as END_DT, 4.44 as INDX2) as FLOATER_RECORD)']}
     expect:
       rows:
         - {bcusip: 'ABC', index2: 2.32}
         - {bcusip: 'DEF', index2: 4.44}
+  # - name: test_index2
+  #   description: This test checks coupon_type.
+  #   model: index2
+  #   given:
+  #     - input: ref('int_security_decoded')
+  #       format: csv
+  #       fixture: fixture_security_decoded
+  #   expect:
+  #     rows:
+  #       - {bcusip: 'ABC', index2: 2.32}
+  #       - {bcusip: 'DEF', index2: 4.44}
