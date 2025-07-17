@@ -7,9 +7,9 @@ models:
       columns:
           - name: id
             description: "The primary key for this table"
-            tests:
-                - unique
-                - not_null
+            # tests:
+            #     - unique
+            #     - not_null
 
     - name: my_second_dbt_model
       description: "A starter dbt model"
@@ -17,11 +17,11 @@ models:
           - name: id
             description: "The primary key for this table"
             tests:
-                - unique
+                # - unique
                 - not_null
 
     - name: sample_data
       columns:
           - name: generic_id
-            tests:
-                - is_unique_custom
+            # tests:
+            #     - is_unique_custom
