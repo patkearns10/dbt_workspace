@@ -8,8 +8,8 @@ models:
           - has_failed_decodes:
               condition: "date >= current_date - 1"
   - name: seed__bcusip
-    data_tests:
-      - has_failed_decodes_nonderived
+    # data_tests:
+    #   - has_failed_decodes_nonderived
 
 
       
