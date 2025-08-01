@@ -4,6 +4,7 @@ import pandas as pd
 from collections import Counter, defaultdict
 import networkx as nx
 import plotly.graph_objects as go
+import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 
 TOP_LEVEL_FOLDERS = [
@@ -68,9 +69,14 @@ def build_dependency_graph(manifest_path="manifest.json"):
 
     return graph, folder_edges, folder_model_counts
 
-def draw_interactive_plotly(graph, folder_edges, folder_model_counts, output_file="dbt_dependency_graph.html"):
-    pos = nx.spring_layout(graph, seed=42, k=3)  # layout
 
+def draw_interactive_plotly(graph, folder_edges, folder_model_counts, output_file="dbt_dependency_graph.html"):
+    pos = nx.spring_layout(graph, seed=42, k=1.2)  # smaller k to pull nodes closer
+    
+    # Fix integrations node position if it exists
+    if "integrations" in pos:
+        pos["integrations"] = (0, 0)
+    
     node_x = []
     node_y = []
     node_text = []
@@ -160,32 +166,97 @@ def draw_interactive_plotly(graph, folder_edges, folder_model_counts, output_fil
     fig.write_html(output_file)
     print(f"Interactive graph saved to {output_file}")
 
+####
+
 def draw_png_fixed_size_with_labels(graph, folder_model_counts, output_file="dbt_dependency_graph.png"):
-    pos = nx.spring_layout(graph, seed=42, k=3)
+    pos = nx.spring_layout(graph, seed=42, k=1.2)
+    
+    # Fix integrations position for png also
+    if "integrations" in pos:
+        pos["integrations"] = (0, 0)
 
     plt.figure(figsize=(14,10))
+    ax = plt.gca()
+    ax.set_aspect('equal')
 
+    node_size_pt2 = 700  # same as used in draw_networkx_nodes
+    # Convert node size from points^2 to radius in data coords:
+    # Radius in points:
+    node_radius_pt = (node_size_pt2 ** 0.5) / 2  
+    # Get figure DPI and axis limits:
+    fig = plt.gcf()
+    dpi = fig.dpi
+
+    xlim = ax.get_xlim()
+    ylim = ax.get_ylim()
+
+    x_range = abs(xlim[1] - xlim[0])
+    y_range = abs(ylim[1] - ylim[0])
+
+    # Calculate how many data units per point:
+    data_per_point_x = x_range / (fig.get_size_inches()[0] * dpi)
+    data_per_point_y = y_range / (fig.get_size_inches()[1] * dpi)
+    # Approximate radius in data units (take average scale):
+    node_radius = node_radius_pt * (data_per_point_x + data_per_point_y) / 2
+
+    # Draw nodes fixed size
     nx.draw_networkx_nodes(
         graph, pos,
-        node_size=700,
+        node_size=node_size_pt2,
         node_color=[FOLDER_COLORS.get(node, "lightcoral") for node in graph.nodes()],
-        edgecolors='black'
+        edgecolors='black',
+        ax=ax
     )
 
-    nx.draw_networkx_edges(graph, pos, arrows=True, arrowstyle='-|>', arrowsize=15)
+    # Draw edges with arrows that just touch node edges
+    for (src, tgt) in graph.edges():
+        x0, y0 = pos[src]
+        x1, y1 = pos[tgt]
 
-    nx.draw_networkx_labels(graph, pos, font_size=12)
+        dx = x1 - x0
+        dy = y1 - y0
+        dist = (dx**2 + dy**2)**0.5
+        if dist == 0:
+            continue
 
+        # Offset start/end points by node radius along edge vector
+        start_x = x0 + (dx / dist) * node_radius
+        start_y = y0 + (dy / dist) * node_radius
+        end_x = x1 - (dx / dist) * node_radius
+        end_y = y1 - (dy / dist) * node_radius
+
+        if graph.has_edge(tgt, src):
+            edge_color = 'red'
+            zorder = 3
+        else:
+            edge_color = 'gray'
+            zorder = 2
+
+        arrow = mpatches.FancyArrowPatch(
+            (start_x, start_y), (end_x, end_y),
+            arrowstyle='-|>', mutation_scale=15,
+            linewidth=2, color=edge_color,
+            alpha=0.7,
+            zorder=zorder
+        )
+        ax.add_patch(arrow)
+
+    # Draw labels
+    nx.draw_networkx_labels(graph, pos, font_size=12, ax=ax)
+
+    # Draw model count labels next to nodes with small offset
     for node, (x, y) in pos.items():
         count = folder_model_counts.get(node, 0)
-        plt.text(x + 0.05, y + 0.05, f"{count} models", fontsize=10, fontweight='bold')
+        plt.text(x + 0.03, y, f"{count} models", fontsize=10, fontweight='bold', verticalalignment='center')
 
-    plt.title("DBT Folder Dependency Graph (PNG with Model Count Labels)")
+    plt.title("DBT Folder Dependency Graph (PNG with Model Count Labels & Bidirectional Edges)")
     plt.axis('off')
     plt.tight_layout()
     plt.savefig(output_file, dpi=150)
     plt.close()
     print(f"PNG graph saved to {output_file}")
+
+####
 
 def save_csv(folder_edges, output_file="dbt_dependency_edges.csv"):
     data = [
