@@ -22,3 +22,14 @@ unit_tests:
   #     rows:
   #       - {bcusip: 'ABC', index2: 2.32}
   #       - {bcusip: 'DEF', index2: 4.44}
+  - name: test_factor_set
+    description: This test checks array struct.
+    model: factor_set_model
+    given:
+      - input: ref('seed__security_history')
+        rows:
+          - {bcusip: 1, asof_date: 2025-06-20, type: 'call', exchange: 'NYSE', amount: 100}
+          - {bcusip: 1, asof_date: 2025-06-20, type: 'convertible', exchange: 'ASX', amount: 10000}
+    expect:
+      rows:
+        - {bcusip: 1, factor_set: ['struct(DATE("2025-06-20") as asof_date, "call" as type, "NYSE" as exchange, 100 as amount)', 'struct(DATE("2025-06-20") as asof_date, "convertible" as type, "ASX" as exchange, 10000 as amount)']}
