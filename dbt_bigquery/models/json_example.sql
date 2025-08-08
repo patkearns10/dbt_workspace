@@ -1,3 +1,9 @@
+{{
+    config(
+        post_hook="{{ macro_with_var_to_enable() }}"
+    )
+}}
+
 select 
 1 as col,
 JSON_OBJECT(
