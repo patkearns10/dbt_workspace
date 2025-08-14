@@ -1,0 +1,10 @@
+
+custom_checks_dir: custom_checks
+
+manifest_checks:
+  - name: check_model_schemas
+    severity: error
+    rules:
+      models/staging: ["stg_"]
+      models/marts: ["fct_", "dim_"]
+      models/intermediate: ["int_"]
