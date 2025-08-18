@@ -140,6 +140,6 @@ metrics:
       text far beyond what a normal description would contain, maybe 2000+
       characters in total.
     type: simple
-    label: "dummy lifetime value"
+    label: "dummy_this_is_a_really_long_name_that_should_trigger_a_limit_check_because_we_are_trying_to_push_the_semantic_layer_to_its_absolute_maximum_length_and_see_where_it_breaks_and_how_dbt_reacts_so_we_know_if_we_need_to_document_a_limitthis_is_a_really_long_name_that_should_trigger_a_limit_check_because_we_are_trying_to_push_the_semantic_layer_to_its_absolute_maximum_length_and_see_where_it_breaks_and_how_dbt_reacts_so_we_know_if_we_need_to_document_a_limit"
     type_params:
       measure: lifetime_value
