@@ -1,0 +1,145 @@
+version: 2
+
+semantic_models:
+  - name: this_is_a_really_long_name_that_should_trigger_a_limit_check_because_we_are_trying_to_push_the_semantic_layer_to_its_absolute_maximum_length_and_see_where_it_breaks_and_how_dbt_reacts_so_we_know_if_we_need_to_document_a_limitthis_is_a_really_long_name_that_should_trigger_a_limit_check_because_we_are_trying_to_push_the_semantic_layer_to_its_absolute_maximum_length_and_see_where_it_breaks_and_how_dbt_reacts_so_we_know_if_we_need_to_document_a_limit
+    description: >
+      This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+    model: ref('customer_orders_dummy_join')
+    defaults:
+      agg_time_dimension: ordered_at
+    entities:
+      - name: dummycustomers
+        type: foreign
+        expr: customer_id
+      - name: dummy_orders
+        type: primary
+        expr: _ORDER
+    dimensions:
+      - name: customer_name
+        type: categorical
+      - name: first_order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: most_recent_order_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: ordered_at
+        type: time
+        type_params:
+          time_granularity: day
+    measures:
+      - name: number_of_orders
+        description: The total number of orders placed by the customer.
+        agg: sum
+        create_metric: true
+      - name: lifetime_value
+        description: The total lifetime value of the customer based on their orders.
+        agg: sum
+        create_metric: true
+      - name: amount
+        description: The total amount spent by the customer on orders.
+        agg: sum
+        create_metric: true
+      - name: count_order
+        agg: count
+        create_metric: true
+        expr: _ORDER
+      - name: count_customer
+        agg: count_distinct
+        create_metric: true
+        expr: customer_id
+
+metrics:
+  - name: met_dummy_lifetime_value
+    description: >
+      This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+            This is an extremely long description meant to test the limits of the dbt
+      semantic layer. We want to see whether dbt itself errors, whether the
+      metricflow engine rejects it, or whether downstream integrations (like BI
+      tools or the GraphQL API) truncate it. To push things, keep extending this
+      text far beyond what a normal description would contain, maybe 2000+
+      characters in total.
+    type: simple
+    label: "dummy lifetime value"
+    type_params:
+      measure: lifetime_value
