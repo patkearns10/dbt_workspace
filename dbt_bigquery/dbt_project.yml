@@ -24,6 +24,11 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+
+query-comment:
+  job-label: True
+
+
 vars:
   my_cool_var: '2016-06-01'
   dbt_system_to_build: 'incremental'
@@ -66,8 +71,9 @@ models:
     example:
       materialized: view
 
-on-run-end: 
-  - "{{ did_tests_run(results) }}"
+on-run-end:
+  - "{{ macro_with_var_to_enable() }}"
+# - "{{ did_tests_run(results) }}"
 #  - "{{ parse_test_results(results) }}"
 #  - "{{ store_test_results(results) }}"
 #  - "{{ centralize_test_failures(results) }}"
