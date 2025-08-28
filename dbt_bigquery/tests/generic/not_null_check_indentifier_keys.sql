@@ -3,6 +3,7 @@
     -- identifier_keys: {{ identifier_keys }}
     -- model: {{ model }}
     -- column_name: {{ column_name }}
+    
     {% if execute %}
         {% if identifier_keys is none %}
             -- identifier_keys are missing... grab from the model meta config
@@ -13,7 +14,11 @@
         {% endif %}
     {% endif %}
 
-    select {{ identifier_keys }}
+    {% if identifier_keys %}    
+        {%- set columns_csv = identifier_keys | join(', ') %}
+    {% endif %}
+
+    select {{ columns_csv }}
     from {{ model }}
     where {{ column_name }} is null
 
