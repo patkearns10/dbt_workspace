@@ -3,7 +3,7 @@
     {%- do print("get_row_count has started running") -%}
 
     {% if materialized == 'ephemeral' %}
-        
+        {{ return(0) }}
     {% elif materialized == 'view' %}
         -- pass variable to command to enable count(*) for view.
         -- $ dbt build --vars '{"allow_count": "1"}'
