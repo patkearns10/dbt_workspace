@@ -72,8 +72,9 @@ models:
       materialized: view
 
 on-run-end:
-  - "{{ macro_with_var_to_enable() }}"
+  # - "{{ macro_with_var_to_enable() }}"
 # - "{{ did_tests_run(results) }}"
+  - "{{ extract_run_results(results) }}"
 #  - "{{ parse_test_results(results) }}"
 #  - "{{ store_test_results(results) }}"
 #  - "{{ centralize_test_failures(results) }}"
