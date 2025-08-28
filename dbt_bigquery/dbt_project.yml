@@ -71,6 +71,9 @@ models:
     example:
       materialized: view
 
+data_tests:
+  +store_failures: true
+
 on-run-end:
   # - "{{ macro_with_var_to_enable() }}"
 # - "{{ did_tests_run(results) }}"

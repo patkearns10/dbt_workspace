@@ -1,5 +1,21 @@
 -- extracts no. of rows from bigquery table using information_schema
-{% macro get_row_count(database_name, table_schema, table_name) %}
+{% macro get_row_count(database_name, table_schema, table_name, materialized) %}
+    {%- do print("get_row_count has started running") -%}
+
+    {% if materialized == 'ephemeral' %}
+        
+    {% elif materialized == 'view' %}
+        -- pass variable to command to enable count(*) for view.
+        -- $ dbt build --vars '{"allow_count": "1"}'
+        {% if var('allow_count', 0) == 0 %}
+            {{ return(0) }}
+        {% else %}
+            {{ count_star(database_name, table_schema, table_name) }}
+        {% endif %}
+
+    {% else %}
+
+    --NOTE: commenting this out because it doesnt work in my bigquery project
     {# {% set regions = ["australia-southeast1", "us-east4", "europe-west2", "asia-southeast1"] %}
     {% for region in regions %}
         {% set table = database_name + ".region-" + region + ".INFORMATION_SCHEMA.TABLE_STORAGE" %}
@@ -14,15 +30,18 @@
             {% continue %}
         {% endif %}
     {% endfor %} #}
- 
+    {{ count_star(database_name, table_schema, table_name) }}
+
+    {% endif %}
+{% endmacro %}
+
+
+{% macro count_star(database_name, table_schema, table_name) %}
     -- if not valid result is found in any region then use count(*)
     {% set table_name_concat = database_name ~ '.' ~ table_schema ~ '.' ~ table_name %}
     {% set query = "SELECT COUNT(*) as row_count FROM `" + table_name_concat + "`" %}
     {% set result = run_query(query) %}
     {% set row_count = result[0]['row_count'] %}
+    {%- do print("get_row_count has finished running") -%}
     {{ return(row_count) }}
- 
- 
-    -- If nil value then return default value
-    {{ return(0) }}
 {% endmacro %}

@@ -8,7 +8,7 @@
     {% if execute %}
         {% for node in graph.nodes.values() %}
             {% if node.name in parsed_results_dict and node.resource_type == "model" %}
-                {% set total_table_rows = get_row_count(node.database, node.schema, node.name) %}
+                {% set total_table_rows = get_row_count(node.database, node.schema, node.name, node.config.materialized) %}
                 {% set _ = parsed_results_dict[node.name].update({'identifier_keys': node.meta.identifier_keys}) %}
                 {% set _ = parsed_results_dict[node.name].update({'project': node.database}) %}
                 {% set _ = parsed_results_dict[node.name].update({'database_name': node.schema}) %}
@@ -19,6 +19,6 @@
     {% endif %}
  
 {#    {%- do print("parsed_results_dict after is: " ~ parsed_results_dict) %}#}
- 
+    {% do print("extract_run_result has finished running") %}
     {{ return(parsed_results_dict) }}
 {% endmacro %}
