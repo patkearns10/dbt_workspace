@@ -3,7 +3,7 @@
     {%- do print("get_row_count has started running") -%}
 
     {% if materialized == 'view' %}
-        -- set environment variable to enable or disable count(*).
+        {# set environment variable to enable or disable count(*). #}
         {{ count_star(database_name, table_schema, table_name, env_var('DBT_COUNT_STAR', 'ALLOW')) }}
     {% else %}
 
@@ -20,7 +20,7 @@
             {{ return(row_count) }}
         {% else %}
 #}
-            -- set environment variable to enable or disable count(*).
+            {# set environment variable to enable or disable count(*). #}
             {{ count_star(database_name, table_schema, table_name, env_var('DBT_COUNT_STAR', 'ALLOW')) }}
 {#  TODO: Brian add this back in
         {% endif %}
@@ -32,7 +32,7 @@
 
 
 {% macro count_star(database_name, table_schema, table_name, allow_flag) %}
-    -- if not valid result is found in any region then use count(*)
+    {# if not valid result is found in any region then use count(*) #}
     {% if allow_flag == 'ALLOW' %}
         {% set table_name_concat = database_name ~ '.' ~ table_schema ~ '.' ~ table_name %}
         {% set query = "SELECT COUNT(*) as row_count FROM `" + table_name_concat + "`" %}
@@ -40,7 +40,7 @@
         {% set row_count = result[0]['row_count'] %}
         {%- do print("get_row_count has finished running") -%}
         {{ return(row_count) }}
-    -- env_var('DBT_COUNT_STAR') set to something other than 'ALLOW'
+    {# env_var('DBT_COUNT_STAR') set to something other than 'ALLOW' #}
     {% else %}
         {{ return(0) }}
     {% endif %}
