@@ -17,6 +17,8 @@ sources:
               - not_null
               - unique:
                   tags: ['top_level']
+          - name: name
+            tags: ['pii']
       - name: orders
         identifier: jaffle_shop__orders
         description: One record per order
