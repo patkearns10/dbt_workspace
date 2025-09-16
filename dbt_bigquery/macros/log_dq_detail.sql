@@ -17,6 +17,7 @@
             {% set rule_id = value.database_name ~ '.' ~ value.table_name ~ '.' ~ result.column_name ~ '.' ~ result.test_name %}
             {% set result_detail_id = result.invocation_id ~ '.' ~ result.unique_id %}
             {% for error in result.failed_rows %}
+                -- convert data types to string to prevent json serializable errors
                 {% set safe_error = {} %}
                 {% for k, v in error.items() %}
                     {% do safe_error.update({k: v|string}) %}
