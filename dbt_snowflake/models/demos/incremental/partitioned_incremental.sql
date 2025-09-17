@@ -1,12 +1,10 @@
-{{ 
-    config(
-        materialized='partitioned_incremental', 
-        partition_by='WAREHOUSE_NAME', 
-        partitions_to_process=["'RANDY_PITCHER_WORKSPACE_PROD_WH'", "'RANDY_PITCHER_WORKSPACE_DEV_WH'"],
-        unique_key='record_id',
-        enabled=False
-    ) 
-}}
+{{ config(
+    materialized="partitioned_incremental", 
+    partition_by="WAREHOUSE_NAME", 
+    unique_key="record_id", 
+    enabled=False, 
+    meta={'partitions_to_process': ["'RANDY_PITCHER_WORKSPACE_PROD_WH'", "'RANDY_PITCHER_WORKSPACE_DEV_WH'"]}
+) }}
 
 WITH HISTORY AS (
   SELECT 

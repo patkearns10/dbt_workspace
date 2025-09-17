@@ -11,5 +11,6 @@ snapshots:
       - name: OL_CUSTKEY
         tests:
           - dbt_constraints.foreign_key:
-              pk_table_name: ref('SNAP_DIM_CUSTOMERS')
-              pk_column_name: C_CUSTKEY
+              arguments:
+                pk_table_name: ref('SNAP_DIM_CUSTOMERS')
+                pk_column_name: C_CUSTKEY

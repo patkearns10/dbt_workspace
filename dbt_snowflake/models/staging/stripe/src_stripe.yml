@@ -6,14 +6,15 @@ sources:
     database: raw
     tables:
       - name: payment
-        loaded_at_field: _BATCHED_AT
-        freshness:
-          warn_after:
-            count: 1
-            period: day
-          error_after:
-            count: 3
-            period: day
+        config:
+          loaded_at_field: _BATCHED_AT
+          freshness:
+            warn_after:
+              count: 1
+              period: day
+            error_after:
+              count: 3
+              period: day
         columns:
           - name: id
             tests:
@@ -22,8 +23,10 @@ sources:
           - name: paymentmethod
             tests:
               - accepted_values:
-                  values: ['credit_card', 'bank_transfer', 'gift_card', 'coupon']
+                  arguments:
+                    values: ['credit_card', 'bank_transfer', 'gift_card', 'coupon']
           - name: status
             tests:
               - accepted_values:
-                  values: ['success', 'fail']
+                  arguments:
+                    values: ['success', 'fail']

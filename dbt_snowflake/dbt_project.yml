@@ -3,8 +3,8 @@ version: '1.0.0'
 config-version: 2
 
 profile: default
-dbt-cloud: 
-    project-id: 89074
+dbt-cloud:
+  project-id: 89074
 
 vars:
   dbt_artifacts_environment_aware: true
@@ -37,26 +37,7 @@ vars:
         sp_sales_code: 8
         media_mark: 9
 
-  weekday_sale_dict: [
-    {
-      weekday: monday,
-      promotion_no: 1,
-      sp_sales_code: 2,
-      media_mark: 3,
-     },
-    {
-      weekday: tuesday,
-      promotion_no: 1,
-      sp_sales_code: 2,
-      media_mark: 3,
-     },
-    {
-      weekday: wednesday,
-      promotion_no: 1,
-      sp_sales_code: 2,
-      media_mark: 3,
-     }
-  ]
+  weekday_sale_dict: [{weekday: monday, promotion_no: 1, sp_sales_code: 2, media_mark: 3}, {weekday: tuesday, promotion_no: 1, sp_sales_code: 2, media_mark: 3}, {weekday: wednesday, promotion_no: 1, sp_sales_code: 2, media_mark: 3}]
 
 models:
   secret:
@@ -70,18 +51,18 @@ models:
       some_key: some_value
 
     snowflake_meta:
-      +tags:   snowflake_meta
+      +tags: snowflake_meta
       +schema: snowflake_meta
 
     demos:
       custom_schema:
-        +schema: custom_schema  
-        +materialized: table  
+        +schema: custom_schema
+        +materialized: table
       easy_incremental:
         +watermark: watermark
         +materialized: easy_incremental
       hard_deletes:
-        +enabled: True
+        +enabled: true
 
     marts:
       core:
@@ -89,7 +70,7 @@ models:
           - "marts_core_subfolder"
     python:
       +enabled: false
-  
+
   dbt_artifacts:
     +schema: less_dbt_artifact
 
@@ -102,13 +83,13 @@ snapshots:
   secret:
     +target_schema: "{{ target.schema }}"
     schema_change:
-        +target_schema: "{{target.schema if env_var('DBT_ENV_CLEANSED') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') == 'github_pull_request' else 'CLEANSED' }}"
+      +target_schema: "{{target.schema if env_var('DBT_ENV_CLEANSED') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') == 'github_pull_request' else 'CLEANSED' }}"
     snowflake_meta:
       +tags: ['snowflake_meta']
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"
 
     hard_deletes:
-      +enabled: True
+      +enabled: true
 
 # on-run-start:
   # - "{{ create_run_end_results_table() }}"
@@ -122,3 +103,5 @@ on-run-end:
   # - "{{ log(invocation_id, true) }}"
   # - "{{ log(modules.datetime.datetime.now(), true) }}"
   # - "{{ test_results(results) }}"
+flags:
+  require_generic_test_arguments_property: true

@@ -16,7 +16,8 @@ models:
         description: Total number of orders a customer has ever placed.
       - name: first_ordered_at
         description: The timestamp when a customer placed their first order.
-        tags: ['updated_at']
+        config:
+          tags: ['updated_at']
       - name: last_ordered_at
         description: The timestamp of a customer's most recent order.
       - name: lifetime_spend_pretax
@@ -27,7 +28,8 @@ models:
         description: Options are 'new' or 'returning', indicating if a customer has ordered more than once or has only placed their first order to date.
         tests:
           - accepted_values:
-              values: ["new", "returning"]
+              arguments:
+                values: ["new", "returning"]
 
   - name: fct_orders
     description: Order overview data mart, offering key details for each order inlcluding if it's a customer's first order and a food vs. drink item breakdown. One row per order.
@@ -41,15 +43,17 @@ models:
         description: The foreign key relating to the customer who placed the order.
         tests:
           - relationships:
-              to: ref('stg_customers')
-              field: customer_id
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
       - name: location_id
         description: The foreign key relating to the location the order was placed at.
       - name: order_total
         description: The total amount of the order in USD including tax.
       - name: ordered_at
         description: The timestamp the order was placed at.
-        tags: ['updated_at']
+        config:
+          tags: ['updated_at']
       - name: count_food_items
         description: The number of individual food items ordered.
       - name: count_drink_items
@@ -82,8 +86,9 @@ models:
     columns:
       - name: order_item_id
         description: The unique key of the orders items mart.
-        meta:
-          column_has_hard_coded_exceptions: "yes it does"
         tests:
           - not_null
           - unique_coded_exceptions
+        config:
+          meta:
+            column_has_hard_coded_exceptions: "yes it does"

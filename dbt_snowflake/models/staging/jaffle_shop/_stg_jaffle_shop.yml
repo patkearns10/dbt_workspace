@@ -2,16 +2,19 @@ version: 2
 
 models:
   - name: stg_customers
-    tags: ['model_level']
     description: Customer data with basic cleaning and transformation applied, one row per customer.
+    config:
+      tags: ['model_level']
     columns:
       - name: customer_id
-        tags: ['column_level']
         description: The unique key for each customer.
+        config:
+          tags: ['column_level']
         tests:
           - not_null
           - unique:
-              tags: ['test_level']
+              config:
+                tags: ['test_level']
 
   - name: stg_locations
     description: List of open locations with basic cleaning and transformation applied, one row per location.
@@ -35,9 +38,10 @@ models:
     description: Order data with basic cleaning and transformation applied, one row per order.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - order_id
-            - customer_id
+          arguments:
+            combination_of_columns:
+              - order_id
+              - customer_id
     columns:
       - name: order_id
         description: The unique key for each order.
@@ -45,12 +49,15 @@ models:
           - not_null
           - unique
           - is_unique_custom:
-              condition: "ordered_at <= '2024-09-07' and ordered_at >= '2024-09-01'"
+              arguments:
+                condition: "ordered_at <= '2024-09-07' and ordered_at >= '2024-09-01'"
           - dbt_expectations.expect_column_values_to_be_unique:
-              row_condition: "customer_id is not null"
+              arguments:
+                row_condition: "customer_id is not null"
       - name: ordered_at
         description: used to find updated date
-        tags: ['updated_at']
+        config:
+          tags: ['updated_at']
       - name: _pk
         description: The unique key - using surrogate key
         tests:

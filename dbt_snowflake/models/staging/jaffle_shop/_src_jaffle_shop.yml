@@ -5,37 +5,43 @@ sources:
     description: A replica of the postgres database
     database: development
     schema: dbt_pkearns
-    tags: ['top_level']
+    config:
+      tags: ['top_level']
     tables:
       - name: customers
-        tags: ['table_level']
         identifier: jaffle_shop__customers
+        config:
+          tags: ['table_level']
         columns:
           - name: id
-            tags: ['column_level']
+            config:
+              tags: ['column_level']
             tests:
               - not_null
               - unique:
-                  tags: ['top_level']
+                  config:
+                    tags: ['top_level']
           - name: name
-            tags: ['pii']
+            config:
+              tags: ['pii']
       - name: orders
         identifier: jaffle_shop__orders
         description: One record per order
-        loaded_at_field: ordered_at
-        freshness:
-          warn_after: {count: 100000, period: day}
-          error_after: {count: 200000, period: day}
         columns:
           - name: id
             tests:
               - unique
               - not_null
+        config:
+          loaded_at_field: ordered_at
+          freshness:
+            warn_after: {count: 100000, period: day}
+            error_after: {count: 200000, period: day}
       - name: items
         identifier: jaffle_shop__items
       - name: products
         identifier: jaffle_shop__products
       - name: stores
         identifier: jaffle_shop__stores
-      - name: supplies 
+      - name: supplies
         identifier: jaffle_shop__supplies
