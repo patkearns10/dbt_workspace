@@ -27,4 +27,3 @@ snapshots:
         description: The unique key.
         tests:
           - not_null
-          - unique

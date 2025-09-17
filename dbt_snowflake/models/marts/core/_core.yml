@@ -2,8 +2,9 @@ version: 2
 
 models:
   - name: customers
-    access: public
     description: One record per customer
+    config:
+      access: public
  #   tests:
  #     - dbt_utils.unique_combination_of_columns:
  #         combination_of_columns:
@@ -15,22 +16,26 @@ models:
  #           - number_of_orders
  #           - lifetime_value
     columns:
-     - name: customer_id
-       description: Primary key
-       tags: [run_da_tests]
+      - name: customer_id
+        description: Primary key
+        config:
+          tags: [run_da_tests]
  #       tests:
  #         - unique
  #         - not_null
  #         - not_null_sampling
-     - name: first_order_date
-       description: NULL when a customer has not yet placed an order.
+      - name: first_order_date
+        description: NULL when a customer has not yet placed an order.
+
 
   - name: orders
-    access: public
+    config:
+      access: public
     description: Complete orders model including the amount associated with each order.
     tests:
       - dbt_utils.expression_is_true:
-          expression: "amount >= 0"
+          arguments:
+            expression: "amount >= 0"
 #    columns:
 #      - name: order_id
 #        tags: [run_da_tests]
@@ -38,4 +43,3 @@ models:
 #        tests:
 #          - unique
 #          - not_null
-

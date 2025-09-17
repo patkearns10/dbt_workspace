@@ -1,8 +1,8 @@
 {{ config(
-  materialized='easy_incremental',
-  watermark='watermark',
-  enabled=False
-  ) }}
+    materialized="easy_incremental", 
+    enabled=False, 
+    meta={'watermark': 'watermark'}
+) }}
 
 WITH HISTORY AS (
   SELECT 

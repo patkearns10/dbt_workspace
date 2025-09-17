@@ -5,10 +5,9 @@ sources:
     database: snowflake
     schema: account_usage
     loader: snowflake # informational only (free text)
-    
-    tags:
-      - snowflake_meta
-      
+    config:
+      tags:
+        - snowflake_meta
     tables:
       - name: query_history
       - name: warehouse_load_history
@@ -16,33 +15,34 @@ sources:
       - name: metering_history
       - name: users
 
+
   - name: snowflake_meta_qa
     database: snowflake
     schema: account_usage
     loader: snowflake # informational only (free text)
-    
-    tags:
-      - snowflake_meta
-      - qa
-      
+    config:
+      tags:
+        - snowflake_meta
+        - qa
     tables:
       - name: query_history
+
 
 
   - name: snowflake_meta_dev
     database: snowflake
     schema: account_usage
     loader: snowflake # informational only (free text)
-    
-    tags:
-      - snowflake_meta
-      - dev
-      
+    config:
+      tags:
+        - snowflake_meta
+        - dev
     tables:
       - name: query_history
 
 
-  - name: snowflake_meta_dynamic 
+
+  - name: snowflake_meta_dynamic
     database: |
       {%- if target.name == "default" or target.name == "dev" -%} snowflake
       {%- elif target.name == "qa"  -%} snowflake
@@ -50,23 +50,25 @@ sources:
       {%- else -%} invalid_database
       {%- endif -%}
     schema: account_usage
-    loader: snowflake # informational only (free text)
-    
-    tags:
-      - snowflake_meta
-      - dynamic
-      
+
+    config:
+      tags:
+        - snowflake_meta
+        - dynamic
+      meta:
+        loader: snowflake # informational only (free text)
     tables:
       - name: query_history
+
 
 
   - name: snowflake_meta_global_variable
     database: "{{var('snowflake_meta_src_db')}}"
     schema: account_usage
-    loader: snowflake # informational only (free text)
-    
-    tags:
-      - snowflake_meta
-      
+    config:
+      tags:
+        - snowflake_meta
+      meta:
+        loader: snowflake # informational only (free text)
     tables:
       - name: query_history
