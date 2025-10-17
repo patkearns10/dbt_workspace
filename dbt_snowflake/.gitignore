@@ -10,3 +10,4 @@ env/
 *.vscode
 venv
 .vscode/
+dbt_internal_packages/

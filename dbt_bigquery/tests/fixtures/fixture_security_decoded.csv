@@ -1,0 +1,3 @@
+bcusip,change_date,floater_set
+'ABC','2021-08-13',"[{""FLOATER_record"": {""START_DT"": ""2021-08-01"", ""END_DT"": ""2021-08-10"", ""INDX2"": 1.81}}, {""FLOATER_record"": {""START_DT"": ""2021-08-12"", ""END_DT"": ""2023-08-14"", ""INDX2"": 2.32}}]"
+'DEF','2022-09-16',"[{""FLOATER_record"": {""START_DT"": ""2020-01-01"", ""END_DT"": ""2020-02-01"", ""INDX2"": 5.32}}, {""FLOATER_record"": {""START_DT"": ""2020-02-02"", ""END_DT"": ""2022-09-16"", ""INDX2"": 4.44}}]"

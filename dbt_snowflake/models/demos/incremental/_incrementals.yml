@@ -6,7 +6,9 @@ models:
       - name: unique_id
         tests:
           - is_unique__incremental:
-              condition: "unique_id = 1"
+              arguments:
+                condition: "unique_id = 1"
       - name: _updated_at
         description: used to find updated date
-        tags: ['updated_at']
+        config:
+          tags: ['updated_at']

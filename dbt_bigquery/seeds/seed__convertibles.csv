@@ -1,0 +1,6 @@
+bcusip,asof_date,type,exchange,amount
+1,2025-06-20,convertible,ASX,10000
+2,2025-06-21,convertible,NYSE,5000
+3,2025-06-22,convertible,ASX,100000
+4,2025-06-23,calconvertible,ASX,15000
+5,2025-06-20,convertible,NYSE,9900
