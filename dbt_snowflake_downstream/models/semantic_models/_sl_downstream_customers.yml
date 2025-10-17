@@ -4,6 +4,9 @@ semantic_models:
     table, providing a comprehensive view of customer information for downstream analysis
     and reporting.
   model: ref('secret', 'customers')
+  config:
+    # Use case 1
+    enabled: "{{ True if env_var('DBT_SL_USE_CASE', 1) | int >= 1 else false }}"
   defaults:
     agg_time_dimension: first_order_date
 
