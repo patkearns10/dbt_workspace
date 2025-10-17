@@ -1,0 +1,28 @@
+semantic_models:
+- name: downstream_orders
+  description: Comprehensive view of order data for downstream analysis and reporting.
+  model: ref('secret', 'orders')
+  defaults:
+    agg_time_dimension: ordered_at
+  entities:
+  - name: orders
+    type: primary
+    expr: order_id
+  - name: customer
+    type: foreign
+    expr: customer_id
+  dimensions:
+  - name: ordered_at
+    type: time
+    type_params:
+      time_granularity: day
+  measures:
+  - name: total_amount
+    description: The total amount of the order.
+    agg: sum
+    create_metric: true
+    expr: amount
+  - name: count_order
+    agg: count
+    create_metric: true
+    expr: order_id
