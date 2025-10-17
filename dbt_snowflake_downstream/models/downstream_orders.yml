@@ -8,17 +8,7 @@ models:
       description: A unique identifier for each order.
     - name: customer_id
       description: The identifier for the customer who placed the order.
-    - name: order_date
+    - name: ordered_at
       description: The date when the order was placed.
-    - name: status
-      description: The current status of the order.
-    - name: credit_card_amount
-      description: The amount paid using a credit card.
-    - name: coupon_amount
-      description: The discount amount applied through a coupon.
-    - name: bank_transfer_amount
-      description: The amount paid via bank transfer.
-    - name: gift_card_amount
-      description: The amount paid using a gift card.
     - name: amount
       description: The total amount of the order.
