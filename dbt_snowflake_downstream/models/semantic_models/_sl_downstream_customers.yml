@@ -26,14 +26,11 @@ semantic_models:
   - name: number_of_orders
     description: The total number of orders placed by the customer.
     agg: sum
-    create_metric: true
   - name: lifetime_value
     description: The total value of the customer's transactions over their lifetime.
     agg: sum
-    create_metric: true
   - name: count_distinct_customers
     agg: count
-    create_metric: true
     expr: customer_id
 
 metrics:
