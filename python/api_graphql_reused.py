@@ -8,7 +8,7 @@ url = 'https://metadata.cloud.getdbt.com/graphql'
 
 
 headers = {
-    'Authorization': f'Bearer dbtu_wh4XyMQxxfvD-SVZHtSFb4wxq6kTpHAO9TPGykGjWpUYL80NFk'
+    'Authorization': f'Bearer dbtu_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 }
 
 query_body = '''
