@@ -94,8 +94,8 @@ snapshots:
 # on-run-start:
   # - "{{ create_run_end_results_table() }}"
 
-on-run-end:
-  - "{{ outside_macro() }}"
+# on-run-end:
+  # - "{{ outside_macro() }}"
   # - "{% if target.name != 'ci' %}{{ dbt_artifacts.upload_results(results) }}{% endif %}" # dont dbt_artifacts run in ci
   # - "{{ get_updated_at(graph, target) }}"
   # - "{{ log_run_end_results(results) }}"  # JYeo code
@@ -103,5 +103,6 @@ on-run-end:
   # - "{{ log(invocation_id, true) }}"
   # - "{{ log(modules.datetime.datetime.now(), true) }}"
   # - "{{ test_results(results) }}"
+  
 flags:
   require_generic_test_arguments_property: true
