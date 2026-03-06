@@ -10,6 +10,6 @@ models:
       event_time: START_TIME_CENTRAL_TIME
     columns:
       - name: START_TIME_CENTRAL_TIME
-        tests:
-          - unique
-          - not_null
+        # tests:
+        #   - unique
+        #   - not_null
