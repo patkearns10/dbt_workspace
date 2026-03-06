@@ -5,6 +5,16 @@ snapshots:
      unique_key: unique_id
      strategy: timestamp
      updated_at: _date
+   columns:
+    - name: unique_id
+      data_tests:
+        - unique
+        - not_null
+    - name: color
+      data_tests:
+        - accepted_values:
+            arguments:
+              values: ['red', 'orange', 'yellow', 'green', 'blue', 'violet']
  - name: yml_snapshot_example_overrides
    relation: ref('upstream_example')
    config:

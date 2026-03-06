@@ -3,12 +3,16 @@ version: 2
 models:
   - name: stg_contracts
     latest_version: 1
+    config:
+      contract:
+        enforced: true
     columns:
       - name: job_id
         data_type: number
         constraints:
           - type: not_null
           - type: unique
+          - type: primary_key
         # tests:
         #   - not_null
         #   - unique

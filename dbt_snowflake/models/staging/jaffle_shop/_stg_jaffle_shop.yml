@@ -36,6 +36,8 @@ models:
 
   - name: stg_orders
     description: Order data with basic cleaning and transformation applied, one row per order.
+    config:
+      event_time: ordered_at
     tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
