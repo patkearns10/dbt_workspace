@@ -13,12 +13,13 @@ orders as (
 customer_orders as (
     select
         customer_id,
+        'text' as some_field,
         min(ordered_at) as first_order_date,
         max(ordered_at) as most_recent_order_date,
         count(order_id) as number_of_orders,
         sum(amount) as lifetime_value
     from orders
-    group by 1
+    group by 1,2
 ),
 final as (
     select
