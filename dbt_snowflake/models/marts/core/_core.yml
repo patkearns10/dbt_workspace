@@ -39,8 +39,9 @@ models:
             expression: "amount >= 0"
     columns:
      - name: order_id
-       tags: [run_da_tests]
        description: Primary key for orders
+       config:
+         tags: [run_da_tests]
        tests:
          - unique
          - not_null
