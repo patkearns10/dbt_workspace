@@ -3,7 +3,7 @@
 
   {% set unique_key = config.get('unique_key') %}
   {% set partition_by  = config.get('partition_by') %}
-  {% set partitions_to_process  = config.get('partitions_to_process') %}
+  {% set partitions_to_process  = config.meta_get('partitions_to_process') %}
 
   {% do log('\nunique_key=' ~unique_key~ '\npartition_by=' ~partition_by~ '\npartitions_to_process=' ~partitions_to_process, False)%}
 

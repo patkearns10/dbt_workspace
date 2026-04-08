@@ -48,4 +48,4 @@ select
     '{{ my_cool_var_mirror }}' as changed_variable,
 
     -- non existent variable (variable not defined) overwritten by env_var
-    '{{ var("non_existent_variable", env_var("DBT_WAREHOUSE")) }}' as overwrite_in_command
+    '{{ var("non_existent_variable", env_var("DBT_WAREHOUSE", "TRANSFORMING")) }}' as overwrite_in_command
