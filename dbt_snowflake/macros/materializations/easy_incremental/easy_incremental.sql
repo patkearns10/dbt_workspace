@@ -2,7 +2,7 @@
 {% materialization easy_incremental, default -%}
 
   {% set unique_key = config.get('unique_key') %}
-  {% set watermark  = config.get('watermark') %}
+  {% set watermark  = config.meta_get('watermark') %}
 
   {% set target_relation = this.incorporate(type='table') %}
   {% set existing_relation = load_relation(this) %}

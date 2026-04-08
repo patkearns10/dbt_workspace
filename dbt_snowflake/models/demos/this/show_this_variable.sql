@@ -17,7 +17,7 @@ select
     '{{ this.name }}' as this_name,
     -- config info
     '{{ model.config.alias }}' as model_alias,
-    {{ model.config.tags }} as model_tags,
+    '{{ model.config.tags | join(", ") }}' as model_tags,
     '{{ model.config.materialized }}' as model_materialization,
     -- model info
     '{{ model.alias }}' as model_alias_v2,

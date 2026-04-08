@@ -2,7 +2,7 @@ name: 'secret'
 version: '1.0.0'
 config-version: 2
 
-profile: default
+profile: snowflake
 dbt-cloud:
   project-id: 89074
 
@@ -39,6 +39,11 @@ vars:
 
   weekday_sale_dict: [{weekday: monday, promotion_no: 1, sp_sales_code: 2, media_mark: 3}, {weekday: tuesday, promotion_no: 1, sp_sales_code: 2, media_mark: 3}, {weekday: wednesday, promotion_no: 1, sp_sales_code: 2, media_mark: 3}]
 
+# Skip analyses during Fusion compile (ad-hoc SQL / JavaScript blocks are often non-SQL)
+analyses:
+  secret:
+    +enabled: false
+
 models:
   secret:
     #+post-hook:
@@ -59,8 +64,9 @@ models:
         +schema: custom_schema
         +materialized: table
       easy_incremental:
-        +watermark: watermark
         +materialized: easy_incremental
+        +meta:
+          watermark: watermark
       hard_deletes:
         +enabled: true
 
@@ -83,7 +89,7 @@ snapshots:
   secret:
     +target_schema: "{{ target.schema }}"
     schema_change:
-      +target_schema: "{{target.schema if env_var('DBT_ENV_CLEANSED') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') == 'github_pull_request' else 'CLEANSED' }}"
+      +target_schema: "{{ target.schema if env_var('DBT_ENV_CLEANSED', '') == 'DEVELOPER' or env_var('DBT_CLOUD_RUN_REASON_CATEGORY', 'default') == 'github_pull_request' else 'CLEANSED' }}"
     snowflake_meta:
       +tags: ['snowflake_meta']
       +target_schema: "{{ 'snowflake_meta' if 'prod' in target.name.lower() else target.schema ~ '__snowflake_meta' }}"
@@ -103,6 +109,3 @@ snapshots:
   # - "{{ log(invocation_id, true) }}"
   # - "{{ log(modules.datetime.datetime.now(), true) }}"
   # - "{{ test_results(results) }}"
-  
-flags:
-  require_generic_test_arguments_property: true

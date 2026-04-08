@@ -1,5 +1,5 @@
 def model(dbt, session):
-    # target_name = dbt.config.get("target_name")
+    # target_name = dbt.config.meta_get("target_name")
 
     # bring in reference model as dataframe
     customers_df = dbt.ref("customers")

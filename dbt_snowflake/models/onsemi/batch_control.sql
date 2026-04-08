@@ -1,12 +1,10 @@
 -- This is an example Incremental model. This is the code that you would have within all of your incremental models
 -- so they can kick off the stored procedures to update the ETL Control table
-{{
-    config(
-        materialization='incremental',
-        post_hook="{{ v_sql_upd_success(v_dbt_job_name) }}",
-        enabled=false
-    )
-}}
+{{ config(
+    materialized='incremental',
+    post_hook="{{ v_sql_upd_success(v_dbt_job_name) }}",
+    enabled=false
+) }}
 
 
 -- TODO: consider changing job name to the name of the file so you could use something standard like {{ this.name }} or some version of that (like fully qualified name)
