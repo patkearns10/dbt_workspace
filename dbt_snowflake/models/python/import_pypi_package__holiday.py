@@ -17,7 +17,7 @@ def model(dbt, session):
 
     # apply our function
     # (columns need to be in uppercase on Snowpark)
-    df["IS_HOLIDAY"] = df["ORDER_DATE"].apply(is_holiday)
+    df["IS_HOLIDAY"] = df["ORDERED_AT"].apply(is_holiday)
 
     # return final dataset (Pandas DataFrame)
     return df
