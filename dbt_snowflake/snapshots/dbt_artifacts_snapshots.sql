@@ -6,7 +6,8 @@
             unique_key='node_id',
             strategy='timestamp',
             updated_at='run_started_at',
-            invalidate_hard_deletes=true
+            invalidate_hard_deletes=true,
+            enabled=false
         )
     }}
 

@@ -12,7 +12,7 @@
     dbt_cloud_run_reason_category as id,
     dbt_cloud_run_reason_category,
     dbt_cloud_run_reason,
-    current_timestamp as updated_at_field
+    current_timestamp::timestamp_ntz as updated_at_field
     from {{ ref('dbt_variables') }}
  
  {% endsnapshot %}

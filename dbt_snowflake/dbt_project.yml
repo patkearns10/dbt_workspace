@@ -69,16 +69,21 @@ models:
           watermark: watermark
       hard_deletes:
         +enabled: true
+      snapshots_related:
+        snapshot_ephemeral:
+          +enabled: false
 
     marts:
       core:
         +tags:
           - "marts_core_subfolder"
+    dbt_artifacts_less:
+      +enabled: false
     python:
       +enabled: false
 
-  dbt_artifacts:
-    +schema: less_dbt_artifact
+  # dbt_artifacts:
+  #   +schema: less_dbt_artifact
 
 sources:
   secret:

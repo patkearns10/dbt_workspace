@@ -13,13 +13,13 @@
 
 select 
     1 as id,
-    current_timestamp() as local_tz  -- LA
+    current_timestamp()::timestamp_ntz as local_tz  -- LA
 
 -- union all
 
 -- select 
 --     2 as id,
---     current_timestamp() as local_tz  -- LA
+--     current_timestamp()::timestamp_ntz as local_tz  -- LA
 
 
 
