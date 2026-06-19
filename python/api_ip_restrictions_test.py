@@ -128,6 +128,7 @@ def main():
         "999.999.999.999/32",   # invalid — bad octets
         "192.168.1.0/24",       # valid
         "10.0.0.0/33",          # invalid — prefix > 32
+        "2001:db8::/32",        # IPv6
     ]
     payload = make_rule_with_cidrs(rule, mixed)
     resp = put_rule(payload)
