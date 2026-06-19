@@ -12,25 +12,25 @@ models:
           this is a multi
           line
           comment
-        tests:
+        data_tests:
           - unique
           - not_null
   - name: seed_downstream
     columns:
       - name: id
-        tests:
+        data_tests:
           - unique
           - not_null
   - name: bar_view
     config:
       meta: {from_model_yml: yerp}
   - name: bar_table
-    tests:
+    data_tests:
       - dbt_utils.equal_rowcount:
           arguments:
             compare_model: ref('foo_table')
   - name: baz_table
-    tests:
+    data_tests:
       - a_plus_b_equals_c:
           arguments:
             model_a: ref('foo_table')

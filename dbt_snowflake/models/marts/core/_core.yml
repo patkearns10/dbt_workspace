@@ -1,47 +1,484 @@
 version: 2
 
 models:
-  - name: customers
-    description: One record per customer
-    config:
-      access: public
- #   tests:
- #     - dbt_utils.unique_combination_of_columns:
- #         combination_of_columns:
- #           - customer_id
- #           - first_name
- #           - last_name
- #           - first_order_date
- #           - most_recent_order_date
- #           - number_of_orders
- #           - lifetime_value
+  - name: dim_customers
+    description: Customer overview data mart. One row per customer.
+    semantic_model:
+      enabled: true
+      name: customers
+    agg_time_dimension: first_ordered_at
     columns:
       - name: customer_id
-        description: Primary key
+        description: Unique customer identifier.
+        entity:
+          name: customers
+          type: primary
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_name
+        description: Customer full name.
+        dimension:
+          type: categorical
+
+      - name: count_lifetime_orders
+        description: Total number of orders the customer has placed.
+
+      - name: first_ordered_at
+        description: Timestamp when the customer placed their first order.
+        granularity: day
+        dimension:
+          type: time
+        config:
+          tags: ['updated_at']
+
+      - name: last_ordered_at
+        description: Timestamp when the customer placed their most recent order.
+        granularity: day
+        dimension:
+          type: time
+
+      - name: lifetime_spend_pretax
+        description: Sum of pre-tax order subtotals for the customer.
+
+      - name: lifetime_spend
+        description: Sum of order totals, including tax, for the customer.
+
+      - name: customer_type
+        description: Indicates whether the customer is new or returning.
+        dimension:
+          type: categorical
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["new", "returning"]
+
+    metrics:
+      - name: met_count_distinct_customers
+        description: Count of distinct customers.
+        label: Customers
+        type: simple
+        agg: count_distinct
+        expr: customer_id
+
+      - name: met_customers_with_orders
+        description: Unique count of customers placing orders.
+        label: Customers with orders
+        type: simple
+        agg: count_distinct
+        expr: customer_id
+
+      - name: met_count_lifetime_orders
+        description: Total count of orders per customer.
+        label: Lifetime orders
+        type: simple
+        agg: sum
+        expr: count_lifetime_orders
+
+      - name: met_lifetime_spend_pretax
+        description: Customer lifetime spend before taxes.
+        label: Lifetime spend pretax
+        type: simple
+        agg: sum
+        expr: lifetime_spend_pretax
+
+      - name: met_lifetime_spend
+        description: Gross customer lifetime spend inclusive of taxes.
+        label: Lifetime spend
+        type: simple
+        agg: sum
+        expr: lifetime_spend
+
+  - name: fct_orders
+    description: Order overview data mart. One row per order.
+    semantic_model:
+      enabled: true
+      name: orders
+    agg_time_dimension: ordered_at
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "order_total >= 0"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "tax_paid >= 0"
+    columns:
+      - name: order_id
+        description: Unique order identifier.
+        entity:
+          name: orders
+          type: primary
+        data_tests:
+          - not_null
+          - unique
+
+      - name: location_id
+        description: Foreign key for the store location where the order was placed.
+        entity:
+          name: locations
+          type: foreign
+
+      - name: customer_id
+        description: Foreign key for the customer who placed the order.
+        entity:
+          name: customers
+          type: foreign
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
+
+      - name: order_total
+        description: Total order amount in USD, including tax.
+        dimension:
+          type: categorical
+
+      - name: tax_paid
+        description: Tax paid for the order in USD.
+
+      - name: ordered_at
+        description: Timestamp when the order was placed.
+        granularity: day
+        dimension:
+          type: time
+        data_tests:
+          - not_null
+        config:
+          tags: ['updated_at']
+
+      - name: count_food_items
+        description: Number of food items in the order.
+
+      - name: count_drink_items
+        description: Number of drink items in the order.
+
+      - name: order_cost
+        description: Supply cost to fulfill the order.
+
+      - name: is_food_order
+        description: Indicates whether the order included any food items.
+        dimension:
+          type: categorical
+
+      - name: is_drink_order
+        description: Indicates whether the order included any drink items.
+        dimension:
+          type: categorical
+
+    metrics:
+      - name: met_order_total
+        description: Sum of order value.
+        label: Order total
+        type: simple
+        agg: sum
+        expr: order_total
+
+      - name: met_food_order_total
+        description: Sum of order value for food orders.
+        label: Food order total
+        type: simple
+        agg: sum
+        expr: case when is_food_order then order_total else 0 end
+
+      - name: met_order_count
+        description: Number of orders placed.
+        label: Order count
+        type: simple
+        agg: sum
+        expr: 1
+
+      - name: met_locations_with_orders
+        description: Number of locations with orders.
+        label: Locations with orders
+        type: simple
+        agg: count_distinct
+        expr: location_id
+
+      - name: met_order_value_p99
+        description: The 99th percentile order value.
+        label: Order value p99
+        type: simple
+        agg: percentile
+        expr: order_total
+        percentile: 99.0
+        percentile_type: discrete
+
+      - name: met_discrete_order_value_p99
+        description: The 99th percentile order value using a discrete distribution.
+        label: Discrete order value p99
+        type: simple
+        agg: percentile
+        expr: order_total
+        percentile: 99.0
+        percentile_type: discrete
+
+      - name: met_large_order
+        description: Count of orders with order total over 20.
+        label: Large orders
+        type: simple
+        agg: sum
+        expr: 1
+        filter: |
+          {{ Dimension('orders__order_total') }} >= 20
+
+      - name: met_food_order_amount
+        description: Sum of order amount for food orders.
+        label: Food order amount
+        type: simple
+        agg: sum
+        expr: case when is_food_order then order_total else 0 end
+
+      - name: met_max_order_amount
+        description: Highest order value for a given period.
+        label: Max order amount
+        type: simple
+        agg: max
+        expr: order_total
+
+      - name: met_min_order_amount
+        description: Lowest order value for a given period.
+        label: Min order amount
+        type: simple
+        agg: min
+        expr: order_total
+
+      - name: met_new_customers
+        description: Unique count of new customers.
+        label: New customers
+        type: simple
+        agg: count_distinct
+        expr: customer_id
+        filter: |
+          {{ Dimension('customers__customer_type') }} = 'new'
+
+      - name: met_order_amount
+        description: Cost of fulfilling orders.
+        label: Order amount
+        type: simple
+        agg: sum
+        expr: order_cost
+
+  - name: order_items
+    description: Order item overview data mart. One row per order item.
+    config:
+      meta:
+        model_has_hard_coded_exceptions: "yes it does"
+      tags: ['updated_at']
+    semantic_model:
+      enabled: true
+      name: order_item
+    agg_time_dimension: ordered_at
+    columns:
+      - name: order_item_id
+        description: Unique order item identifier.
+        entity:
+          name: order_items
+          type: primary
+        data_tests:
+          - not_null
+          - unique_coded_exceptions
+        config:
+          meta:
+            column_has_hard_coded_exceptions: "yes it does"
+
+      - name: order_id
+        description: Foreign key for the order containing this item.
+        entity:
+          name: orders
+          type: foreign
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_orders')
+                field: order_id
+
+      - name: product_id
+        description: Foreign key for the ordered product.
+        entity:
+          name: products
+          type: foreign
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_products')
+                field: product_id
+
+      - name: product_price
+        description: Product price for the order item in USD.
+
+      - name: supply_cost
+        description: Supply cost for the order item in USD.
+
+      - name: is_food_item
+        description: Indicates whether the product is food.
+        dimension:
+          type: categorical
+
+      - name: is_drink_item
+        description: Indicates whether the product is a drink.
+        dimension:
+          type: categorical
+
+      - name: ordered_at
+        description: Timestamp when the parent order was placed.
+        granularity: day
+        dimension:
+          type: time
+
+    metrics:
+      - name: met_item_revenue
+        description: Revenue generated by order items.
+        label: Item revenue
+        type: simple
+        agg: sum
+        expr: product_price
+
+      - name: met_food_item_revenue
+        description: Revenue generated by food order items.
+        label: Food item revenue
+        type: simple
+        agg: sum
+        expr: case when is_food_item = 1 then product_price else 0 end
+
+      - name: met_drink_item_revenue
+        description: Revenue generated by drink order items.
+        label: Drink item revenue
+        type: simple
+        agg: sum
+        expr: case when is_drink_item = 1 then product_price else 0 end
+
+  - name: customers
+    description: One record per customer.
+    config:
+      access: public
+    columns:
+      - name: customer_id
+        description: Primary key.
         config:
           tags: [run_da_tests]
         data_tests:
-         - unique
-         - not_null
-         - not_null_sampling
+          - unique
+          - not_null
+          - not_null_sampling
       - name: first_order_date
         description: NULL when a customer has not yet placed an order.
 
-
   - name: orders
+    description: Complete orders model including the amount associated with each order.
     config:
       access: public
       event_time: ordered_at
-    description: Complete orders model including the amount associated with each order.
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "amount >= 0"
     columns:
-     - name: order_id
-       description: Primary key for orders
-       config:
-         tags: [run_da_tests]
-       tests:
-         - unique
-         - not_null
+      - name: order_id
+        description: Primary key for orders.
+        config:
+          tags: [run_da_tests]
+        data_tests:
+          - unique
+          - not_null
+
+metrics:
+  - name: met_food_order_pct
+    description: Food order amount as a percentage of total order amount.
+    label: Food order percent
+    type: ratio
+    numerator: met_food_order_amount
+    denominator: met_order_total
+
+  - name: met_food_order_pct_cumulative
+    description: Food order total as a percentage of total order amount.
+    label: Food order percent of total order amount
+    type: derived
+    expr: met_food_order_pct * 100
+    input_metrics:
+      - name: met_food_order_pct
+
+  - name: met_food_order_gross_profit
+    description: Gross profit for food orders.
+    label: Food order gross profit
+    type: derived
+    expr: food_revenue - food_cost
+    input_metrics:
+      - name: met_food_order_total
+        alias: food_revenue
+      - name: met_food_order_amount
+        alias: food_cost
+
+  - name: met_order_gross_profit
+    description: Gross profit for orders.
+    label: Order gross profit
+    type: derived
+    expr: revenue - cost
+    input_metrics:
+      - name: met_order_total
+        alias: revenue
+      - name: met_order_amount
+        alias: cost
+
+  - name: met_food_order_total_x10
+    description: Food order total multiplied by 10.
+    label: Food x10
+    type: derived
+    expr: met_food_order_total * 10
+    input_metrics:
+      - name: met_food_order_total
+
+  - name: met_food_order_total_x100
+    description: Food order total multiplied by 100.
+    label: Food x100
+    type: derived
+    expr: met_food_order_total_x10 * 10
+    input_metrics:
+      - name: met_food_order_total_x10
+
+  - name: met_food_order_total_x1000
+    description: Food order total multiplied by 1,000.
+    label: Food x1000
+    type: derived
+    expr: met_food_order_total_x100 * 10
+    input_metrics:
+      - name: met_food_order_total_x100
+
+  - name: met_food_order_total_x10000
+    description: Food order total multiplied by 10,000.
+    label: Food x10000
+    type: derived
+    expr: met_food_order_total_x1000 * 10
+    input_metrics:
+      - name: met_food_order_total_x1000
+
+  - name: met_food_order_total_ratio
+    description: Ratio between the large and small food order total multipliers.
+    label: Food order total ratio
+    type: ratio
+    numerator: met_food_order_total_x10000
+    denominator: met_food_order_total_x10
+
+  - name: met_cumulative_order_amount
+    description: Cumulative value of all orders.
+    label: Cumulative order amount
+    type: cumulative
+    input_metric: met_order_total
+
+  - name: met_cumulative_order_amount_l1m
+    description: Trailing one-month cumulative order amount.
+    label: Cumulative order amount L1M
+    type: cumulative
+    input_metric: met_order_total
+    window: 1 month
+
+  - name: met_cumulative_order_amount_mtd
+    description: Month-to-date value of all orders.
+    label: Cumulative order amount MTD
+    type: cumulative
+    input_metric: met_order_total
+    grain_to_date: month

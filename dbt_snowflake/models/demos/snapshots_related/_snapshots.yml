@@ -22,9 +22,13 @@ snapshots:
      strategy: timestamp
      updated_at: _date
      dbt_valid_to_current: to_date('9999-12-31')
+     snapshot_meta_column_names:
+       dbt_valid_from: start_date
+       dbt_valid_to: end_date
  - name: yml_snapshot_example_ephemeral
    relation: ref('snapshot_ephemeral')
    config:
+     enabled: false
      database: development
      schema: dbt_pkearns_snapshot_yml
      unique_key: node_id

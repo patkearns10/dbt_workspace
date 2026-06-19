@@ -15,14 +15,14 @@
 select
  3 as id,
  'updated' as status,
- current_timestamp() as updated_at
+ current_timestamp()::timestamp_ntz as updated_at
 
 union all
 
 select
  2 as id,
  'undeleted' as status,
- current_timestamp() as updated_at
+ current_timestamp()::timestamp_ntz as updated_at
 
 
 {% endsnapshot %}
