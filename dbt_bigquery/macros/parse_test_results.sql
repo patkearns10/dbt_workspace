@@ -45,9 +45,13 @@
                         {% set failed_rows_results = run_query(compiled_sql) %}
                         {% set failed_array_length = run_result_dict.get('failures') %}
     
-                        -- Get the failure results from the stored failure
+                        -- Get the failure results from the stored failure (convert data types to string to prevent json serializable errors)
                         {% for row in failed_rows_results.rows[:max_failed_rows] %}
-                            {% do failed_rows.append(row.dict()) %}
+                            {% set row_dict = {} %}
+                            {% for k, v in row.dict().items() %}
+                                {% do row_dict.update({k: v|string}) %}
+                            {% endfor %}
+                            {% do failed_rows.append(row_dict) %}
                         {% endfor %}
     
                     {%- endif -%}
