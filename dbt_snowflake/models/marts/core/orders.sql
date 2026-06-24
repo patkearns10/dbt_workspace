@@ -13,7 +13,7 @@ payments as (
 order_payments as (
 
     select
-
+        'text' as some_column,
         order_id,
         order_cost as amount
 
