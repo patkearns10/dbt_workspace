@@ -1,7 +1,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'my_new_project'
+name: 'snowflake_downstream'
 version: '1.0.0'
 config-version: 2
 
@@ -21,6 +21,25 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
+vars:
+  # --- xref() config ---
+  # The macro itself defaults xref_upstream_env to '' (no redirect) unless
+  # DBT_XREF_UPSTREAM_ENV is set as an env var on a given dbt Cloud environment
+  # (e.g. set only on "staging" -> DBT_XREF_UPSTREAM_ENV=prod). Leave the var
+  # below unset so per-environment control stays in dbt Cloud's env var UI,
+  # not hardcoded here. The two maps below are static and safe to check in.
+
+  xref_env_map:
+    prod:
+      database: PROD_EXAMPLE        # <- replace with upstream project's actual PROD database
+      schema: NEW_PROD_SCHEMA           # optional — omit to keep whatever ref() resolves
+    staging:
+      database: STAGING_EXAMPLE        # <- replace with upstream project's actual PROD database
+      schema: NEW_STAGING_SCHEMA           # optional — omit to keep whatever ref() resolves
+
+  xref_exposed_models:
+    secret.orders: vw_orders_prod_exposed
+    secret.customers: vw_customers_prod_exposed
 
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
