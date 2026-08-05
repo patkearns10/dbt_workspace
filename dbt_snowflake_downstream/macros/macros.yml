@@ -1,0 +1,29 @@
+version: 2
+
+macros:
+  - name: xref
+    description: >
+      Environment-aware drop-in replacement for cross-project ref(). When the
+      `xref_upstream_env` var/env var is unset, behaves identically to ref().
+      When set (e.g. to `prod`), rewrites the resolved relation's
+      database/schema to the upstream environment configured in
+      `xref_env_map`, and — if the referenced model is listed in
+      `xref_exposed_models` — swaps in the identifier of the
+      exposed/published view variant instead of the underlying table. Built
+      for multi-pre-prod setups where a non-prod environment (e.g. staging)
+      needs to deliberately read production-quality data from an upstream
+      project instead of that project's own staging environment.
+    arguments:
+      - name: package_name
+        type: string
+        description: >
+          The upstream project name to reference, matching ref()'s first
+          positional argument for a cross-project ref. If only one positional
+          argument is passed to xref(), it is treated as `model_name` and this
+          behaves as a normal same-project ref().
+      - name: model_name
+        type: string
+        description: The name of the model to reference.
+      - name: version
+        type: string
+        description: Optional model version, passed straight through to ref().
