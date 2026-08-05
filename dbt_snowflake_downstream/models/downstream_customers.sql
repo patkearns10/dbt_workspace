@@ -1,1 +1,1 @@
-select * from {{ ref('secret', 'customers') }}
+select * from {{ xref('secret', 'customers') }}
