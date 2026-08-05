@@ -68,6 +68,14 @@
           xref_exposed_models:
             secret.orders: vw_orders_prod_exposed
 
+    Logging: when xref_upstream_env is set, this always logs one line so a
+    redirect (or the lack of one) is visible in `dbt run`/`dbt compile`
+    output — but it distinguishes an actual redirect from a no-op. If
+    xref_upstream_env is set but xref_env_map has no entry for that env and
+    xref_exposed_models has no entry for this model, the resolved relation is
+    identical to plain ref() and the log says so explicitly, rather than
+    implying a redirect happened when it didn't.
+
     Usage: identical to ref() — {{ xref('secret', 'orders') }} or
     {{ xref('my_model') }} for a same-project ref.
 -#}
@@ -102,8 +110,19 @@
 
 {%- set new_rel = rel.replace_path(database=new_database, schema=new_schema, identifier=new_identifier) -%}
 
+{%- set redirected = (new_database != rel.database) or (new_schema != rel.schema) or (new_identifier != rel.identifier) -%}
+
 {%- if execute -%}
-    {{ log("xref(): " ~ package_name ~ "." ~ model_name ~ " -> " ~ new_rel, info=true) }}
+    {%- if redirected -%}
+        {{ log("xref(): redirected " ~ package_name ~ "." ~ model_name ~ " -> " ~ new_rel, info=true) }}
+    {%- else -%}
+        {{ log(
+            "xref(): xref_upstream_env='" ~ upstream_env ~ "' is set but no redirect was applied for "
+            ~ package_name ~ "." ~ model_name ~ " — no matching entry in xref_env_map['" ~ upstream_env
+            ~ "'] or xref_exposed_models['" ~ exposed_key ~ "']. Resolved relation unchanged: " ~ new_rel,
+            info=true
+        ) }}
+    {%- endif -%}
 {%- endif -%}
 
 {{ return(new_rel) }}
