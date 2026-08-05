@@ -3,14 +3,23 @@
     xref() — environment-aware cross-project ref for multi-pre-prod setups.
 
     Problem this solves (Macquarie demo):
-      dbt's native cross-project ref() always resolves an upstream PUBLIC model
-      to that upstream project's PRODUCTION relation, regardless of which
-      environment the downstream project is running in. Some orgs run several
-      long-lived pre-prod environments (dev/qa/uat/staging) that mirror each
-      other 1:1 upstream <-> downstream, and want staging-downstream to read
-      from staging-upstream, qa-downstream from qa-upstream, etc. — OR, as a
-      deliberate exception, want a specific non-prod environment (e.g. staging)
-      to read from the *prod* upstream because only prod has trustworthy data.
+      dbt's native cross-project ref() already resolves based on environment
+      type: a downstream PROD run reads the upstream project's PROD relation,
+      and any non-prod downstream run (dev, staging, etc.) reads the upstream
+      project's STAGING relation, if one is configured. Two gaps that leaves:
+        1. dbt Cloud only supports a single non-prod "staging" environment per
+           project. Orgs running several distinct long-lived pre-prod
+           environments (dev/qa/uat/staging) that are meant to mirror their
+           upstream counterparts 1:1 can't do so natively — every downstream
+           non-prod run collapses onto that one upstream staging environment
+           (or resolves to nothing, if upstream has no staging env configured).
+        2. Some orgs want the opposite override for a specific non-prod
+           environment: instead of reading upstream's staging (which may have
+           stale/untrustworthy data), a chosen non-prod env — e.g. staging —
+           should deliberately read the upstream *prod* relation.
+      xref() lets either case be handled explicitly, per environment, via
+      vars/env vars, without touching dbt's built-in ref() resolution logic
+      for everyone else.
 
     How it works:
       1. If called with a single arg, behaves exactly like ref(model_name) —
@@ -39,8 +48,8 @@
       xref_upstream_env:
         The upstream environment this run should read from, e.g. 'prod'.
         Leave unset (default '') to fall back to normal dbt Mesh behavior
-        (always prod, no rewrite) — this makes xref() a safe drop-in
-        replacement for ref() everywhere else.
+        (prod->prod, non-prod->upstream staging, no rewrite) — this makes
+        xref() a safe drop-in replacement for ref() everywhere else.
         Example: --vars '{"xref_upstream_env": "prod"}'
         or in dbt_project.yml under a target-specific block, or
         env_var('DBT_XREF_UPSTREAM_ENV').
