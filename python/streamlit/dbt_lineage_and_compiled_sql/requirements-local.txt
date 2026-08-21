@@ -1,0 +1,5 @@
+# Local development only. Inside Streamlit in Snowflake, add `requests` and
+# `pandas` via the Packages menu (or environment.yml) instead of this file.
+streamlit>=1.36
+requests>=2.31
+pandas>=2.0
