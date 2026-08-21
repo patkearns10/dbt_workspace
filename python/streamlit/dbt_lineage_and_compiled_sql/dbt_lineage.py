@@ -305,6 +305,13 @@ query Ancestors($environmentId: BigInt!, $uniqueId: String!) {
           node {
             uniqueId
             name
+            # The target's OWN metadata. `ancestors` covers upstream nodes only,
+            # so without these the selected model is the one row in the table
+            # with no materialization, status, or build time. Safe to select
+            # unaliased: this is a different selection set from the fragments
+            # below, so no field merging applies.
+            materializedType
+            executionInfo { lastRunStatus executeCompletedAt }
             ancestors(types: [Model, Source, Seed, Snapshot]) {
               ... on ModelAppliedStateNestedNode {
                 uniqueId name resourceType materializedType
@@ -350,6 +357,7 @@ query AncestorsMinimal($environmentId: BigInt!, $uniqueId: String!) {
           node {
             uniqueId
             name
+            materializedType
             ancestors(types: [Model, Source, Seed, Snapshot]) {
               ... on ModelAppliedStateNestedNode { uniqueId name }
               ... on SourceAppliedStateNestedNode { uniqueId name sourceName }
@@ -491,6 +499,11 @@ def _fetch_upstream(
             "uniqueId": target["uniqueId"],
             "name": target["name"],
             "resourceType": "Model",
+            # Carry the target's own metadata through, so the selected model is
+            # not the one blank row in the table. Absent when the minimal
+            # fallback query was used.
+            "materializedType": target.get("materializedType"),
+            "executionInfo": target.get("executionInfo"),
             "is_target": True,
         }
     }
