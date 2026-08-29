@@ -17,12 +17,17 @@
             {% set rule_id = value.database_name ~ '.' ~ value.table_name ~ '.' ~ result.column_name ~ '.' ~ result.test_name %}
             {% set result_detail_id = result.invocation_id ~ '.' ~ result.unique_id %}
             {% for error in result.failed_rows %}
+                -- convert data types to string to prevent json serializable errors
+                {% set safe_error = {} %}
+                {% for k, v in error.items() %}
+                    {% do safe_error.update({k: v|string}) %}
+                {% endfor %}
                 {% set parsed_dq_detail_dict = {
                     'result_detail_id': result_detail_id,
                     'rule_sum_id': result.rule_sum_id,
                     'rule_id': rule_id,
-                    'error_record': tojson(error)
-                }%}
+                    'error_record': tojson(safe_error)
+                } %}
                 {% do parsed_dq_detail_list.append(parsed_dq_detail_dict) %}
             {% endfor %}
         {% endfor %}
