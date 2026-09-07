@@ -18,7 +18,7 @@ order_items_summary as (
 
         order_items.order_id,
 
-        sum(supply_cost) as order_cost,
+        sum(supply_cost) + 1 as order_cost,
         sum(is_food_item) as count_food_items,
         sum(is_drink_item) as count_drink_items
 
