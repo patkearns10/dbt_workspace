@@ -1,6 +1,14 @@
 version: 2
 
 models:
+  - name: dim_customers__new__changed
+    description: Customer overview data mart. One row per customer. modified for examples.
+    columns:
+      - name: customer_id
+        description: Unique customer identifier.
+        data_tests:
+          - not_null
+          - unique
   - name: dim_customers
     description: Customer overview data mart. One row per customer.
     semantic_model:
