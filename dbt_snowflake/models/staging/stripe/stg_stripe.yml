@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: stg_payments
+    description: Stripe payments with source fields renamed and payment amounts converted from cents to dollars. One row per payment.
+    columns:
+      - name: payment_id
+        description: Unique identifier for the Stripe payment.
+        data_tests:
+          - not_null
+          - unique
+      - name: order_id
+        description: Identifier for the order associated with the payment.
+        data_tests:
+          - not_null
+      - name: payment_method
+        description: Method used to make the payment, retained for payment-method analysis and downstream pivoting.
+      - name: status
+        description: Current payment processing status supplied by Stripe.
+      - name: amount
+        description: Payment amount in dollars, converted from the source value stored in cents.
+      - name: created_at
+        description: Timestamp when Stripe created the payment record.
+
+  - name: stg_stripe__payments
+    description: Direct passthrough of the raw Stripe payment relation used for staging and source-reference demonstrations. Retains the source grain of one row per payment.
+    columns:
+      - name: id
+        description: Unique payment identifier supplied by Stripe.
+        data_tests:
+          - not_null
+          - unique

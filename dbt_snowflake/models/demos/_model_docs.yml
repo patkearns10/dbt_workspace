@@ -1,0 +1,131 @@
+version: 2
+
+models:
+  - name: a_incremental_demo
+    description: Demonstrates incremental materialization behavior with a compact synthetic dataset.
+  - name: autogenerate_join_conditions
+    description: Demonstrates generating join predicates from relation metadata at compile time.
+  - name: baz_view
+    description: View-form fixture used with the general foo, bar, and baz materialization examples.
+  - name: change_roles
+    description: Demonstrates changing Snowflake roles during model execution.
+  - name: ci_change
+    description: Small fixture used to validate model changes in CI workflows.
+  - name: compress_snapshot
+    description: Reads snapshot history into a compact form for snapshot compression demonstrations.
+  - name: compress_snapshot_incremental
+    description: Incrementally maintains compressed snapshot history for comparison with the non-incremental example.
+  - name: context_env_vars
+    description: Exposes selected dbt execution-context environment variables for debugging orchestration behavior.
+  - name: create_and_call_udtf
+    description: Demonstrates creating and invoking a Snowflake user-defined table function from a dbt model.
+  - name: custom_schema
+    description: Fixture used to verify custom schema generation and folder-level materialization configuration.
+  - name: dbt_variables
+    description: Demonstrates rendering project variables into model output.
+  - name: dedupe_incremental
+    description: Incrementally removes duplicate records using the deduplication demo inputs.
+  - name: disable_list_create
+    description: Creates the relation used to demonstrate variable-driven model disabling.
+  - name: dynamic_unpack
+    description: Expands keys from semi-structured JSON into relational columns using dynamic SQL.
+  - name: env_var_changes
+    description: Fixture used to demonstrate how environment-variable changes affect parsing and execution.
+  - name: ephemeral_1
+    description: First ephemeral fixture in a chained CTE dependency example.
+  - name: ephemeral_2
+    description: Second ephemeral fixture that consumes the first ephemeral model.
+  - name: execute_query
+    description: Demonstrates executing compile-time SQL and using the returned values in a model.
+  - name: find_dupes
+    description: Identifies duplicate records used by the incremental deduplication demonstration.
+  - name: foo_table
+    description: Table-form base fixture for the general foo, bar, and baz model examples.
+  - name: foo_view
+    description: View-form base fixture for the general foo, bar, and baz model examples.
+  - name: get_dynamic_sql_value_usage
+    description: Demonstrates injecting a value returned by dynamic SQL into model output.
+  - name: hard_deletes__augmented_snapshot_view
+    description: Augments hard-delete snapshot history for inspecting delete and undelete behavior.
+  - name: hard_deletes__snapshot_passthrough
+    description: Passes hard-delete snapshot records through for downstream behavior checks.
+  - name: hard_deletes_source
+    description: Synthetic source-like fixture for hard-delete snapshot demonstrations.
+  - name: in_and_out
+    description: Demonstrates reading and updating project-scoped variables across model execution.
+  - name: incremental_1
+    description: First node in a five-model incremental dependency-chain fixture.
+  - name: incremental_2
+    description: Second node in a five-model incremental dependency-chain fixture.
+  - name: incremental_3
+    description: Third node in a five-model incremental dependency-chain fixture.
+  - name: incremental_4
+    description: Fourth node in a five-model incremental dependency-chain fixture.
+  - name: incremental_5
+    description: Final node in a five-model incremental dependency-chain fixture.
+  - name: incremental_dupes
+    description: Incremental fixture designed to exercise duplicate-key handling.
+  - name: incremental_exclude
+    description: Demonstrates excluding selected columns from incremental merge updates.
+  - name: incremental_scd
+    description: Demonstrates incrementally maintaining slowly changing dimension attributes.
+  - name: incremental_scd2
+    description: Demonstrates a second type-2 slowly changing dimension implementation.
+  - name: incremental_steps_override
+    description: Fixture used to validate incremental execution with job step overrides.
+  - name: int_orders_microbatch_example
+    description: Intermediate order fixture used to demonstrate microbatch processing by event time.
+  - name: landing
+    description: Demonstrates the project's custom landing materialization.
+  - name: local_variables
+    description: Demonstrates assigning and consuming local Jinja variables within model compilation.
+  - name: model_with_pre_hook
+    description: Fixture used to validate model pre-hook execution.
+  - name: model_with_webhooks
+    description: Fixture used to validate webhook-related orchestration behavior.
+  - name: my_second_model
+    description: Downstream example model used with `my_first_model` in basic DAG demonstrations.
+  - name: my_third_model
+    description: Additional basic fixture used to exercise selection and dependency behavior.
+  - name: namespacing
+    description: Demonstrates namespaced access to project and package variables or macros.
+  - name: pack_json_demo
+    description: Demonstrates packing relational values into Snowflake semi-structured JSON.
+  - name: printer
+    description: Compile-time logging fixture used to inspect macro and invocation context.
+  - name: project_info
+    description: Surfaces selected dbt project metadata for debugging compilation context.
+  - name: query_tag
+    description: Fixture used to validate Snowflake query-tag configuration.
+  - name: raw_json
+    description: Synthetic semi-structured input for the dynamic JSON unpacking example.
+  - name: run_query_return
+    description: Demonstrates returning and rendering values from dbt's `run_query` function.
+  - name: skip_this_incremental
+    description: Incremental fixture used to demonstrate variable-driven execution skipping.
+  - name: snapshot_downstream_hard_deletes
+    description: Downstream view of snapshot records used to inspect hard-delete behavior.
+  - name: tag_model
+    description: Fixture used to demonstrate tag-based model selection.
+  - name: test_list_depends_on
+    description: Fixture used to inspect dependency lists exposed in dbt's graph context.
+  - name: timezones
+    description: Demonstrates Snowflake timestamp and timezone conversion behavior.
+  - name: union_relations
+    description: Demonstrates combining compatible relations with `dbt_utils.union_relations`.
+  - name: unit_test_model
+    description: Transformation under test in the demo unit-test definitions.
+  - name: unit_test_sample_data
+    description: Deterministic sample input used by the unit-test demonstration.
+  - name: upstream_example
+    description: Upstream fixture for incremental dependency and state-change demonstrations.
+  - name: upstream_id_changes
+    description: Fixture that changes upstream identifiers to exercise incremental update behavior.
+  - name: var_2
+    description: Downstream variable fixture that consumes `var_1`.
+  - name: var_enabled_ci_change
+    description: Fixture whose enabled state is controlled by variables in CI scenarios.
+  - name: variable_usage
+    description: Demonstrates reading globally scoped variables and using them during execution.
+  - name: view_snapshot_delete_and_undelete
+    description: View over snapshot history used to inspect delete and undelete events.

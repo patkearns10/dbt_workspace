@@ -2,8 +2,10 @@ version: 2
 
 models:
   - name: var_1
+    description: Base variable-retry fixture that emits a single stable value for downstream retry demonstrations.
     columns:
       - name: col
+        description: Unique, non-null fixture value consumed by `var_2`.
         tests:
           - unique
           - not_null

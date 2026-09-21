@@ -2,96 +2,116 @@ version: 2
 
 models:
   - name: stg_contracts
+    description: Contract-enforced staging fixture for job records. One row per job identifier.
     latest_version: 1
     config:
       contract:
         enforced: true
     columns:
       - name: job_id
+        description: Unique identifier for the job and the model's primary key.
         data_type: number
         constraints:
           - type: not_null
           - type: unique
           - type: primary_key
-        # tests:
-        #   - not_null
-        #   - unique
       - name: job_type
+        description: Category of work performed by the job.
         data_type: string
       - name: is_job_active
+        description: Indicates whether the job is currently active.
         data_type: boolean
       - name: job_duration_days
+        description: Elapsed job duration expressed in days.
         data_type: number(30,2)
       - name: created_date
+        description: Timestamp when the job record was created.
         data_type: TIMESTAMP_LTZ
       - name: completed_date
+        description: Timestamp when the job completed; null while the job remains active.
         data_type: TIMESTAMP_LTZ
     versions:
       - v: 1
         config:
-          contract: { enforced: true }
+          contract: {enforced: true}
         columns:
           - include: all
 
-
   - name: int_contracts
+    description: Contract-enforced intermediate job model that adds update metadata while retaining one row per job identifier.
     latest_version: 1
     columns:
       - name: job_id
+        description: Unique identifier for the job.
         data_type: number
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: job_type
+        description: Category of work performed by the job.
         data_type: string
       - name: is_job_active
+        description: Indicates whether the job is currently active.
         data_type: boolean
       - name: job_duration_days
+        description: Elapsed job duration expressed in days.
         data_type: number(30,2)
       - name: created_date
+        description: Timestamp when the job record was created.
         data_type: TIMESTAMP_LTZ
       - name: completed_date
+        description: Timestamp when the job completed.
         data_type: TIMESTAMP_LTZ
       - name: updated_at
+        description: Timestamp when the intermediate record was last updated.
         data_type: TIMESTAMP_LTZ
     versions:
       - v: 1
         config:
-          contract: { enforced: true }
+          contract: {enforced: true}
         columns:
           - include: all
-  
+
   - name: fct_contracts
+    description: Versioned, contract-enforced job fact model. One row per job identifier; version 2 removes the duration field from the public contract.
     latest_version: 2
     columns:
       - name: job_id
+        description: Unique identifier for the job.
         data_type: number
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: job_type
+        description: Category of work performed by the job.
         data_type: string
       - name: job_name
+        description: Human-readable name assigned to the job.
         data_type: string
       - name: is_job_active
+        description: Indicates whether the job is currently active.
         data_type: boolean
       - name: job_duration_days
+        description: Elapsed job duration in days, available in version 1 only.
         data_type: number(30,2)
       - name: created_date
+        description: Timestamp when the job record was created.
         data_type: TIMESTAMP_LTZ
       - name: completed_date
+        description: Timestamp when the job completed.
         data_type: TIMESTAMP_LTZ
       - name: updated_at
+        description: Timestamp when the fact record was last updated.
         data_type: TIMESTAMP_LTZ
     versions:
       - v: 1
         config:
-          contract: { enforced: true }
+          contract: {enforced: true}
         columns:
           - include: all
       - v: 2
         config:
-          contract: { enforced: true }
+          contract: {enforced: true}
         columns:
           - include: all
             exclude: [job_duration_days]

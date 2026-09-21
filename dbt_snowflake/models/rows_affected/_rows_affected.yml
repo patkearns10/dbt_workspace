@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: rows_affected__view
+    description: Seven-row fixture materialized as a view for validating adapter rows-affected reporting.
+    columns:
+      - name: id
+        description: Stable fixture identifier ranging from 1 through 7.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: rows_affected__table
+    description: Seven-row fixture materialized as a table for validating adapter rows-affected reporting.
+    columns:
+      - name: id
+        description: Stable fixture identifier ranging from 1 through 7.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: rows_affected__incremental
+    description: Incremental fixture used to validate rows-affected reporting; full refresh loads identifiers 1 through 7 and incremental runs add identifier 8.
+    columns:
+      - name: id
+        description: Unique merge key for each fixture row.
+        data_tests:
+          - not_null
+          - unique

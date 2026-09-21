@@ -2,34 +2,37 @@ version: 2
 
 models:
   - name: my_first_model
-    description: |
-      this
-      is a multi line
-      comment
+    description: Basic synthetic model used to demonstrate model documentation, tests, and downstream refs.
     columns:
       - name: col
-        description: >
-          this is a multi
-          line
-          comment
+        description: Stable fixture value used to demonstrate uniqueness and non-null testing.
         data_tests:
           - unique
           - not_null
+
   - name: seed_downstream
+    description: Pass-through of a seed fixture used to demonstrate seed-to-model dependencies. One row per seed identifier.
     columns:
       - name: id
+        description: Unique identifier inherited from the upstream seed.
         data_tests:
           - unique
           - not_null
+
   - name: bar_view
+    description: View-form derivative of the foo fixture used to demonstrate model-level metadata configuration.
     config:
       meta: {from_model_yml: yerp}
+
   - name: bar_table
+    description: Table-form derivative of `foo_table` used to verify row-count parity across materializations.
     data_tests:
       - dbt_utils.equal_rowcount:
           arguments:
             compare_model: ref('foo_table')
+
   - name: baz_table
+    description: Composite fixture used to validate the custom arithmetic relationship across foo and bar models.
     data_tests:
       - a_plus_b_equals_c:
           arguments:

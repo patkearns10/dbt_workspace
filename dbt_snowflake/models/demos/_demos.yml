@@ -2,6 +2,7 @@ version: 2
 
 models:
   - name: some_dates
+    description: Synthetic date-range fixture used to validate ordering and cross-column date expectations.
     tests:
       - dbt_utils.expression_is_true:
           arguments:

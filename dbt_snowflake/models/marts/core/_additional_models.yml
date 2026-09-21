@@ -1,0 +1,52 @@
+version: 2
+
+models:
+  - name: customer_orders_dummy_join
+    description: Joins customers to their orders for join and window-function demonstrations. One row per order, with `_order` sequencing each customer's orders by first order date.
+    columns:
+      - name: order_id
+        description: Unique identifier for the joined order.
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_id
+        description: Identifier for the customer who placed the order.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('customers')
+                field: customer_id
+
+  - name: customers_plus_one
+    description: Pass-through of `customers` used to exercise a simple downstream dependency in the DAG. Retains one row per customer.
+    columns:
+      - name: customer_id
+        description: Unique customer identifier inherited from `customers`.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: dim_customers__new
+    description: Alternative customer dimension used to demonstrate model changes. One row per customer with lifetime order and spend attributes.
+    columns:
+      - name: customer_id
+        description: Unique customer identifier.
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_type
+        description: Classifies customers as new or returning based on whether they have placed more than one order.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['new', 'returning']
+
+  - name: payments__pivoted
+    description: Pivots payment methods into amount columns for order-level analysis. One row per order with a dynamically generated column for each payment method.
+    columns:
+      - name: order_id
+        description: Unique identifier for the order whose payments are summarized.
+        data_tests:
+          - not_null
+          - unique

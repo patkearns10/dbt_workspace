@@ -2,13 +2,15 @@ version: 2
 
 models:
   - name: my_incremental_model
+    description: Incremental fixture used to exercise conditional uniqueness checks and watermark-based processing.
     columns:
       - name: unique_id
+        description: Identifier evaluated by the incremental uniqueness test within its configured condition.
         tests:
           - is_unique__incremental:
               arguments:
                 condition: "unique_id = 1"
       - name: _updated_at
-        description: used to find updated date
+        description: Timestamp used as the incremental processing watermark.
         config:
           tags: ['updated_at']

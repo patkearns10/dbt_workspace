@@ -2,15 +2,16 @@ version: 2
 
 models:
   - name: model_with_schema_tests
+    description: Fixture used to validate tag-based skipping of schema tests while retaining model execution.
     config:
       meta:
         loader: snowflake
     columns:
       - name: id
+        description: Unique, non-null fixture identifier targeted by the skippable schema-test tag.
         config:
           tags:
             - skippable_schema_test
         tests:
           - unique
           - not_null
-

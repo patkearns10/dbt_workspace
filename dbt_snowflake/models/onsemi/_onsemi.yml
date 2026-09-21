@@ -1,0 +1,54 @@
+version: 2
+
+models:
+  - name: stg_onsemi
+    description: Static ON Semiconductor-style sample records used to exercise warehouse metadata and incremental macros. One row per corporation code.
+    columns:
+      - name: CORPORATION_CODE
+        description: Unique corporation identifier for the sample record.
+        data_tests:
+          - not_null
+          - unique
+      - name: _updated_at
+        description: Timestamp used as the incremental processing watermark.
+        data_tests:
+          - not_null
+
+  - name: int_onsemi
+    description: Enriches the ON Semiconductor sample records with generated column lists and an MD5 value for incremental merge demonstrations. Retains one row per corporation code.
+    columns:
+      - name: CORPORATION_CODE
+        description: Unique corporation identifier inherited from staging.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: onsemi_incremental
+    description: Incrementally loads the enriched ON Semiconductor sample into the sales mart using corporation code as the merge key and `_updated_at` as the watermark.
+    columns:
+      - name: CORPORATION_CODE
+        description: Merge key for the incremental billing fact sample.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: product
+    description: Incremental product example combining one-time-load, negative-key, and daily staging records. One row per product key after merge processing.
+    columns:
+      - name: PRODUCT_KEY
+        description: Unique merge key for a product record, including the seeded negative-key member.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: product_using_macros
+    description: Macro-driven equivalent of the incremental product load, combining one-time and daily product records. One row per product key after merge processing.
+    columns:
+      - name: PRODUCT_KEY
+        description: Unique merge key for a product record.
+        data_tests:
+          - not_null
+          - unique
+
+  - name: check_sources
+    description: Diagnostic model that counts rows across dynamically discovered source relations in the configured target database. One row per checked source relation.
