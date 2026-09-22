@@ -211,8 +211,8 @@ models:
         type: simple
         agg: percentile
         expr: order_total
-        percentile: 99.0
-        percentile_type: discrete
+        percentile: 0.99
+        percentile_type: continuous
 
       - name: met_discrete_order_value_p99
         description: The 99th percentile order value using a discrete distribution.
@@ -220,7 +220,7 @@ models:
         type: simple
         agg: percentile
         expr: order_total
-        percentile: 99.0
+        percentile: 0.99
         percentile_type: discrete
 
       - name: met_large_order
