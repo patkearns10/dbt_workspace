@@ -14,7 +14,7 @@ packages:
   - package: godatadriven/dbt_date
     version: 0.17.2
   - package: brooklyn-data/dbt_artifacts
-    version: 2.10.0
+    version: 2.11.1
   # Temporarily disabled while we unwind downstream artifact models/snapshots.
   # - git: "https://github.com/dbt-labs/dbt-artifacts-less.git"
   #   revision: "main"
