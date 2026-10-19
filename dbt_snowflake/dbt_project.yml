@@ -7,8 +7,8 @@ dbt-cloud:
   project-id: 89074
 
 vars:
-  dbt_artifacts_environment_aware: true
   is_backfill: false
+
   refresh_start_date: '1970-01-01'
   refresh_end_date: '2999-01-01'
   my_cool_var: '2016-06-01'
@@ -82,8 +82,11 @@ models:
     python:
       +enabled: false
 
-  # dbt_artifacts:
-  #   +schema: less_dbt_artifact
+  dbt_artifacts:
+    sources:
+      +full_refresh: true
+
+
 
 sources:
   secret:
