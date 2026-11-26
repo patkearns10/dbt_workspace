@@ -10,3 +10,4 @@ env/
 *.vscode
 venv
 .vscode/
+python/__pycache__/
